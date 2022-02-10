@@ -1,4 +1,4 @@
-![Logo](https://user-images.githubusercontent.com/30237636/153431521-addef1a6-1031-4da9-827e-39013238c195.png)
+![Logo](https://user-images.githubusercontent.com/30237636/153431521-addef1a6-1031-4da9-827e-39013238c195.png)</br></br>
 
 # Cutting Room
 
