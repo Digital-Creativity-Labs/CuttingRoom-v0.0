@@ -1,0 +1,2681 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Xabe.FFmpeg</name>
+    </assembly>
+    <members>
+        <member name="T:Xabe.FFmpeg.Conversion">
+            <inheritdoc />
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Build">
+            <inheritdoc />
+        </member>
+        <member name="E:Xabe.FFmpeg.Conversion.OnProgress">
+            <inheritdoc />
+        </member>
+        <member name="E:Xabe.FFmpeg.Conversion.OnDataReceived">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Conversion.FFmpegProcessId">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Conversion.OutputFilePath">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Conversion.InputFormat">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Conversion.OutputFormat">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Conversion.OutputPixelFormat">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Start">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Start(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Start(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Start(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Clear">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.AddParameter(System.String,Xabe.FFmpeg.Enums.ParameterPosition)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.AddStream``1(``0[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetPreset(Xabe.FFmpeg.Enums.ConversionPreset)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetSeek(System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetInputTime(System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetOutputTime(System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.UseMultiThread(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.UseMultiThread(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetOutput(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetVideoBitrate(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetAudioBitrate(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.UseShortest(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetPriority(System.Nullable{System.Diagnostics.ProcessPriorityClass})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ExtractEveryNthFrame(System.Int32,System.Func{System.String,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ExtractNthFrame(System.Int32,System.Func{System.String,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildVideoFromImages(System.Int32,System.Func{System.String,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildVideoFromImages(System.Collections.Generic.IEnumerable{System.String})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetInputFrameRate(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetFrameRate(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.GetScreenCapture(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildThreadsArgument(System.Boolean)">
+            <summary>
+                Create argument for ffmpeg with thread configuration
+            </summary>
+            <param name="multiThread">Use multi thread</param>
+            <returns>Build parameter argument</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildMap">
+            <summary>
+                Create map for included streams
+            </summary>
+            <returns>Map argument</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildParameters(Xabe.FFmpeg.Enums.ParameterPosition)">
+            <summary>
+                Create parameters string
+            </summary>
+            <param name="forPosition">Position for parameters</param>
+            <returns>Parameters</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.BuildInput">
+            <summary>
+                Create input string for all streams
+            </summary>
+            <returns>Input argument</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.New">
+            <summary>
+                Get new instance of Conversion
+            </summary>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.UseHardwareAcceleration(Xabe.FFmpeg.Enums.HardwareAccelerator,Xabe.FFmpeg.Enums.VideoCodec,Xabe.FFmpeg.Enums.VideoCodec,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetOverwriteOutput(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetInputFormat(Xabe.FFmpeg.Enums.MediaFormat)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetOutputFormat(Xabe.FFmpeg.Enums.MediaFormat)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetOutputPixelFormat(Xabe.FFmpeg.Enums.PixelFormat)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ToMp4(System.String,System.String)">
+            <summary>
+                Convert file to MP4
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Destination file</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ToTs(System.String,System.String)">
+            <summary>
+                Convert file to TS
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Destination file</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ToOgv(System.String,System.String)">
+            <summary>
+                Convert file to OGV
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Destination file</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ToWebM(System.String,System.String)">
+            <summary>
+                Convert file to WebM
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Destination file</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ToGif(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+                Convert image video stream to gif
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Output path</param>
+            <param name="loop">Number of repeats</param>
+            <param name="delay">Delay between repeats (in seconds)</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SetWatermark(System.String,System.String,System.String,Xabe.FFmpeg.Enums.Position)">
+            <summary>
+                Melt watermark into video
+            </summary>
+            <param name="inputPath">Input video path</param>
+            <param name="outputPath">Output file</param>
+            <param name="inputImage">Watermark</param>
+            <param name="position">Position of watermark</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ExtractVideo(System.String,System.String)">
+            <summary>
+                Extract video from file
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Output audio stream</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ExtractAudio(System.String,System.String)">
+            <summary>
+                Extract audio from file
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Output video stream</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Snapshot(System.String,System.String,System.TimeSpan)">
+            <summary>
+                Saves snapshot of video
+            </summary>
+            <param name="inputPath">Video</param>
+            <param name="outputPath">Output file</param>
+            <param name="captureTime">TimeSpan of snapshot</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ChangeSize(System.String,System.String,Xabe.FFmpeg.Enums.VideoSize)">
+            <summary>
+                Change video size
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Output path</param>
+            <param name="size">Expected size</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Split(System.String,System.String,System.TimeSpan,System.TimeSpan)">
+            <summary>
+                Get part of video
+            </summary>
+            <param name="inputPath">Video</param>
+            <param name="outputPath">Output file</param>
+            <param name="startTime">Start point</param>
+            <param name="duration">Duration of new video</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.AddAudio(System.String,System.String,System.String)">
+            <summary>
+                Add audio stream to video file
+            </summary>
+            <param name="videoPath">Video</param>
+            <param name="audioPath">Audio</param>
+            <param name="outputPath">Output file</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.AddSubtitles(System.String,System.String,System.String)">
+            <summary>
+                Add subtitles to video stream
+            </summary>
+            <param name="inputPath">Video</param>
+            <param name="outputPath">Output file</param>
+            <param name="subtitlesPath">Subtitles</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.AddSubtitle(System.String,System.String,System.String,System.String)">
+            <summary>
+                Add subtitle to file. It will be added as new stream so if you want to burn subtitles into video you should use
+                SetSubtitles method.
+            </summary>
+            <param name="inputPath">Input path</param>
+            <param name="outputPath">Output path</param>
+            <param name="subtitlePath">Path to subtitle file in .srt format</param>
+            <param name="language">Language code in ISO 639. Example: "eng", "pol", "pl", "de", "ger"</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.SaveM3U8Stream(System.Uri,System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            Save M3U8 stream
+            </summary>
+            <param name="uri">Uri to stream</param>
+            <param name="outputPath">Output path</param>
+            <param name="duration">Duration of stream</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Concatenate(System.String,System.String[])">
+            <summary>
+                Concat multiple inputVideos.
+            </summary>
+            <param name="output">Concatenated inputVideos</param>
+            <param name="inputVideos">Videos to add</param>
+            <returns>Conversion result</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.Convert(System.String,System.String)">
+            <summary>
+                Convert one file to another with destination format.
+            </summary>
+            <param name="inputFilePath">Path to file</param>
+            <param name="outputFilePath">Path to file</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Conversion.ConvertWithHardware(System.String,System.String,Xabe.FFmpeg.Enums.HardwareAccelerator,Xabe.FFmpeg.Enums.VideoCodec,Xabe.FFmpeg.Enums.VideoCodec,System.Int32)">
+            <summary>
+                Convert one file to another with destination format using hardware acceleration (if possible). Using cuvid. Works only on Windows/Linux with NVidia GPU.
+            </summary>
+            <param name="inputFilePath">Path to file</param>
+            <param name="outputFilePath">Path to file</param>
+            <param name="hardwareAccelerator">Hardware accelerator. List of all acceclerators available for your system - "ffmpeg -hwaccels"</param>
+            <param name="decoder">Codec using to decoding input video (e.g. h264_cuvid)</param>
+            <param name="encoder">Codec using to encode output video (e.g. h264_nvenc)</param>
+            <param name="device">Number of device (0 = default video card) if more than one video card.</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.ConversionQueue">
+            <summary>
+                Create queue for conversions
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.ConversionQueue.ConversionQueueEventHandler">
+            <summary>
+                Information about queue's media status
+            </summary>
+            <param name="currentItemNumber">Auto incremented id of conversion</param>
+            <param name="totalItemsCount">Count of conversion items</param>
+            <param name="conversion">Conversion that was just finished</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.#ctor(System.Boolean)">
+            <summary>
+                Queue for conversions.
+            </summary>
+            <param name="parallel">
+                If set, queue create multiple workers based on CPU cores. It's best to set if files are small
+                (less than few MB).
+            </param>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="E:Xabe.FFmpeg.ConversionQueue.OnConverted">
+            <summary>
+                Occurs when conversion in queue finished
+            </summary>
+        </member>
+        <member name="E:Xabe.FFmpeg.ConversionQueue.OnException">
+            <summary>
+                Occurs when appers any exceptions during conversion
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.Start(System.Threading.CancellationTokenSource)">
+            <summary>
+                Start converting media in queue
+            </summary>
+            <param name="cancellationTokenSource">Cancelation token</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.Pause">
+            <summary>
+                Pause converting media in queue
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.Add(Xabe.FFmpeg.IConversion)">
+            <summary>
+                Add conversion to queue
+            </summary>
+            <param name="conversion">Defined conversion</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.ConversionQueue.Add(System.Threading.Tasks.Task{Xabe.FFmpeg.IConversion})">
+            <summary>
+                Add conversion to queue
+            </summary>
+            <param name="conversion">Defined conversion</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.FilterConfiguration">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.FilterConfiguration.FilterType">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.FilterConfiguration.StreamNumber">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.FilterConfiguration.Filters">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.IConversion">
+            <summary>
+                Allows to prepare and start IConversion.
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IConversion.OutputFilePath">
+            <summary>
+                Output file path
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IConversion.FFmpegProcessId">
+            <summary>
+            FFmpeg process id
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Clear">
+            <summary>
+                Clear saved parameters
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetPriority(System.Nullable{System.Diagnostics.ProcessPriorityClass})">
+            <summary>
+            Set priority of ffmpeg process
+            </summary>
+            <param name="priority">FFmpeg process priority</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.ExtractEveryNthFrame(System.Int32,System.Func{System.String,System.String})">
+            <summary>
+            Extracts Every frameNo frame of the input video and outputs as a png image
+            </summary>
+            <param name="frameNo">The frame interval to extract </param>
+            <param name="buildOutputFileName"> Delegate Function to build up custom filename when outputting multiple files </param>
+            <returns></returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.ExtractNthFrame(System.Int32,System.Func{System.String,System.String})">
+            <summary>
+            Extracts the frameNo'th frame of the input video and outputs as a png image
+            </summary>
+            <param name="frameNo">The frame to extract</param>
+            <param name="buildOutputFileName"> Delegate Function to build up custom filename when outputting multiple files </param>
+            <returns></returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.BuildVideoFromImages(System.Int32,System.Func{System.String,System.String})">
+            <summary>
+            Builds a video from a directory containing one or more sequentially named images
+            </summary>
+            <param name="startNumber">The number of the image to start building video from</param>
+            <param name="buildInputFileName"> Delegate Function to build up custom filename when inputting multiple files </param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.BuildVideoFromImages(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Builds a video from a directory containing one or more sequentially named images
+            </summary>
+            <param name="imageFiles"> List of Image Files to Build into a Video</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetFrameRate(System.Double)">
+            <summary>
+            Builds the -framerate option for the output of this conversion
+            </summary>
+            <param name="frameRate">The desired framerate of the output</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetInputFrameRate(System.Double)">
+            <summary>
+            Builds the -framerate option for the input of this conversion
+            </summary>
+            <param name="frameRate">the desired framerate of the input</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetSeek(System.Nullable{System.TimeSpan})">
+            <summary>
+                Seeks in output file to position. (-ss argument)
+            </summary>
+            <param name="seek">Position</param>
+            <returns>IConversion</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetInputTime(System.Nullable{System.TimeSpan})">
+            <summary>
+                Sets input capture length (-t input argument)
+                Typically used with the GetScreenCapture Function to stop capturing after a time interval
+            </summary>
+            <param name="seek">Output Length</param>
+            <returns>IConversion</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetOutputTime(System.Nullable{System.TimeSpan})">
+            <summary>
+                Sets output file length (-t output argument)
+            </summary>
+            <param name="seek">Output Length</param>
+            <returns>IConversion</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetPreset(Xabe.FFmpeg.Enums.ConversionPreset)">
+            <summary>
+                Set preset of IConversion. Slower speed equals better compression and quality.
+            </summary>
+            <param name="preset">Preset</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetVideoBitrate(System.String)">
+            <summary>
+                Sets The bitrate of the video streams to the supplied value
+                Acceptable values include 1200K for 1200kbit/s or 1M for 1mbit/s
+            </summary>
+            <param name="bitrate">The required Bitrate Value</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetAudioBitrate(System.String)">
+            <summary>
+                Sets The bitrate of the audio streams to the supplied value
+                Acceptable values include 1200K for 1200kbit/s or 1M for 1mbit/s
+            </summary>
+            <param name="bitrate">The required Bitrate Value</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.UseMultiThread(System.Int32)">
+            <summary>
+                Defines thread count used by converter
+            </summary>
+            <param name="threadCount">Number of used threads</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.UseMultiThread(System.Boolean)">
+            <summary>
+                Defines if converter should use all CPU cores
+            </summary>
+            <param name="multiThread">Use multiThreads</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetOutput(System.String)">
+            <summary>
+                Set output path
+            </summary>
+            <param name="outputPath">Output media file</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetOverwriteOutput(System.Boolean)">
+            <summary>
+                Set overwrite output file parameter
+            </summary>
+            <param name="overwrite">Should be output file overwritten or not. If not overwrite and file exists conversion will throw ConversionException</param>
+            <returns>>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.GetScreenCapture(System.Double)">
+            <summary>
+                Captures the entire display for length seconds at the specified framerate 
+            </summary>
+            <param name="frameRate">The framrate at which to capture the display</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetInputFormat(Xabe.FFmpeg.Enums.MediaFormat)">
+            <summary>
+            Sets the format for the input file using the -f option before the input file name
+            </summary>
+            <param name="inputFormat">The input format to set</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetOutputFormat(Xabe.FFmpeg.Enums.MediaFormat)">
+            <summary>
+            Sets the format for the output file using the -f option before the output file name
+            </summary>
+            <param name="outputFormat">The output format to set</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.SetOutputPixelFormat(Xabe.FFmpeg.Enums.PixelFormat)">
+            <summary>
+            Sets the pixel format for the output file using the -pix_fmt option before the output file name
+            </summary>
+            <param name="pixelFormat">The output pixel format to set</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="E:Xabe.FFmpeg.IConversion.OnProgress">
+            <summary>
+                Fires when FFmpeg progress changes
+            </summary>
+        </member>
+        <member name="E:Xabe.FFmpeg.IConversion.OnDataReceived">
+            <summary>
+                Fires when FFmpeg process print sonething
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.UseShortest(System.Boolean)">
+            <summary>
+                Finish encoding when the shortest input stream ends. (-shortest)
+            </summary>
+            <param name="useShortest"></param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Build">
+            <summary>
+                Build FFmpeg arguments
+            </summary>
+            <returns>Arguments</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Start">
+            <summary>
+                Start conversion
+            </summary>
+            <returns>Conversion result</returns>
+            <exception cref="T:Xabe.FFmpeg.Exceptions.ConversionException">Occurs when FFmpeg process return error.</exception>
+            <exception cref="T:System.ArgumentException">Occurs when no FFmpeg executables were found.</exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Start(System.Threading.CancellationToken)">
+            <summary>
+                Start conversion
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Conversion result</returns>
+            <exception cref="T:Xabe.FFmpeg.Exceptions.ConversionException">Occurs when FFmpeg process return error.</exception>
+            <exception cref="T:System.ArgumentException">Occurs when no FFmpeg executables were found.</exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+            <exception cref="T:System.Threading.Tasks.TaskCanceledException">Occurs when task was cancalled.</exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Start(System.String)">
+            <summary>
+                Start an FFmpeg process with specified arguments
+            </summary>
+            <param name="parameters">FFmpeg parameters eg. "-i sample.mp4 -v 0 -vcodec mpeg4 -f mpegts udp://127.0.0.1:23000"</param>
+            <returns>Conversion result</returns>
+            <exception cref="T:Xabe.FFmpeg.Exceptions.ConversionException">Occurs when FFmpeg process return error.</exception>
+            <exception cref="T:System.ArgumentException">Occurs when no FFmpeg executables were found.</exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.Start(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Start an FFmpeg process with specified arguments
+            </summary>
+            <param name="parameters">FFmpeg parameters eg. "-i sample.mp4 -v 0 -vcodec mpeg4 -f mpegts udp://127.0.0.1:23000"</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Conversion result</returns>
+            <exception cref="T:Xabe.FFmpeg.Exceptions.ConversionException">Occurs when FFmpeg process return error.</exception>
+            <exception cref="T:System.ArgumentException">Occurs when no FFmpeg executables were found.</exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+            <exception cref="T:System.Threading.Tasks.TaskCanceledException">Occurs when task was cancalled.</exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.AddParameter(System.String,Xabe.FFmpeg.Enums.ParameterPosition)">
+            <summary>
+                Add additional parameters for the conversion (They must be well formed)
+            </summary>
+            <param name="parameter"> Parameter to set</param>
+            <param name="parameterPosition">Position of parameter</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.AddStream``1(``0[])">
+            <summary>
+                Add streams to output file
+            </summary>
+            <param name="streams">Streams to add</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.IConversion.UseHardwareAcceleration(Xabe.FFmpeg.Enums.HardwareAccelerator,Xabe.FFmpeg.Enums.VideoCodec,Xabe.FFmpeg.Enums.VideoCodec,System.Int32)">
+            <summary>
+                Use hardware acceleration. This option set -threads to 1 for compatibility reasons. This should be use with proper codec (e.g. -c:v h264_nvenc or h264_cuvid)
+            </summary>
+            <param name="hardwareAccelerator">Hardware accelerator. List of all accelerators available for your system - "ffmpeg -hwaccels"</param>
+            <param name="decoder">Codec using to decode input video.</param>
+            <param name="encoder">Codec using to encode output video.</param>
+            <param name="device">Number of device (0 = default video card) if more than one video card.</param>
+            <returns>IConversion object</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.IFilterConfiguration">
+            <summary>
+                Stream filter configuration
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IFilterConfiguration.FilterType">
+            <summary>
+                Type of filter
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IFilterConfiguration.StreamNumber">
+            <summary>
+                Stream filter number
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IFilterConfiguration.Filters">
+            <summary>
+                Filter with name and values
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.IInputBuilder">
+            <summary>
+            Interface for building a list of input files intended to be used with the BuildVideoFromImages Function
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IInputBuilder.FileList">
+            <summary>
+            List of File Paths to be used as an input
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.IInputBuilder.PrepareInputFiles(System.Collections.Generic.List{System.String},System.String@)">
+            <summary>
+            Prepares a list of files to be used as input by renaming them to have a consistent file name and copying them to the temp directory
+            </summary>
+            <param name="files">A list of file paths to prepare</param>
+            <param name="directory">The Path to the temporary directory containing the prepared files</param>
+            <returns>Delegate function to generate input argument from file List</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.InputBuilder">
+            <summary>
+            Default Implementation of the IInputBuilder Interface
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.InputBuilder.FileList">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.InputBuilder.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.InputBuilder.PrepareInputFiles(System.Collections.Generic.List{System.String},System.String@)">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Downloader.IFFmpegDownloader">
+            <summary>Downloads the Latest Version of FFMpeg</summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Downloader.IFFmpegDownloader.GetLatestVersion">
+            <summary>Do the download and install FFMpeg</summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Downloader.Zeranoe.FullFFmpegDownloader">
+            <summary>Download a Fullbuild from zeranoe.com for Windows or macOS</summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Downloader.Zeranoe.FullFFmpegDownloader.Extract(System.String,System.String)">
+            <summary>Extract only binary files from the zip archive</summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.AudioCodec">
+            <summary>
+                Audio codec ("ffmpeg -codecs")
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.AudioCodec.Aac">
+            <summary>
+                AAC (Advanced Audio Coding) (decoders: aac aac_fixed ) (encoders: aac libvo_aacenc )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.AudioCodec.Ac3">
+            <summary>
+                AC3 (Dolby Digital audio codec)
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.AudioCodec.Libvorbis">
+            <summary>
+                Vorbis (decoders: vorbis libvorbis ) (encoders: vorbis libvorbis )
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.AudioCodec.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.AudioCodec.Codec">
+            <summary>
+                Audio codec
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.AudioCodec.ToString">
+            <summary>
+                Format to string
+            </summary>
+            <returns>Codec as string</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.BitstreamFilter">
+            <summary>
+                Bistream filter
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.BitstreamFilter.#ctor(System.String)">
+            <summary>
+                Create filter
+            </summary>
+            <param name="filter">Filter string</param>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.BitstreamFilter.Filter">
+            <summary>
+                Bistream filter
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.BitstreamFilter.H264Mp4ToAnnexB">
+            <summary>
+                H264_Mp4ToAnnexB
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.BitstreamFilter.AacAdtstoAsc">
+            <summary>
+                Aac_AdtstoAsc
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.BitstreamFilter.ToString">
+            <summary>
+                Return bitstream filter in ffmpeg format
+            </summary>
+            <returns>string formatted filter</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.ConversionPreset">
+            <summary>
+                Preset of conversion. Faster speed causes worse optimization and quality.
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.VerySlow">
+            <summary>
+                Very slow
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.Slower">
+            <summary>
+                Slower
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.Slow">
+            <summary>
+                Slow
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.Medium">
+            <summary>
+                Medium
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.Fast">
+            <summary>
+                Fast
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.Faster">
+            <summary>
+                Faster
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.VeryFast">
+            <summary>
+                Very fast
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.SuperFast">
+            <summary>
+                Super fast
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ConversionPreset.UltraFast">
+            <summary>
+                Ultra fast
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.FileExtensions">
+            <summary>
+                Files extensions
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Avi">
+            <summary>
+                .mp4
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Mp4">
+            <summary>
+                .mp4
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Mp3">
+            <summary>
+                .mp3
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Mpeg">
+            <summary>
+                .mpeg
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Ts">
+            <summary>
+                .ts
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.WebM">
+            <summary>
+                .webm
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Ogv">
+            <summary>
+                .ogv
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Png">
+            <summary>
+                .png
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Mkv">
+            <summary>
+                .mkv
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.FileExtensions.Gif">
+            <summary>
+                .gif
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.Flags">
+            <summary>
+                Flags for Vidoes (-flags option)
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Flags.Interlaced">
+            <summary>
+                convert a Progressive Video to an Interlaced
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.Flags.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.Flags.Flag">
+            <summary>
+                Conversion Flag
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.Flags.ToString">
+            <summary>
+                Format to string
+            </summary>
+            <returns>Codec as string</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.HardwareAccelerator">
+            <summary>
+                Hardware accelerators ("ffmpeg -hwaccels")
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.d3d11va">
+            <summary>
+                d3d11va
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.Auto">
+            <summary>
+                Use the first available option
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.dxva2">
+            <summary>
+                dxva2
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.qsv">
+            <summary>
+                qsv
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.cuvid">
+            <summary>
+                qsv
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.HardwareAccelerator.vdpau">
+            <summary>
+                qsv
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.HardwareAccelerator.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.HardwareAccelerator.Accelerator">
+            <summary>
+                Hardware accelerator
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.HardwareAccelerator.ToString">
+            <summary>
+                Convert to string format
+            </summary>
+            <returns>Accelerator string</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.MediaFormat">
+            <summary>
+                Video format ("ffmpeg -formats")
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.MediaFormat.#ctor(System.String)">
+            <summary>
+                Create new media format
+            </summary>
+            <param name="format">Media format name</param>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Format">
+            <summary>
+                Video codec
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Avi">
+            <summary>
+                AVI (Audio Video Interleaved)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Dvd">
+            <summary>
+                MPEG-2 PS (DVD VOB)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Flv">
+            <summary>
+                FLV (Flash Video)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.H264">
+            <summary>
+                raw H.264 video
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Hevc">
+            <summary>
+                raw HEVC video
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Matroska">
+            <summary>
+                Matroska
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Mov">
+            <summary>
+                Quicktime / MOV
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Mp4">
+            <summary>
+                MP4 (MPEG-4 Part 14)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Mpeg">
+            <summary>
+                MPEG-1 Systems / MPEG program stream
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Mpegts">
+            <summary>
+                MPEG-TS (MPEG-2 Transport Stream)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Ogg">
+            <summary>
+                Ogg
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.Rawvideo">
+            <summary>
+                Raw video
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.GdiGrab">
+            <summary>
+                GdiGrab
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.AVFoundation">
+            <summary>
+               AVFoundation
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.MediaFormat.X11Grab">
+            <summary>
+                X11Grab
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.MediaFormat.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.ParameterPosition">
+            <summary>
+                Position of input parameter
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ParameterPosition.PreInput">
+            <summary>
+                Parameter before input config
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.ParameterPosition.PostInput">
+            <summary>
+                Parameter after input config
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.PixelFormat">
+            <summary>
+                Pixel Format ("ffmpeg -pix_fmt")
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.PixelFormat.Yuv420P">
+            <summary>
+            YUV420P Pixel Format
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.PixelFormat.Yuv422">
+            <summary>
+            YUV422 Pixel Format
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.PixelFormat.Rgb24">
+            <summary>
+            RGB24 Pixel Format
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.PixelFormat.Bgr24">
+            <summary>
+            BGR24 Pixel Format
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.PixelFormat.Yuv422P">
+            <summary>
+            YUV422P Pixel Format
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.PixelFormat.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.PixelFormat.Format">
+            <summary>
+                Pixel Format
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.PixelFormat.ToString">
+            <summary>
+                Format to string
+            </summary>
+            <returns>Pixel Format as string</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.Position">
+            <summary>
+                Position on video
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.UpperLeft">
+            <summary>
+                Upper left corner
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.UpperRight">
+            <summary>
+                Upper right corner
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.Right">
+            <summary>
+                5px from right border
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.Left">
+            <summary>
+                5px from left border
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.Up">
+            <summary>
+                5x from upper border
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.BottomRight">
+            <summary>
+                Bottom right corner
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.BottomLeft">
+            <summary>
+                Bottom left corner
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.Center">
+            <summary>
+                Center of video
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.Position.Bottom">
+            <summary>
+                5px from bottom corner
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.RotateDegrees">
+            <summary>
+                Defines types of available rotation
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.RotateDegrees.CounterClockwiseAndFlip">
+            <summary>
+                90 degrees counter clockwise and vertical flip
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.RotateDegrees.Clockwise">
+            <summary>
+                90 degress clockwise
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.RotateDegrees.CounterClockwise">
+            <summary>
+                90 degrees counter clockwise
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.RotateDegrees.ClockwiseAndFlip">
+            <summary>
+                90 degrees counter clockwise and vertical flip
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.RotateDegrees.Invert">
+            <summary>
+                Rotate video by 180 degrees
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.SubtitleFormat">
+            <summary>
+                Output subtitle format
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.SubtitleFormat.#ctor(System.String)">
+            <summary>
+                Subtitle format
+            </summary>
+            <param name="format">Subtitles format</param>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.SubtitleFormat.Srt">
+            <summary>
+                SubRip
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.SubtitleFormat.WebVtt">
+            <summary>
+                SubRip
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.SubtitleFormat.Ass">
+            <summary>
+                SubRip
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.VideoCodec">
+            <summary>
+                Video codec ("ffmpeg -codecs")
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.H264">
+            <summary>
+                H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (decoders: h264 h264_crystalhd h264_vdpau ) (encoders: libx264 libx264rgb
+                )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Hevc">
+            <summary>
+                H.265 / HEVC (High Efficiency Video Coding) (encoders: libx265 )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Mpeg4">
+            <summary>
+                MPEG-4 part 2 (decoders: mpeg4 mpeg4_crystalhd mpeg4_vdpau ) (encoders: mpeg4 libxvid )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Png">
+            <summary>
+                PNG (Portable Network Graphics) image
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Theora">
+            <summary>
+                Theora (encoders: libtheora )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Tiff">
+            <summary>
+                TIFF image
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Vp8">
+            <summary>
+                On2 VP8 (decoders: vp8 libvpx ) (encoders: libvpx )
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Libx264">
+            <summary>
+                Free x264 codec
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.H264_cuvid">
+            <summary>
+                h264_cuvid
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.H264_nvenc">
+            <summary>
+                h264_nvenc
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoCodec.Copy">
+            <summary>
+                Copy
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.VideoCodec.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoCodec.Codec">
+            <summary>
+                Video codec
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.VideoCodec.ToString">
+            <summary>
+                Convert to string format
+            </summary>
+            <returns>Codec string</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Enums.VideoSize">
+            <summary>
+                Video size
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoSize.Height">
+            <summary>
+                FFmpeg resolution height
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.Enums.VideoSize.Width">
+            <summary>
+                FFmpeg resolution width
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.VideoSize.#ctor(System.Int32,System.Int32)">
+            <summary>
+                VideoSize in FFmpeg format
+            </summary>
+            <param name="width">Width of output video</param>
+            <param name="height">Height of output video</param>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Ntsc">
+            <summary>
+                720x480
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Pal">
+            <summary>
+                720x576
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qntsc">
+            <summary>
+                352x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qpal">
+            <summary>
+                352x288
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Sntsc">
+            <summary>
+                640x480
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Spal">
+            <summary>
+                768x576
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Film">
+            <summary>
+                352x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.NtscFilm">
+            <summary>
+                352x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Sqcif">
+            <summary>
+                128x96
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qcif">
+            <summary>
+                176x144
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Cif">
+            <summary>
+                352x288
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._4Cif">
+            <summary>
+                704x576
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._16cif">
+            <summary>
+                1408x1152
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qqvga">
+            <summary>
+                160x120
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qvga">
+            <summary>
+                320x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Vga">
+            <summary>
+                640x480
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Svga">
+            <summary>
+                800x600
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Xga">
+            <summary>
+                1024x768
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Uxga">
+            <summary>
+                1600x1200
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qxga">
+            <summary>
+                2048x1536
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Sxga">
+            <summary>
+                1280x1024
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qsxga">
+            <summary>
+                2560x2048
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hsxga">
+            <summary>
+                5120x4096
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wvga">
+            <summary>
+                852x480
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wxga">
+            <summary>
+                1366x768
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wsxga">
+            <summary>
+                1600x1024
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wuxga">
+            <summary>
+                1920x1200
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Woxga">
+            <summary>
+                2560x1600
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wqsxga">
+            <summary>
+                3200x2048
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wquxga">
+            <summary>
+                3840x2400
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Whsxga">
+            <summary>
+                6400x4096
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Whuxga">
+            <summary>
+                7680x4800
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Cga">
+            <summary>
+                320x200
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Ega">
+            <summary>
+                640x350
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hd480">
+            <summary>
+                852x480
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hd720">
+            <summary>
+                1280x720
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hd1080">
+            <summary>
+                1920x1080
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._2K">
+            <summary>
+                2048x1080
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._2Kflat">
+            <summary>
+                1998x1080
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._2Kscope">
+            <summary>
+                2048x858
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._4K">
+            <summary>
+                4096x2160
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._4Kflat">
+            <summary>
+                3996x2160
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._4Kscope">
+            <summary>
+                4096x1716
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Nhd">
+            <summary>
+                640x360
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hqvga">
+            <summary>
+                240x160
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Wqvga">
+            <summary>
+                400x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Fwqvga">
+            <summary>
+                432x240
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Hvga">
+            <summary>
+                480x320
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Qhd">
+            <summary>
+                960x540
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._2Kdci">
+            <summary>
+                2048x1080
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize._4Kdci">
+            <summary>
+                4096x2160
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Uhd2160">
+            <summary>
+                3840x2160
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Enums.VideoSize.Uhd4320">
+            <summary>
+                7680x4320
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Enums.VideoSize.ToString">
+            <summary>
+                Convert video size to string format
+            </summary>
+            <returns>Formatted video size</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.CodecType">
+            <summary>
+                Stream type
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.CodecType.Video">
+            <summary>
+                Video stream
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.CodecType.Audio">
+            <summary>
+                Audio stream
+            </summary>
+        </member>
+        <member name="F:Xabe.FFmpeg.CodecType.Subtitle">
+            <summary>
+                Subtitle stream
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Events.ConversionProgressEventHandler">
+            <summary>
+                Info about conversion progress
+            </summary>
+            <param name="sender">Sender</param>
+            <param name="args">Conversion info</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Events.ConversionProgressEventArgs">
+            <summary>
+                Conversion information
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Events.ConversionProgressEventArgs.#ctor(System.TimeSpan,System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Events.ConversionProgressEventArgs.Duration">
+            <summary>
+                Current processing time
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Events.ConversionProgressEventArgs.TotalLength">
+            <summary>
+                Input movie length
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Events.ConversionProgressEventArgs.Percent">
+            <summary>
+                Percent of conversion
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Exceptions.ConversionException">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg process return error.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Exceptions.ConversionException.#ctor(System.String,System.String)">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg process return error.
+            </summary>
+            <param name="errorMessage">FFmpeg error output</param>
+            <param name="inputParameters">FFmpeg input parameters</param>
+        </member>
+        <member name="P:Xabe.FFmpeg.Exceptions.ConversionException.InputParameters">
+            <summary>
+                FFmpeg input parameters
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.Exceptions.FFmpegNotFoundException">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg process return error.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Exceptions.FFmpegNotFoundException.#ctor(System.String)">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg executables cannot be found.
+            </summary>
+            <param name="errorMessage">FFmpeg error output</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Exceptions.HardwareAcceleratorNotFoundException">
+            <inheritdoc />
+            <summary>
+                 The exception that is thrown when a FFmpeg cannot find specified hardware accelerator.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Exceptions.HardwareAcceleratorNotFoundException.#ctor(System.String,System.String)">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg cannot find specified hardware accelerator.
+            </summary>
+            <param name="errorMessage">FFmpeg error output</param>
+            <param name="inputParameters">FFmpeg input parameters</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Exceptions.InvalidInputException">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when input does not exists.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Exceptions.InvalidInputException.#ctor(System.String)">
+            <summary>
+                The exception that is thrown when input does not exists.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Exceptions.UnknownDecoderException">
+            <inheritdoc />
+            <summary>
+                 The exception that is thrown when a FFmpeg cannot find specified hardware accelerator.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Exceptions.UnknownDecoderException.#ctor(System.String,System.String)">
+            <inheritdoc />
+            <summary>
+                The exception that is thrown when a FFmpeg cannot find specified hardware accelerator.
+            </summary>
+            <param name="errorMessage">FFmpeg error output</param>
+            <param name="inputParameters">FFmpeg input parameters</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.FFmpeg">
+            <inheritdoc />
+            <summary>
+                Wrapper for FFmpeg
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFmpegDir">
+            <summary>
+                Directory contains FFmpeg and FFprobe
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.ExecutablesPath">
+            <summary>
+                Directory containing FFmpeg and FFprobe
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFmpegExecutableName">
+            <summary>
+                Name of FFmpeg executable name (Case insensitive)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFprobeExecutableName">
+            <summary>
+                Name of FFprobe executable name (Case insensitive)
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.Priority">
+            <summary>
+                FFmpeg tool process priority
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFmpegProcessId">
+            <summary>
+            FFmpeg process id
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.FFmpeg.GetLatestVersion(System.Boolean)">
+            <summary>
+                Download latest FFmpeg version for current operating system to FFmpeg.ExecutablePath. If it is not set download to ".".
+            <param id="fullVersion">Determine if a fully compiled FFPmpeg is downloaded (with gpu support and etc)</param>
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.FFmpeg.#ctor">
+            <summary>
+                Initalize new FFmpeg. Search FFmpeg and FFprobe in PATH
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFmpegPath">
+            <summary>
+                FilePath to FFmpeg
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.FFmpeg.FFprobePath">
+            <summary>
+                FilePath to FFprobe
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.FFmpeg.RunProcess(System.String,System.String,System.Nullable{System.Diagnostics.ProcessPriorityClass},System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+                Run conversion
+            </summary>
+            <param name="args">Arguments</param>
+            <param name="processPath">FilePath to executable (FFmpeg, ffprobe)</param>
+            <param name="priority">Process priority to run executables</param>
+            <param name="standardInput">Should redirect standard input</param>
+            <param name="standardOutput">Should redirect standard output</param>
+            <param name="standardError">Should redirect standard error</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+        </member>
+        <member name="T:Xabe.FFmpeg.FFbase">
+            <summary>
+                Base FFmpeg class
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.FFmpegWrapper">
+            <inheritdoc />
+            <summary>
+                Wrapper for FFmpeg
+            </summary>
+        </member>
+        <member name="E:Xabe.FFmpeg.FFmpegWrapper.OnProgress">
+            <summary>
+                Fires when FFmpeg progress changes
+            </summary>
+        </member>
+        <member name="E:Xabe.FFmpeg.FFmpegWrapper.OnDataReceived">
+            <summary>
+                Fires when FFmpeg process print something
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.FFprobeWrapper">
+            <summary>
+                Get information about media file
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.FFprobeWrapper.GetProperties(System.IO.FileInfo,Xabe.FFmpeg.MediaInfo)">
+            <summary>
+                Get proporties prom media file
+            </summary>
+            <param name="fileInfo">Media file info</param>
+            <param name="mediaInfo">Empty media info</param>
+            <returns>Properties</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.AsyncHelper">
+            <summary>
+                Handling async code synchronously
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.AsyncHelper.RunSync(System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Execute's an async Task method which has a void return value synchronously
+            </summary>
+            <param name="task">Task method to execute</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.AsyncHelper.RunSync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Execute's an async Task method which has a T return type synchronously
+            </summary>
+            <typeparam name="T">Return Type</typeparam>
+            <param name="task">Task method to execute</param>
+            <returns></returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.TimeExtensions">
+            <summary>
+                Extension methods
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.TimeExtensions.ToFFmpeg(System.TimeSpan)">
+            <summary>
+                Return ffmpeg formatted time
+            </summary>
+            <param name="ts">TimeSpan</param>
+            <returns>FFmpeg formated time</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.TimeExtensions.ParseFFmpegTime(System.String)">
+            <summary>
+                Parse FFmpeg formated time
+            </summary>
+            <param name="text">FFmpeg time</param>
+            <returns>TimeSpan</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.IMediaInfo">
+            <summary>
+                Information about media file
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.Streams">
+            <summary>
+                All file streams
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.FileInfo">
+            <summary>
+                Source file info
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.Duration">
+            <summary>
+                Duration of media
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.Size">
+            <summary>
+                Size of file
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.VideoStreams">
+            <summary>
+                Video streams
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.AudioStreams">
+            <summary>
+                Audio streams
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.IMediaInfo.SubtitleStreams">
+            <summary>
+                Audio streams
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.MediaInfo">
+            <inheritdoc cref="T:Xabe.FFmpeg.IMediaInfo" />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.Streams">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.Duration">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.Size">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.VideoStreams">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.AudioStreams">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.SubtitleStreams">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.MediaInfo.FileInfo">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.MediaInfo.Get(System.String)">
+            <summary>
+                Get MediaInfo from file
+            </summary>
+            <param name="filePath">FullPath to file</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.MediaInfo.Get(System.IO.FileInfo)">
+            <summary>
+                Get MediaInfo from file
+            </summary>
+            <param name="fileInfo">FileInfo</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Model.ConversionResult">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.Success">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.MediaInfo">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.StartTime">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.EndTime">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.Duration">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.ConversionResult.Arguments">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Model.IConversionResult">
+            <summary>
+                Information about conversion
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.Success">
+            <summary>
+                Result of conversion
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.MediaInfo">
+            <summary>
+                Output IMediaInfo
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.StartTime">
+            <summary>
+                Date and time of starting conversion
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.EndTime">
+            <summary>
+                Date and time of starting conversion
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.Duration">
+            <summary>
+                Conversion duration
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Model.IConversionResult.Arguments">
+            <summary>
+                Arguments passed to ffmpeg
+            </summary>
+        </member>
+        <member name="T:Xabe.FFmpeg.IProbe">
+            <summary>
+                Allows to prepare and start IProbe.
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.IProbe.Start(System.String)">
+            <summary>
+            Start probe with result from console
+            </summary>
+            <param name="args">Args to pass to FFprobe</param>
+            <returns>Output from console in specified format</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Probe">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Probe.New">
+            <summary>
+                Get new instance of Conversion
+            </summary>
+            <returns>IProbe object</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Probe.Start(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.AudioStream">
+            <inheritdoc cref="T:Xabe.FFmpeg.Streams.IAudioStream" />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.Reverse">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.Build">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.BuildInputArguments">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.BuildAudioCodec">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.Split(System.TimeSpan,System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.CopyStream">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.CodecType">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.SetChannels(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.SetBitstreamFilter(Xabe.FFmpeg.Enums.BitstreamFilter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.ChangeBitrate(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.SetSampleRate(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.ChangeSpeed(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.SetCodec(Xabe.FFmpeg.Enums.AudioCodec)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Index">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Duration">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Format">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Bitrate">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Channels">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.SampleRate">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Codec">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Language">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Default">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Forced">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.GetSource">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.AudioStream.Source">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.SetSeek(System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.AudioStream.GetFilters">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.IAudioStream">
+            <summary>
+                Audio stream
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Duration">
+            <summary>
+                Duration
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.CodecType">
+            <summary>
+                Codec type
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Bitrate">
+            <summary>
+                Bit Rate
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.SampleRate">
+            <summary>
+                Sample Rate
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Channels">
+            <summary>
+                Channels
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Language">
+            <summary>
+            Language 
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Default">
+            <summary>
+            Default
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IAudioStream.Forced">
+            <summary>
+            Forced
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.CopyStream">
+            <summary>
+                Set stream to copy with orginal codec
+            </summary>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.Reverse">
+            <summary>
+                Reverse audio stream
+            </summary>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.SetChannels(System.Int32)">
+            <summary>
+                Set audio Channels (-ac option)
+            </summary>
+            <param name="channels">Number of channels to use in the output stream</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.SetCodec(Xabe.FFmpeg.Enums.AudioCodec)">
+            <summary>
+                Set audio codec and bitrate
+            </summary>
+            <param name="codec">Audio odec</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.SetBitstreamFilter(Xabe.FFmpeg.Enums.BitstreamFilter)">
+            <summary>
+                Set filter
+            </summary>
+            <param name="filter">Filter</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.ChangeBitrate(System.Double)">
+            <summary>
+                Sets the Bitrate of the AudioStream
+            </summary>
+            <param name="bitRate">Bitrate for the AudioStream in bytes</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.SetSampleRate(System.Int32)">
+            <summary>
+                Sets the SampleRate of the AudioStream (-ar option)
+            </summary>
+            <param name="sampleRate">SampleRate in HZ for the Audio Stream</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.ChangeSpeed(System.Double)">
+            <summary>
+                Change speed of media
+            </summary>
+            <param name="multiplaction">Speed value. (0.5 - 2.0). To double the speed set this to 2.0</param>
+            <returns>IAudioStream</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">When speed isn't between 0.5 - 2.0.</exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.Split(System.TimeSpan,System.TimeSpan)">
+            <summary>
+                Get part of audio
+            </summary>
+            <param name="startTime">Start point</param>
+            <param name="duration">Duration of new audio</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IAudioStream.SetSeek(System.Nullable{System.TimeSpan})">
+            <summary>
+                Seeks in input file to position. (-ss argument)
+            </summary>
+            <param name="seek">Position</param>
+            <returns>IAudioStream</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.ILocalStream">
+            <summary>
+                Stream with local source
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.ILocalStream.Source">
+            <summary>
+                File source of stream
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.ILocalStream.Split(System.TimeSpan,System.TimeSpan)">
+            <summary>
+                Get part of media
+            </summary>
+            <param name="startTime">Start point</param>
+            <param name="duration">Duration of new video</param>
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.IStream">
+            <summary>
+                Base stream class
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IStream.Build">
+            <summary>
+                Build FFmpeg arguments
+            </summary>
+            <returns>Arguments</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IStream.BuildInputArguments">
+            <summary>
+                Build FFmpeg arguments for input
+            </summary>
+            <returns>Arguments</returns>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IStream.Index">
+            <summary>
+                Index of stream
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IStream.Format">
+            <summary>
+                Format
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IStream.GetSource">
+            <summary>
+                Get stream input
+            </summary>
+            <returns>Input path</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.ISubtitleStream">
+            <summary>
+                Subtitle stream
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.ISubtitleStream.Language">
+            <summary>
+                Subtitle language
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.ISubtitleStream.Default">
+            <summary>
+            Default
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.ISubtitleStream.Forced">
+            <summary>
+            Forced
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.ISubtitleStream.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.ISubtitleStream.SetFormat(Xabe.FFmpeg.Enums.SubtitleFormat)">
+            <summary>
+                Set subtitle format
+            </summary>
+            <param name="format">Subtitle format</param>
+            <returns>ISubtitleStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.ISubtitleStream.SetLanguage(System.String)">
+            <summary>
+                Set subtitle language
+            </summary>
+            <param name="language">Language</param>
+            <returns>ISubtitleStream</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.IVideoStream">
+            <summary>
+                Video Stream
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Duration">
+            <summary>
+                Duration
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Width">
+            <summary>
+                Width
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Height">
+            <summary>
+                Height
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.FrameRate">
+            <summary>
+                Frame rate
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Ratio">
+            <summary>
+                Screen ratio
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.CodecType">
+            <summary>
+                Codec type
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Bitrate">
+            <summary>
+                Video bitrate
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.PixelFormat">
+            <summary>
+            Pixel Format
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Default">
+            <summary>
+            Default
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Forced">
+            <summary>
+            Forced
+            </summary>
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.IVideoStream.Codec">
+            <summary>
+            Video Codec
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.Rotate(Xabe.FFmpeg.Enums.RotateDegrees)">
+            <summary>
+                Rotate video
+            </summary>
+            <param name="rotateDegrees">Rotate type</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.ChangeSpeed(System.Double)">
+            <summary>
+                Change speed of video
+            </summary>
+            <param name="multiplaction">Speed value. (0.5 - 2.0). To double the speed set this to 2.0</param>
+            <returns>IVideoStream</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">When speed isn't between 0.5 - 2.0.</exception>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetWatermark(System.String,Xabe.FFmpeg.Enums.Position)">
+            <summary>
+                Melt watermark into video
+            </summary>
+            <param name="imagePath">Watermark</param>
+            <param name="position">Position of watermark</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.Reverse">
+            <summary>
+                Reverse video
+            </summary>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetFlags(Xabe.FFmpeg.Enums.Flags)">
+            <summary>
+                Set Flags for conversion (-flags option)
+            </summary>
+            <param name="flags">Flags to use</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetFramerate(System.Int32)">
+            <summary>
+                Set Framerate of the video (-r option)
+            </summary>
+            <param name="framerate">Framerates in FPS</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetBitrate(System.Double)">
+            <summary>
+                Set Bitrate of the video (-b:v option)
+            </summary>
+            <param name="bitrate">Bitrate in bits</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetScale(Xabe.FFmpeg.Enums.VideoSize)">
+            <summary>
+                Set size of video
+            </summary>
+            <param name="size">VideoSize</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetSize(Xabe.FFmpeg.Enums.VideoSize)">
+            <summary>
+                Set size of video
+            </summary>
+            <param name="size">VideoSize</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetCodec(Xabe.FFmpeg.Enums.VideoCodec)">
+            <summary>
+                Set video codec
+            </summary>
+            <param name="codec">Video codec</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetPixelFormat(Xabe.FFmpeg.Enums.PixelFormat)">
+            <summary>
+                Set video pixel format
+            </summary>
+            <param name="pixelFormat">Pixel Format</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.CopyStream">
+            <summary>
+                Set stream to copy with orginal codec
+            </summary>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetBitstreamFilter(Xabe.FFmpeg.Enums.BitstreamFilter)">
+            <summary>
+                Set filter
+            </summary>
+            <param name="filter">Filter</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetLoop(System.Int32,System.Int32)">
+            <summary>
+                Loop over the input stream.(-loop)
+            </summary>
+            <param name="count">Number of repeats</param>
+            <param name="delay">Delay between repeats (in seconds)</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetOutputFramesCount(System.Int32)">
+            <summary>
+                Set output frames count
+            </summary>
+            <param name="number">Number of frames</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.SetSeek(System.TimeSpan)">
+            <summary>
+                Seeks in input file to position. (-ss argument)
+            </summary>
+            <param name="seek">Position</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.AddSubtitles(System.String,System.String,System.String,Xabe.FFmpeg.Enums.VideoSize)">
+            <summary>
+                Burn subtitle into file
+            </summary>
+            <param name="subtitlePath">Path to subtitle file in .srt format</param>
+            <param name="encode">Set subtitles input character encoding. Only useful if not UTF-8.</param>
+            <param name="style">
+                Override default style or script info parameters of the subtitles. It accepts a string containing
+                ASS style format KEY=VALUE couples separated by ","
+            </param>
+            <param name="originalSize">
+                Specify the size of the original video, the video for which the ASS style was composed. This
+                is necessary to correctly scale the fonts if the aspect ratio has been changed.
+            </param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.IVideoStream.Split(System.TimeSpan,System.TimeSpan)">
+            <summary>
+                Get part of video
+            </summary>
+            <param name="startTime">Start point</param>
+            <param name="duration">Duration of new video</param>
+            <returns>IVideoStream</returns>
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.SubtitleStream">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.SetFormat(Xabe.FFmpeg.Enums.SubtitleFormat)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Format">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Source">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.Build">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.BuildInputArguments">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Index">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Language">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Default">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Forced">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.SubtitleStream.Title">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.SetLanguage(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.Xabe#FFmpeg#Streams#ILocalStream#Split(System.TimeSpan,System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.SubtitleStream.GetSource">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.VideoStream">
+            <inheritdoc cref="T:Xabe.FFmpeg.Streams.IVideoStream" />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.GetFilters">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Width">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Height">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.FrameRate">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Ratio">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Duration">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Format">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Index">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Source">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Codec">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.PixelFormat">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Default">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Forced">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.Build">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.BuildInputArguments">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.BuildVideoCodec">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.ChangeSpeed(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.Rotate(Xabe.FFmpeg.Enums.RotateDegrees)">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.CodecType">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.VideoStream.Bitrate">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.CopyStream">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetLoop(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.AddSubtitles(System.String,System.String,System.String,Xabe.FFmpeg.Enums.VideoSize)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.Reverse">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetBitrate(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetFlags(Xabe.FFmpeg.Enums.Flags)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetFramerate(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetScale(Xabe.FFmpeg.Enums.VideoSize)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetSize(Xabe.FFmpeg.Enums.VideoSize)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetCodec(Xabe.FFmpeg.Enums.VideoCodec)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetBitstreamFilter(Xabe.FFmpeg.Enums.BitstreamFilter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetSeek(System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetOutputFramesCount(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetWatermark(System.String,Xabe.FFmpeg.Enums.Position)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.SetPixelFormat(Xabe.FFmpeg.Enums.PixelFormat)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.Split(System.TimeSpan,System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.VideoStream.GetSource">
+            <inheritdoc />
+        </member>
+        <member name="T:Xabe.FFmpeg.Streams.WebStream">
+            <summary>
+                Stream with web source
+            </summary>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.WebStream.#ctor(System.Uri,System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            Create web stream
+            </summary>
+            <param name="uri">File uri</param>
+            <param name="format">Stream format</param>
+            <param name="duration">Duration of video</param>
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.WebStream.Build">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.WebStream.BuildInputArguments">
+            <inheritdoc />
+        </member>
+        <member name="M:Xabe.FFmpeg.Streams.WebStream.GetSource">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.WebStream.Index">
+            <inheritdoc />
+        </member>
+        <member name="P:Xabe.FFmpeg.Streams.WebStream.Format">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
