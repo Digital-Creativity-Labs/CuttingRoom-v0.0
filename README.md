@@ -1,3 +1,5 @@
+![Logo](https://user-images.githubusercontent.com/30237636/153431521-addef1a6-1031-4da9-827e-39013238c195.png)
+
 # Cutting Room
 
 Cutting Room is a tool developed by [Digital Creativity Labs](https://digitalcreativity.ac.uk/) for Unity (2020.3.23f1+) which allows creators to build and deploy Object Based Media productions.
