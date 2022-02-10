@@ -4,6 +4,14 @@
 
 Cutting Room is a tool developed by [Digital Creativity Labs](https://digitalcreativity.ac.uk/) for Unity (2020.3.23f1+) which allows creators to build and deploy Object Based Media productions.
 
+## Getting Started
+
+Clone the repository and copy the source files into a Unity project.
+
+A skeleton layout for a Cutting Room scene can be found at the following path:
+
+`Scenes/CuttingRoomDefault.unity`
+
 ## Documentation
 
 Samples are available within the Samples directory of the repository. These include samples using the Unity [VideoPlayer](https://docs.unity3d.com/ScriptReference/Video.VideoPlayer.html) component and also samples using the [AVProVideo](https://renderheads.com/products/avpro-video/) plugin (not included).
