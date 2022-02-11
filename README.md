@@ -35,7 +35,7 @@ You can join us and other Cutting Room creators in the following communities:
 ## Creators
 
 This tool was developed by [Digital Creativity Labs](https://digitalcreativity.ac.uk) at the [University of York](https://york.ac.uk).
-
+</br></br>
 <div display="flex" align="center">
 <img src="https://user-images.githubusercontent.com/30237636/153431521-addef1a6-1031-4da9-827e-39013238c195.png" style="height:75px;" />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/30237636/153582621-ee15867b-a83f-4757-9159-61ef097db39e.svg" style="height:75px;" />
