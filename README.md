@@ -13,6 +13,7 @@ Cutting Room is a plugin for [Unity](https://unity.com) developed by [Digital Cr
 * Open the cloned project with <b>Unity (2022.3.23f1 or above)</b>.
 * Open the first sample tutorial: `Assets/Samples/UnityVideo/1AtomicNarrativeObject/AtomicNarrativeObject.unity` to learn the basics.
 * Complete the remaining tutorials: `Assets/Samples/UnityVideo`
+* Build your own productions and share them with us via one of our [communities](https://github.com/Digital-Creativity-Labs/CuttingRoom#community).
 
 ## Documentation
 
