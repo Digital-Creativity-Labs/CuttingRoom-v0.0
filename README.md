@@ -8,7 +8,7 @@ Cutting Room is a tool developed by [Digital Creativity Labs](https://digitalcre
 
 Clone the repository and copy the source files into a Unity project.
 
-A skeleton layout for a Cutting Room scene can be found at the following path:
+An example of how to construct a basic Cutting Room scene can be found at the following path within the repository:
 
 `Scenes/CuttingRoomDefault.unity`
 
