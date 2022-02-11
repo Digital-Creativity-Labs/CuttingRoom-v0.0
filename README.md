@@ -29,7 +29,7 @@ The sample Unity scenes provide an interactive demo on how to set up a Cutting R
 
 ## Contributions
 
-We love seeing pull requests with new features or bug fixes so please feel free to create these. We will examine each one and if satisfied, merge them into the main repository.
+We love seeing pull requests with new features or bug fixes so please feel free to create these if you have something to share with us. Once received, we will examine each one and if satisfied, merge them into the main repository with our thanks.
 
 ## Community
 
