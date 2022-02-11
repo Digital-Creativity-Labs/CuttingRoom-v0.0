@@ -29,3 +29,7 @@ COMMS INFO HERE
 ## Creators
 
 This tool was developed by [Digital Creativity Labs](https://digitalcreativity.ac.uk) at the [University of York](https://york.ac.uk).
+
+## Licence
+
+Code is released under the [Apache 2.0 Licence](https://www.apache.org/licenses/LICENSE-2.0).
