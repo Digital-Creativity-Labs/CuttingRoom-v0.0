@@ -9,14 +9,15 @@ Cutting Room is a tool developed by [Digital Creativity Labs](https://digitalcre
 
 ## Getting Started
 
-Clone the repository and copy the source files into a Unity project.
-
-An example of how to construct a basic Cutting Room scene can be found at the following path within the repository:
-
-`Assets/Scenes/CuttingRoomDefault.unity`
+* Clone the repository: `https://github.com/Digital-Creativity-Labs/CuttingRoom.git`
+* Open the cloned project with <b>Unity (2022.3.23f1 or above)</b>.
+* Open the first sample tutorial: `Assets/Samples/UnityVideo/1AtomicNarrativeObject/AtomicNarrativeObject.unity` to learn the basics.
+* Complete the remaining tutorials: `Assets/Samples/UnityVideo`
 
 ## Documentation
 
-Samples are available within the Samples directory of the repository. These include samples using the Unity [VideoPlayer](https://docs.unity3d.com/ScriptReference/Video.VideoPlayer.html) component and also samples using the [AVProVideo](https://renderheads.com/products/avpro-video/) plugin (not included).
-
 API documentation can be found within the `Docs` directory.
+
+## Samples
+
+Samples are available within the Samples directory of the repository. These include samples using the Unity [VideoPlayer](https://docs.unity3d.com/ScriptReference/Video.VideoPlayer.html) component and also samples using the [AVProVideo](https://renderheads.com/products/avpro-video/) plugin (not included).
