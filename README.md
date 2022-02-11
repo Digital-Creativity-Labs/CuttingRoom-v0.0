@@ -10,7 +10,7 @@ Clone the repository and copy the source files into a Unity project.
 
 An example of how to construct a basic Cutting Room scene can be found at the following path within the repository:
 
-`Scenes/CuttingRoomDefault.unity`
+`Assets/Scenes/CuttingRoomDefault.unity`
 
 ## Documentation
 
