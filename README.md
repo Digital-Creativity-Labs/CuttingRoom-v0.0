@@ -30,8 +30,12 @@ COMMS INFO HERE
 
 This tool was developed by [Digital Creativity Labs](https://digitalcreativity.ac.uk) at the [University of York](https://york.ac.uk).
 
-<img src="https://user-images.githubusercontent.com/30237636/153582621-ee15867b-a83f-4757-9159-61ef097db39e.svg" style="width:300px;" />
-<img src="https://user-images.githubusercontent.com/30237636/153583895-28b17f73-725c-4ea6-b557-052bb89efe2e.png" style="width:300px;" />
+<div display="flex" float="left">
+<img src="https://user-images.githubusercontent.com/30237636/153431521-addef1a6-1031-4da9-827e-39013238c195.png" style="height:100px;" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/30237636/153582621-ee15867b-a83f-4757-9159-61ef097db39e.svg" style="height:100px;" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://user-images.githubusercontent.com/30237636/153583895-28b17f73-725c-4ea6-b557-052bb89efe2e.png" style="height:100px;" />
+</div>
 
 ## Licence
 
