@@ -27,7 +27,7 @@ Samples are available within the Samples directory of the repository. These incl
 
 ## Contributions
 
-
+We love seeing pull requests with new features or bug fixes so please feel free to create these. We will examine each one and if satisfied, merge them into the main repository.
 
 ## Community
 
@@ -36,6 +36,10 @@ You can join us and other Cutting Room creators in the following communities:
 * Join and discuss Cutting Room and Object Based Media on [Slack](https://join.slack.com/t/cutting-room-group/shared_invite/zt-13ghccadu-QOVC3uZYppBr4fjBc_KTvw).
 * Create and read threads about Cutting Room on [Reddit](https://www.reddit.com/r/cuttingroom/).
 * Follow and tweet us [@CuttingRoomOBM](https://twitter.com/CuttingRoomOBM) on Twitter.
+
+## Bugs
+
+If you encounter an issue, please make us aware of this by [submitting an issue](https://github.com/Digital-Creativity-Labs/CuttingRoom/issues) through Github.
 
 ## Creators
 
