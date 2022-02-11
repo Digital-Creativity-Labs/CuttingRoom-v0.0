@@ -39,6 +39,10 @@ You can join us and other Cutting Room creators in the following communities:
 * Create and read threads about Cutting Room on [Reddit](https://www.reddit.com/r/cuttingroom/).
 * Follow and tweet us [@CuttingRoomOBM](https://twitter.com/CuttingRoomOBM) on Twitter.
 
+## Collaboration
+
+We are always on the look out for new partners to work with to develop innovative and novel products using Cutting Room. If you would like to speak to us about a potential collaboration please reach out to us at [enquiries@digitalcreativity.ac.uk](mailto:enquiries@digitalcreativity.ac.uk).
+
 ## Support
 
 If you encounter an issue or just need clarification on existing functionality, please make us aware of this by [submitting an issue](https://github.com/Digital-Creativity-Labs/CuttingRoom/issues) through Github and we will do our best to provide assistance.
@@ -54,6 +58,8 @@ This tool was developed by [Digital Creativity Labs](https://digitalcreativity.a
 <img src="https://user-images.githubusercontent.com/30237636/153583895-28b17f73-725c-4ea6-b557-052bb89efe2e.png" style="height:75px;" />
 </div>
 
-## Licence
+## Copyright and Licence
+
+Code and documentation copyright 2015-2022 [Digital Creativity Labs](https://digitalcreativity.ac.uk/) and [University of York](https://york.ac.uk).
 
 Code is released under the [Apache 2.0 Licence](https://www.apache.org/licenses/LICENSE-2.0).
