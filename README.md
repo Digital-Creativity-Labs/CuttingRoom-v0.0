@@ -37,9 +37,9 @@ You can join us and other Cutting Room creators in the following communities:
 * Create and read threads about Cutting Room on [Reddit](https://www.reddit.com/r/cuttingroom/).
 * Follow and tweet us [@CuttingRoomOBM](https://twitter.com/CuttingRoomOBM) on Twitter.
 
-## Bugs
+## Support
 
-If you encounter an issue, please make us aware of this by [submitting an issue](https://github.com/Digital-Creativity-Labs/CuttingRoom/issues) through Github.
+If you encounter an issue or just need clarification on existing functionality, please make us aware of this by [submitting an issue](https://github.com/Digital-Creativity-Labs/CuttingRoom/issues) through Github and we will do our best to provide assistance.
 
 ## Creators
 
