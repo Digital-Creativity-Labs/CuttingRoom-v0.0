@@ -16,13 +16,18 @@ Cutting Room is a plugin for [Unity](https://unity.com) developed by [Digital Cr
 
 ## Documentation
 
-API documentation can be found within the `Docs` directory.
+API documentation can be found:
 
-HOST DOCS SOMEWHERE AND LINK HERE
+* Within the `Docs` directory of the repository.
+* On [Google Drive](https://drive.google.com/file/d/1zP1hT55O3PNzLHuhHe202givsCCV0Iat/view?usp=sharing).
 
 ## Samples
 
 Samples are available within the Samples directory of the repository. These include samples using the Unity [VideoPlayer](https://docs.unity3d.com/ScriptReference/Video.VideoPlayer.html) component and also samples using the [AVProVideo](https://renderheads.com/products/avpro-video/) plugin (not included).
+
+## Contributions
+
+
 
 ## Community
 
