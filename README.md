@@ -26,7 +26,10 @@ Samples are available within the Samples directory of the repository. These incl
 
 ## Community
 
-COMMS INFO HERE
+You can join us and other Cutting Room creators in the following communities:
+
+[Slack](https://join.slack.com/t/cutting-room-group/shared_invite/zt-13ghccadu-QOVC3uZYppBr4fjBc_KTvw)
+[Reddit](https://www.reddit.com/r/cuttingroom/)
 
 ## Creators
 
