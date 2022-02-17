@@ -9,6 +9,7 @@ Cutting Room is a plugin for [Unity](https://unity.com) developed by [Digital Cr
 
 ## Getting Started
 
+* Ensure that you have [Git LFS](https://git-lfs.github.com/) installed.
 * Clone the repository: `https://github.com/Digital-Creativity-Labs/CuttingRoom.git`
 * Open the cloned project with <b>Unity (2020.3.23f1 or above)</b>.
 * Open the first sample tutorial: `Assets/Samples/UnityVideo/1AtomicNarrativeObject/AtomicNarrativeObject.unity` to learn the basics.
