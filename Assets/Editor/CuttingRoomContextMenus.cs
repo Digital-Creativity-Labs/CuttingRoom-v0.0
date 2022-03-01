@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using CuttingRoom;
 using CuttingRoom.VariableSystem;
+using System.Threading.Tasks;
 
 namespace CuttingRoom.Editor
 {
@@ -150,7 +151,19 @@ namespace CuttingRoom.Editor
 			{
 				MediaController mediaController = atomicNarrativeObject.mediaSource.mediaControllerPrefab.GetComponent<MediaController>();
 
-				float duration = await mediaController.GetDuration(atomicNarrativeObject.mediaSource);
+				float duration = 0.0f;
+
+				// Try to get the duration. If the controller has not overriden the GetDuration method, task returned is null so duration is undefined. Set to 0.0f.
+				Task<float> getDurationTask = mediaController.GetDuration(atomicNarrativeObject.mediaSource);
+
+				if (getDurationTask != null)
+				{
+					duration = await getDurationTask;
+				}
+				else
+				{
+					Debug.Log("Controller has provided an implementation of the GetDuration method. Duration is defaulting to 0.0f.");
+				}
 
 				atomicNarrativeObject.duration = duration;
 
