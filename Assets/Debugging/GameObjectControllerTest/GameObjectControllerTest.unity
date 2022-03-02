@@ -239,7 +239,7 @@ MonoBehaviour:
   mediaSource: {fileID: 11400000, guid: aac23ce7d4d19c24a927d8d2e27f5b81, type: 2}
   appearsOnTop: 0
   inTime: 0
-  duration: 3
+  duration: 0
 --- !u!114 &521661647
 MonoBehaviour:
   m_ObjectHideFlags: 0

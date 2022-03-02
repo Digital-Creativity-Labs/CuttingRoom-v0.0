@@ -10,26 +10,46 @@ public class FFmpegUtilities
 {
 	private static string snapshotDirectoryName = "snapshots";
 
+	private static string GetFFmpegExecutablePath()
+	{
+		return Path.Combine(Application.streamingAssetsPath, "ffmpeg-4.2.2-win64-static", "bin");
+	}
+
+	private static bool FFmpegExists()
+	{
+		return Directory.Exists(GetFFmpegExecutablePath());
+	}
+
 	private static void SetFFmpegExecutablesPath()
 	{
-		FFmpeg.ExecutablesPath = Path.Combine(Application.streamingAssetsPath, "ffmpeg-4.2.2-win64-static", "bin");
+		if (!FFmpegExists())
+		{
+			Debug.LogError($"FFmpeg is not installed. Please unzip FFmpeg into the project at the following path: {GetFFmpegExecutablePath()}");
+		}
+		else
+		{
+			FFmpeg.ExecutablesPath = GetFFmpegExecutablePath();
+		}
 	}
 
 	public static async Task<float> GetDuration(string videoFilePath)
 	{
 		SetFFmpegExecutablesPath();
 
-		string command = $@"-v error -select_streams v:0 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ""{videoFilePath}""";
+		float duration = 0.0f;
 
-		string durationString = await Probe.New().Start(command);
-
-		float duration;
-
-		bool parseSuccess = float.TryParse(durationString, out duration);
-
-		if (!parseSuccess)
+		if (FFmpegExists())
 		{
-			Debug.LogError($"GetDuration failed for video at path: {videoFilePath}");
+			string command = $@"-v error -select_streams v:0 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ""{videoFilePath}""";
+
+			string durationString = await Probe.New().Start(command);
+
+			bool parseSuccess = float.TryParse(durationString, out duration);
+
+			if (!parseSuccess)
+			{
+				Debug.LogError($"GetDuration failed for video at path: {videoFilePath}");
+			}
 		}
 
 		return duration;
@@ -39,22 +59,25 @@ public class FFmpegUtilities
 	{
 		SetFFmpegExecutablesPath();
 
-		bool snapshotExists = true;
-
-		if (!SnapshotExists(videoFilePath))
+		if (FFmpegExists())
 		{
-			snapshotExists = await GenerateSnapshot(videoFilePath, normalizedTime);
-		}
+			bool snapshotExists = true;
 
-		if (snapshotExists)
-		{
-			Texture2D loadedSnapshot = LoadSnapshotAsTexture(videoFilePath);
+			if (!SnapshotExists(videoFilePath))
+			{
+				snapshotExists = await GenerateSnapshot(videoFilePath, normalizedTime);
+			}
 
-			return loadedSnapshot;
-		}
-		else
-		{
-			Debug.LogError($"Snapshot could not be loaded for file: {videoFilePath}");
+			if (snapshotExists)
+			{
+				Texture2D loadedSnapshot = LoadSnapshotAsTexture(videoFilePath);
+
+				return loadedSnapshot;
+			}
+			else
+			{
+				Debug.LogError($"Snapshot could not be loaded for file: {videoFilePath}");
+			}
 		}
 
 		return null;
