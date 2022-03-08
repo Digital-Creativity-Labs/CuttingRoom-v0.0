@@ -43,7 +43,7 @@ You can join us and other Cutting Room creators in the following communities:
 
 ## Collaboration
 
-We are always on the look out for new partners to work with to develop innovative and novel products using Cutting Room. If you would like to speak to us about a potential collaboration please reach out to us at [enquiries@digitalcreativity.ac.uk](mailto:enquiries@digitalcreativity.ac.uk).
+We are always on the look out for new partners to work with to develop innovative and novel products using Cutting Room. If you would like to speak to us about a potential collaboration please reach out to us at [CuttingRoom-toolkit@york.ac.uk](mailto:cuttingroom-toolkit@york.ac.uk).
 
 ## Support
 
