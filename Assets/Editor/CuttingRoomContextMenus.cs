@@ -118,7 +118,7 @@ namespace CuttingRoom.Editor
 			return layerNarrativeObject;
 		}
 
-		[MenuItem("GameObject/Cutting Room/Create/Layer Narrartive Object", false, menuItemPriority)]
+		[MenuItem("GameObject/Cutting Room/Create/Layer Narrative Object", false, menuItemPriority)]
 		public static void CreateLayerNarrativeObject()
 		{
 			GameObject layerNarrativeObjectGO = InstantiateLayerNarrativeObject().gameObject;
