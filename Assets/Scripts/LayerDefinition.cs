@@ -75,6 +75,12 @@ namespace CuttingRoom
 				yield return new WaitForEndOfFrame();
 			}
 
+			// Just before the layer starts playing, set the point at which it "starts" sequencing from.
+			// Normally this would be zero but if a layer isnt triggered immediately, then 
+			// it doesnt start sequencing from 0 seconds as the playhead has been moving forward 
+			// while it has been waiting to start processing.
+			sequencerLayer.SetLayerEndTime(sequencer.PlayheadTime);
+
 			yield return rootNarrativeObject.Process(sequencer, sequencerLayer);
 		}
 	}
