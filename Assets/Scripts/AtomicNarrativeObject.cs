@@ -65,16 +65,16 @@ namespace CuttingRoom
 				yield return new WaitForEndOfFrame();
 			}
 
-			sequencer.SequenceAtomicNarrativeObject(sequencerLayer, this);
-
 			// Callback for processing starting.
-			InvokeOnProcessStart();
+			InvokeOnProcessStart(sequencerLayer.GetLayerEndTime());
+
+			sequencer.SequenceAtomicNarrativeObject(sequencerLayer, this);
 
 			// Process the base functionality, output selection.
 			yield return base.Process(sequencer, sequencerLayer);
 
 			// Callback for processing finishing.
-			InvokeOnProcessFinish();
+			InvokeOnProcessFinish(sequencerLayer.GetLayerEndTime());
 		}
 
 #if UNITY_EDITOR

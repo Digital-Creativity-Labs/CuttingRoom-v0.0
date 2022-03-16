@@ -29,7 +29,7 @@ namespace CuttingRoom
 			sequencer.RegisterNarrativeObjectSequenced(this);
 
 			// Callback for processing starting.
-			InvokeOnProcessStart();
+			InvokeOnProcessStart(sequencerLayer.GetLayerEndTime());
 
 			// Do group selection.
 			yield return groupSelectionDecisionPoint.Process(OnCandidateSelected, sequencer, sequencerLayer, this);
@@ -38,7 +38,7 @@ namespace CuttingRoom
 			yield return base.Process(sequencer, sequencerLayer);
 
 			// Callback for processing finishing.
-			InvokeOnProcessFinish();
+			InvokeOnProcessFinish(sequencerLayer.GetLayerEndTime());
 		}
 
 		public IEnumerator OnCandidateSelected(object selected)
