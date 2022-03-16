@@ -64,7 +64,7 @@ namespace CuttingRoom
 			sequencer.RegisterNarrativeObjectSequenced(this);
 
 			// Callback for processing starting.
-			InvokeOnProcessStart();
+			InvokeOnProcessStart(sequencerLayer.GetLayerEndTime());
 
 			// Callback with selected layers.
 			OnSelectedCallback onSelected = OnSelected;
@@ -133,7 +133,7 @@ namespace CuttingRoom
 			yield return base.Process(sequencer, sequencerLayer);
 
 			// Callback for processing finishing.
-			InvokeOnProcessFinish();
+			InvokeOnProcessFinish(sequencerLayer.GetLayerEndTime());
 		}
 
 		private IEnumerator OnSelected(object selections)

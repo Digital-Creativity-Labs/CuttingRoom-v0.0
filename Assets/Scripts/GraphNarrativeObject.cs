@@ -18,7 +18,7 @@ namespace CuttingRoom
             }
 
             // Callback for processing starting.
-            InvokeOnProcessStart();
+            InvokeOnProcessStart(sequencerLayer.GetLayerEndTime());
 
             // Process from the defined root.
             yield return rootNarrativeObject.Process(sequencer, sequencerLayer);
@@ -27,7 +27,7 @@ namespace CuttingRoom
             yield return base.Process(sequencer, sequencerLayer);
 
             // Callback for processing finishing.
-            InvokeOnProcessFinish();
+            InvokeOnProcessFinish(sequencerLayer.GetLayerEndTime());
         }
     }
 }

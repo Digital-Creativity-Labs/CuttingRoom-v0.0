@@ -16,7 +16,7 @@ namespace CuttingRoom
 		/// <summary>
 		/// Delegate for processing callback events.
 		/// </summary>
-		public delegate void OnProcessCallback();
+		public delegate void OnProcessCallback(float triggeringNarrativeObjectSequencerLayerEndTime);
 
 		/// <summary>
 		/// Called when processing begins for this object.
@@ -72,17 +72,17 @@ namespace CuttingRoom
 		/// <summary>
 		/// Called by child classes to indicate processing is starting.
 		/// </summary>
-		protected void InvokeOnProcessStart()
+		protected void InvokeOnProcessStart(float triggeringNarrativeObjectSequencerLayerEndTime)
 		{
-			OnProcessStart?.Invoke();
+			OnProcessStart?.Invoke(triggeringNarrativeObjectSequencerLayerEndTime);
 		}
 
 		/// <summary>
 		/// Called by child classes to indicate processing is finished.
 		/// </summary>
-		protected void InvokeOnProcessFinish()
+		protected void InvokeOnProcessFinish(float triggeringNarrativeObjectSequencerLayerEndTime)
 		{
-			OnProcessFinish?.Invoke();
+			OnProcessFinish?.Invoke(triggeringNarrativeObjectSequencerLayerEndTime);
 		}
 
 		/// <summary>

@@ -34,6 +34,8 @@ namespace CuttingRoom
 		/// </summary>
 		private bool HasBeenTriggered { get; set; } = false;
 
+		private float? TriggeredTime { get; set; } = null;
+
 		/// <summary>
 		/// Resets the triggered status for this object.
 		/// </summary>
@@ -41,6 +43,8 @@ namespace CuttingRoom
 		{
 			// If this layer is not to be triggered, then it has been triggered automatically.
 			HasBeenTriggered = !isTriggered;
+
+			TriggeredTime = null;
 		}
 
 		/// <summary>
@@ -49,6 +53,15 @@ namespace CuttingRoom
 		public void HandleOnTriggered()
 		{
 			HasBeenTriggered = true;
+		}
+
+		/// <summary>
+		/// Handler for triggering this layer definition to start processing.
+		/// </summary>
+		public void HandleOnTriggered(float triggeredTime)
+		{
+			HasBeenTriggered = true;
+			TriggeredTime = triggeredTime;
 		}
 
 		/// <summary>
@@ -75,11 +88,18 @@ namespace CuttingRoom
 				yield return new WaitForEndOfFrame();
 			}
 
-			// Just before the layer starts playing, set the point at which it "starts" sequencing from.
-			// Normally this would be zero but if a layer isnt triggered immediately, then 
-			// it doesnt start sequencing from 0 seconds as the playhead has been moving forward 
-			// while it has been waiting to start processing.
-			sequencerLayer.SetLayerEndTime(sequencer.PlayheadTime);
+			if (TriggeredTime == null)
+			{
+				// Just before the layer starts playing, set the point at which it "starts" sequencing from.
+				// Normally this would be zero but if a layer isnt triggered immediately, then 
+				// it doesnt start sequencing from 0 seconds as the playhead has been moving forward 
+				// while it has been waiting to start processing.
+				sequencerLayer.SetLayerEndTime(sequencer.PlayheadTime);
+			}
+			else
+			{
+				sequencerLayer.SetLayerEndTime((float)TriggeredTime);
+			}
 
 			yield return rootNarrativeObject.Process(sequencer, sequencerLayer);
 		}

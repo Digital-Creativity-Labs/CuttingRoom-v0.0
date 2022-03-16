@@ -43,25 +43,25 @@ namespace CuttingRoom
             {
                 case TriggeringEvent.OnProcessingStart:
 
-                    triggeringNarrativeObject.OnProcessStart += HandleOnTriggered;
+                    triggeringNarrativeObject.OnProcessStart += HandleOnProcessTriggered;
 
                     break;
 
                 case TriggeringEvent.OnProcessingFinish:
 
-                    triggeringNarrativeObject.OnProcessFinish += HandleOnTriggered;
+                    triggeringNarrativeObject.OnProcessFinish += HandleOnProcessTriggered;
 
                     break;
 
                 case TriggeringEvent.OnPlaybackStart:
 
-                    triggeringNarrativeObject.OnPlaybackStart += HandleOnTriggered;
+                    triggeringNarrativeObject.OnPlaybackStart += HandleOnPlaybackTriggered;
 
                     break;
 
                 case TriggeringEvent.OnPlaybackFinish:
 
-                    triggeringNarrativeObject.OnPlaybackFinish += HandleOnTriggered;
+                    triggeringNarrativeObject.OnPlaybackFinish += HandleOnPlaybackTriggered;
 
                     break;
 
@@ -76,9 +76,17 @@ namespace CuttingRoom
         /// <summary>
         /// Invoked from the selected triggering event.
         /// </summary>
-        private void HandleOnTriggered()
+        private void HandleOnPlaybackTriggered()
         {
             triggeredLayerDefinition.HandleOnTriggered();
+        }
+        
+        /// <summary>
+         /// Invoked from the selected triggering event.
+         /// </summary>
+        private void HandleOnProcessTriggered(float triggeringNarrativeObjectSequencerLayerEndTime)
+        {
+            triggeredLayerDefinition.HandleOnTriggered(triggeringNarrativeObjectSequencerLayerEndTime);
         }
     }
 }
