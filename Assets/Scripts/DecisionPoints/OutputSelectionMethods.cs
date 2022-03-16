@@ -81,11 +81,11 @@ namespace CuttingRoom
 		/// <param name="parameters"></param>
 		/// <param name="sequenceSecondsBeforeLayerEndTime"></param>
 		/// <returns></returns>
-		private IEnumerator Wait(object[] parameters, float sequenceSecondsBeforeLayerEndTime = 1.0f)
+		private IEnumerator Wait(object[] parameters)
 		{
 			MethodReferences<NarrativeObject> methodReferences = Utilities.ConvertParameters<NarrativeObject>(parameters);
 
-			float sequencerLayerEndTime = methodReferences.sequencerLayer.GetLayerEndTime() - sequenceSecondsBeforeLayerEndTime;
+			float sequencerLayerEndTime = methodReferences.sequencerLayer.GetLayerEndTime() - waitEndOffset;
 
 			while (methodReferences.sequencer.PlayheadTime < sequencerLayerEndTime)
 			{

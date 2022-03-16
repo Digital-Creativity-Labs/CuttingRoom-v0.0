@@ -11,6 +11,12 @@ namespace CuttingRoom
 	public partial class OutputSelectionDecisionPoint : DecisionPoint
 	{
 		/// <summary>
+		/// Subtracted from the end time of the current seqencer layer to give a processing start time when waiting.
+		/// </summary>
+		[SerializeField]
+		private float waitEndOffset = 0.0f;
+
+		/// <summary>
 		/// A container for the output selection method definition.
 		/// </summary>
 		[Serializable]

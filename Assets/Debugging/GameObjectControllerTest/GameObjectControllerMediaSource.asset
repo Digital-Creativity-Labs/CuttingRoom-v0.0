@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b28638166a43fc4b932f8254724070e, type: 3}
+  m_Name: GameObjectControllerMediaSource
+  m_EditorClassIdentifier: 
+  mediaControllerPrefab: {fileID: 2897612791579247439, guid: 8a02c368ac804dc4aa80c0521e1f35fc,
+    type: 3}
+  mediaSourceData:
+    objects:
+    - {fileID: 4296218468934255303, guid: d2d98e298b0ede94385bf2d8fcaa05fa, type: 3}
+    strings: []
