@@ -739,6 +739,9 @@ namespace CuttingRoom
 
 			public void Update(float playheadTime, NarrativeSpace narrativeSpace, Action<SequencedAtomicNarrativeObject> onSequencedAtomicNarrativeObjectPlayed)
 			{
+				// Store out the current playhead time on the layer.
+				this.playheadTime = playheadTime;
+
 				// If ANO currently playing.
 				if (playingAtomicNarrativeObject != null)
 				{
