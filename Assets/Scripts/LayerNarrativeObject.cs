@@ -55,6 +55,8 @@ namespace CuttingRoom
 				throw new MultipleMasterLayersException("Multiple master layers are defined. There can be only one.");
 			}
 #endif
+			// Remove any layers selected if this object has been processed before.
+			selectedLayerDefinitions.Clear();
 
 			this.sequencer = sequencer;
 			this.sequencerLayer = sequencerLayer;
