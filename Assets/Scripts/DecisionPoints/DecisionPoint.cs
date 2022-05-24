@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using CuttingRoom.VariableSystem.Constraints;
+using System.Linq;
 
 namespace CuttingRoom
 {
@@ -17,6 +18,11 @@ namespace CuttingRoom
 		/// </summary>
 		[SerializeField]
 		internal List<GameObject> candidates = new List<GameObject>();
+
+		/// <summary>
+		/// The candidates for this decision point.
+		/// </summary>
+		public List<GameObject> Candidates { get { return candidates; } }
 
 		/// <summary>
 		/// The constraints which have been applied to this decision point.
@@ -61,11 +67,15 @@ namespace CuttingRoom
 
 #if UNITY_EDITOR
 
-        /// <summary>
-        /// Used by the Narrative Space editor to link nodes together.
-        /// </summary>
-        /// <param name="candidate"></param>
-        public void AddCandidate(GameObject candidate)
+		public event Action OnCandidatesChanged;
+
+		private List<GameObject> cachedCandidates = new List<GameObject>();
+
+		/// <summary>
+		/// Used by the Narrative Space editor to link nodes together.
+		/// </summary>
+		/// <param name="candidate"></param>
+		public void AddCandidate(GameObject candidate)
 		{
 			if (!candidates.Contains(candidate))
 			{
@@ -81,47 +91,27 @@ namespace CuttingRoom
 			}
 		}
 
-		public bool HasCandidate(GameObject candidate)
+		public void OnValidate()
 		{
-			return candidates.Contains(candidate);
-		}
+			// Find candidates which are in the cached list but not in the actual inspector list (so they have been removed in inspector).
+			IEnumerable<GameObject> removedCandidates = cachedCandidates.Except(candidates);
 
-		/// <summary>
-		/// Ensure that the candidates on this decisionpoint are valid.
-		/// </summary>
-		public void Validate()
-		{
-			int removedCount = candidates.RemoveAll((GameObject candidate) => { return candidate == null; });
+			// Find candidates which are in the actual inspector list but not in the cached list (so they have been added in inspector).
+			IEnumerable<GameObject> addedCandidates = candidates.Except(cachedCandidates);
 
-			if (removedCount > 0)
+			if (removedCandidates.Count() > 0 || addedCandidates.Count() > 0)
 			{
-				Debug.LogWarning($"Removed {removedCount} null or empty candidates from decision point attached to GameObject named {gameObject.name}");
+				OnCandidatesChanged?.Invoke();
+
+				CacheCandidates();
 			}
 		}
 
-		/// <summary>
-		/// Editor method used to return the candidates as narrative objects
-		/// for the rendering of the NarrativeSpace in the Narrative Space Editor.
-		/// </summary>
-		/// <returns></returns>
-		public NarrativeObject[] GetCandidatesAsNarrativeObjects()
+		private void CacheCandidates()
 		{
-			List<NarrativeObject> narrativeObjects = new List<NarrativeObject>();
-
-			for (int count = 0; count < candidates.Count; count++)
-			{
-				if (candidates[count] != null)
-				{
-					NarrativeObject narrativeObject = candidates[count].GetComponent<NarrativeObject>();
-
-					if (narrativeObject != null)
-					{
-						narrativeObjects.Add(narrativeObject);
-					}
-				}
-			}
-
-			return narrativeObjects.ToArray();
+			// Cache the new connected guids list.
+			cachedCandidates.Clear();
+			cachedCandidates.AddRange(candidates);
 		}
 
 #endif

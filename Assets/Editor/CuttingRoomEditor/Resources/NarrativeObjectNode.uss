@@ -1,0 +1,5 @@
+#title-label {
+	width:150px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}

@@ -4,6 +4,7 @@ using CuttingRoom.VariableSystem.Constraints;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using System;
 
 namespace CuttingRoom
 {
@@ -13,6 +14,12 @@ namespace CuttingRoom
 	[RequireComponent(typeof(OutputSelectionDecisionPoint), typeof(VariableStore), typeof(GameObjectGuid))]
 	public class NarrativeObject : MonoBehaviour, ISaveable
 	{
+		/// <summary>
+		/// The guid for this narrative object.
+		/// </summary>
+		[HideInInspector]
+		public string guid = Guid.NewGuid().ToString();
+
 		/// <summary>
 		/// Delegate for processing callback events.
 		/// </summary>
@@ -153,6 +160,13 @@ namespace CuttingRoom
 		/// <param name="mediaSource"></param>
 		/// <returns></returns>
 		public virtual Task<Texture2D> GetThumbnail(object args = null) { return null; }
+
+		public event Action OnNarrativeObjectChanged;
+
+		public void OnValidate()
+        {
+			OnNarrativeObjectChanged?.Invoke();
+		}
 #endif
 	}
 }

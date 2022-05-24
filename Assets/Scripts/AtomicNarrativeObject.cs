@@ -78,6 +78,12 @@ namespace CuttingRoom
 		}
 
 #if UNITY_EDITOR
+
+		/// <summary>
+		/// Whether this atomic has a media source assigned.
+		/// </summary>
+		public bool HasMediaSource { get { return mediaSource != null; } }
+
 		/// <summary>
 		/// Used to show a thumbnail of this media in the narrative space editor.
 		/// </summary>
