@@ -86,6 +86,8 @@ namespace CuttingRoom.Editor
                 };
 
                 GraphView.OnViewContainerPushed += OnViewContainerPushed;
+
+                GraphView.OnRootNarrativeObjectChanged += OnRootNarrativeObjectChanged;
             }
 
             if (Toolbar == null)
@@ -119,7 +121,7 @@ namespace CuttingRoom.Editor
                 Toolbar.OnClickAddAtomicNarrativeObjectNode += () =>
                 {
                     CuttingRoomContextMenus.CreateAtomicNarrativeObject();
-
+                                        
                     RegenerateContents(false);
                 };
 
@@ -156,11 +158,25 @@ namespace CuttingRoom.Editor
             }
         }
 
-        private void OnNarrativeObjectConnectedGuidsChanged()
+        /// <summary>
+        /// Invoked whenever the outputs of a narrative object change.
+        /// </summary>
+        private void OnNarrativeObjectOutputCandidatesChanged()
         {
             RegenerateContents(true);
         }
 
+        /// <summary>
+        /// Invoked whenever the root narrative object of the narrative space or any narrative object changes.
+        /// </summary>
+        private void OnRootNarrativeObjectChanged()
+        {
+            RegenerateContents(true);
+        }
+
+        /// <summary>
+        /// Populate the graph view for this window.
+        /// </summary>
         private void PopulateGraphView()
         {
             // Find Narrative Objects in the scene. These will be displayed on the Graph View as nodes.
@@ -168,8 +184,8 @@ namespace CuttingRoom.Editor
 
             foreach (NarrativeObject narrativeObject in narrativeObjects)
             {
-                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged -= OnNarrativeObjectConnectedGuidsChanged;
-                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectConnectedGuidsChanged;
+                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged -= OnNarrativeObjectOutputCandidatesChanged;
+                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectOutputCandidatesChanged;
             }
 
             bool graphViewChanged = GraphView.Populate(SaveUtility.Load(), narrativeObjects);

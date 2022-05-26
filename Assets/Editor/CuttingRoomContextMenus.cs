@@ -9,18 +9,16 @@ namespace CuttingRoom.Editor
 {
 	public static class CuttingRoomContextMenus
 	{
-		private const string narrativeObjectRootName = "NarrativeObjects";
-
 		private const int menuItemPriority = 0;
 
-		[MenuItem("Cutting Room/Scene Utilities/Set All Atomic Narrative Object Durations To Length Of Media Source")]
-		public static void SetAllAtomsDurationToMediaLength()
-		{
-			if (EditorUtility.DisplayDialog("Warning", "Are you sure you want to set all Atomic Narrative Objects to the length of their assigned Media Source?", "Yes", "Cancel"))
-			{
-				CuttingRoomUtilities.SetAllSceneAtomsDurationToMediaLength();
-			}
-		}
+		//[MenuItem("Cutting Room/Scene Utilities/Set All Atomic Narrative Object Durations To Length Of Media Source")]
+		//public static void SetAllAtomsDurationToMediaLength()
+		//{
+		//	if (EditorUtility.DisplayDialog("Warning", "Are you sure you want to set all Atomic Narrative Objects to the length of their assigned Media Source?", "Yes", "Cancel"))
+		//	{
+		//		CuttingRoomUtilities.SetAllSceneAtomsDurationToMediaLength();
+		//	}
+		//}
 
 		[MenuItem("GameObject/Cutting Room/Create/Graph Narrative Object", false, menuItemPriority)]
 		public static void CreateGraphNarrativeObject()

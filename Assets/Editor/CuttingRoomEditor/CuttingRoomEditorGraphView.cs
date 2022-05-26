@@ -31,6 +31,11 @@ namespace CuttingRoom.Editor
         public event Action OnViewContainerPushed;
 
         /// <summary>
+        /// Invoked whenever a view containers root narrative object changes.
+        /// </summary>
+        public event Action OnRootNarrativeObjectChanged;
+
+        /// <summary>
         /// The supported node types in this graph view.
         /// </summary>
         private enum NodeType
@@ -228,8 +233,6 @@ namespace CuttingRoom.Editor
         {
             if (graphViewChange.elementsToRemove != null && graphViewChange.elementsToRemove.Count > 0)
             {
-                Debug.LogError("Element has been deleted. Ensure that this is modifying the Narrative Space.");
-
                 foreach (GraphElement graphElement in graphViewChange.elementsToRemove)
                 {
                     // If an element has been removed.
@@ -240,8 +243,6 @@ namespace CuttingRoom.Editor
 
                         if (deletedEdgeState == null)
                         {
-                            Debug.LogError("EdgeState was not found when deleting edge. This should never happen.");
-
                             continue;
                         }
 
@@ -266,8 +267,6 @@ namespace CuttingRoom.Editor
 
             if (graphViewChange.edgesToCreate != null && graphViewChange.edgesToCreate.Count > 0)
             {
-                Debug.LogError("Edge has been created. Ensure that this is modifying the Narrative Space.");
-
                 foreach (Edge edge in graphViewChange.edgesToCreate)
                 {
                     NarrativeObjectNode outputNode = FindNarrativeObjectWithPort(edge.output);
@@ -350,6 +349,11 @@ namespace CuttingRoom.Editor
             return false;
         }
 
+        /// <summary>
+        /// Pop containers until the view desired is top of the view stack.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        /// <returns></returns>
         public bool PopViewContainersToViewContainer(ViewContainer viewContainer)
         {
             if (!viewContainerStack.Contains(viewContainer))
@@ -402,6 +406,13 @@ namespace CuttingRoom.Editor
             return false;
         }
 
+        /// <summary>
+        /// Get the list of deleted view containers and narrative object guids when deleting a view container.
+        /// This is recursive so returns the contents of any child view containers and their contained narrative object guids.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        /// <param name="deletedViewContainers"></param>
+        /// <param name="deletedNarrativeObjectGuids"></param>
         private void GetDeletedViewContainersAndNarrativeObjectGuids(ViewContainer viewContainer, ref List<ViewContainer> deletedViewContainers, ref List<string> deletedNarrativeObjectGuids)
         {
             deletedViewContainers.Add(viewContainer);
@@ -426,6 +437,40 @@ namespace CuttingRoom.Editor
                     deletedNarrativeObjectGuids.Add(guid);
                 }
             }
+        }
+
+        private string GetViewContainerRootNarrativeObjectGuid(ViewContainer viewContainer)
+        {
+            if (viewContainer.narrativeObjectGuid == rootViewContainerGuid)
+            {
+                NarrativeSpace narrativeSpace = GetNarrativeSpace();
+
+                // If a root is set on the narrative space, return its guid.
+                if (narrativeSpace != null && narrativeSpace.rootNarrativeObject != null)
+                {
+                    return narrativeSpace.rootNarrativeObject.guid;
+                }
+            }
+            else
+            {
+                NarrativeObject narrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
+
+                if (narrativeObject != null)
+                {
+                    if (narrativeObject is GraphNarrativeObject)
+                    {
+                        GraphNarrativeObject graphNarrativeObject = narrativeObject.GetComponent<GraphNarrativeObject>();
+
+                        // If a root is set on the graph object, return its guid.
+                        if (graphNarrativeObject.rootNarrativeObject != null)
+                        {
+                            return graphNarrativeObject.rootNarrativeObject.guid;
+                        }
+                    }
+                }
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -615,12 +660,24 @@ namespace CuttingRoom.Editor
                 }
             }
 
+            // The view container being rendered.
+            ViewContainer visibleViewContainer = viewContainerStack.Peek();
+
+            // Get the guid of the root narrative object of the view.
+            string viewContainerRootNarrativeObjectGuid = GetViewContainerRootNarrativeObjectGuid(visibleViewContainer);
+
             // Find the nodes which are in the current view container. These will be rendered.
-            IEnumerable<NarrativeObjectNode> visibleNarrativeObjectNodes = NarrativeObjectNodes.Where(narrativeObjectNode => viewContainerStack.Peek().ContainsNode(narrativeObjectNode.NarrativeObject.guid));
+            IEnumerable<NarrativeObjectNode> visibleNarrativeObjectNodes = NarrativeObjectNodes.Where(narrativeObjectNode => visibleViewContainer.ContainsNode(narrativeObjectNode.NarrativeObject.guid));
 
             // For each node, make sure all edges exist.
             foreach (NarrativeObjectNode narrativeObjectNode in visibleNarrativeObjectNodes)
             {
+                // If the node is the root of the current view.
+                if (narrativeObjectNode.NarrativeObject.guid == viewContainerRootNarrativeObjectGuid)
+                {
+                    narrativeObjectNode.EnableRootVisuals();
+                }
+
                 // For each connection from the nodes outputs.
                 foreach (GameObject candidate in narrativeObjectNode.NarrativeObject.outputSelectionDecisionPoint.Candidates)
                 {
@@ -672,17 +729,47 @@ namespace CuttingRoom.Editor
             return graphViewChanged;
         }
 
+        /// <summary>
+        /// Get the current Narrative Space instance within the scene.
+        /// </summary>
+        /// <returns></returns>
+        private NarrativeSpace GetNarrativeSpace()
+        {
+            NarrativeSpace narrativeSpace = UnityEngine.Object.FindObjectOfType<NarrativeSpace>();
+
+            if (narrativeSpace == null)
+            {
+                Debug.LogError("Narrative Space not found. Please ensure there is an instance of NarrativeSpace attached to a game object within the scene.");
+            }
+
+            return narrativeSpace;
+        }
+
+        /// <summary>
+        /// Get the narrative object with the specified guid.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        private NarrativeObject GetNarrativeObject(string guid)
+        {
+            NarrativeObject[] narrativeObjects = UnityEngine.Object.FindObjectsOfType<NarrativeObject>();
+
+            return narrativeObjects.Where(narrativeObject => narrativeObject.guid == guid).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Invoked whenever a narrative object is set as root on the graph view.
+        /// </summary>
+        /// <param name="narrativeObjectNode"></param>
         private void OnNarrativeObjectNodeSetAsRoot(NarrativeObjectNode narrativeObjectNode)
         {
             // If the current view is the narrative space.
             if (viewContainerStack.Peek().narrativeObjectGuid == rootViewContainerGuid)
             {
-                NarrativeSpace narrativeSpace = UnityEngine.Object.FindObjectOfType<NarrativeSpace>();
+                NarrativeSpace narrativeSpace = GetNarrativeSpace();
 
                 if (narrativeSpace == null)
                 {
-                    Debug.LogError("Narrative Space not found. Please ensure there is an instance of NarrativeSpace attached to a game object within the scene.");
-
                     return;
                 }
 
@@ -690,10 +777,8 @@ namespace CuttingRoom.Editor
             }
             else
             {
-                NarrativeObject[] narrativeObjects = UnityEngine.Object.FindObjectsOfType<NarrativeObject>();
-
                 // Find the narrative object which has the same guid as the current view container.
-                NarrativeObject narrativeObject = narrativeObjects.Where(narrativeObject => narrativeObject.guid == viewContainerStack.Peek().narrativeObjectGuid).FirstOrDefault();
+                NarrativeObject narrativeObject = GetNarrativeObject(viewContainerStack.Peek().narrativeObjectGuid);
 
                 if (narrativeObject == null)
                 {
@@ -710,9 +795,14 @@ namespace CuttingRoom.Editor
                 }
                 else
                 {
-                    Debug.LogWarning("Cannot set root node of narrative object as type is unknown.");
+                    Debug.LogError("Cannot set root node of narrative object as type is unknown.");
+
+                    return;
                 }
             }
+
+            // Invoke the callback as a root has changed somewhere on the graph.
+            OnRootNarrativeObjectChanged?.Invoke();
         }
     }
 }

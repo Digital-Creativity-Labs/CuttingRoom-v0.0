@@ -6,13 +6,13 @@ using System.Linq;
 
 public class GenerateMediaSourcesEditor : EditorWindow
 {
-	private static GenerateMediaSourcesEditor generateMediaSourcesEditor = null;
+	//private static GenerateMediaSourcesEditor generateMediaSourcesEditor = null;
 
-	[MenuItem("Cutting Room/Generate Media Sources")]
-	private static void ShowGenerateMediaSourcesEditor()
-	{
-		generateMediaSourcesEditor = GetWindow<GenerateMediaSourcesEditor>("Generate Media Sources");
-	}
+	//[MenuItem("Cutting Room/Generate Media Sources")]
+	//private static void ShowGenerateMediaSourcesEditor()
+	//{
+	//	generateMediaSourcesEditor = GetWindow<GenerateMediaSourcesEditor>("Generate Media Sources");
+	//}
 
 	/// <summary>
 	/// The media controller to apply to the generated media sources.

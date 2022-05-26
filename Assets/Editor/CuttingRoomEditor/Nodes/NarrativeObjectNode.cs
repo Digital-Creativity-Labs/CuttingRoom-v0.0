@@ -79,6 +79,26 @@ namespace CuttingRoom.Editor
         }
 
         /// <summary>
+        /// Enable the visual element for this being a root.
+        /// </summary>
+        public void EnableRootVisuals()
+        {
+            VisualElement titleElement = this.Q<VisualElement>("title");
+
+            Image rootImage = new Image();
+
+            rootImage.name = "root-icon";
+
+            rootImage.styleSheets.Add(StyleSheet);
+
+            Texture rootIcon = Resources.Load<Texture>("Icons/root-icon-24x24");
+
+            rootImage.image = rootIcon;
+
+            titleElement.Insert(0, rootImage);
+        }
+
+        /// <summary>
         /// Called when this node has to construct its contextual menu.
         /// </summary>
         /// <param name="evt"></param>
