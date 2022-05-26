@@ -51,7 +51,6 @@ namespace CuttingRoom.Editor
         {
             // Get the contents container for this node.
             VisualElement contents = this.Q<VisualElement>("contents");
-            contents.styleSheets.Add(StyleSheet);
 
             // Add a divider below the ports.
             VisualElement divider = new VisualElement();
@@ -64,7 +63,7 @@ namespace CuttingRoom.Editor
             hasMediaSourceToggle.SetEnabled(false);
             hasMediaSourceToggle.name = "media-toggle";
             hasMediaSourceToggle.styleSheets.Add(StyleSheet);
-            contents?.Add(hasMediaSourceToggle);
+            contents.Add(hasMediaSourceToggle);
         }
 
         /// <summary>

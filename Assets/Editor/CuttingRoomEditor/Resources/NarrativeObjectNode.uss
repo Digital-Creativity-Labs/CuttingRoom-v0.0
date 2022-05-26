@@ -3,3 +3,7 @@
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
+
+#contents {
+	background-color: #3F3F3F;
+}

@@ -58,12 +58,14 @@ namespace CuttingRoom.Editor
 			divider.AddToClassList("horizontal");
 			contents.Add(divider);
 
+			// Add button to push view for this graph node onto the stack.
 			viewContentsButton = new Button(() => 
 			{
 				OnClickViewContents?.Invoke(this);
 			});
-
 			viewContentsButton.text = "View Contents";
+			viewContentsButton.name = "view-contents-button";
+			viewContentsButton.styleSheets.Add(StyleSheet);
 			contents?.Add(viewContentsButton);
 		}
 

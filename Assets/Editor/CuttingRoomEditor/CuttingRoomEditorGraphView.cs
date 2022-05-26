@@ -51,18 +51,23 @@ namespace CuttingRoom.Editor
         /// The guid representing the container which is the narrative space.
         /// This container has no associated narrative object.
         /// </summary>
-        private const string rootViewContainerGuid = "0";
+        public const string rootViewContainerGuid = "0";
 
         /// <summary>
         /// View stack for rendering the recursive layers of the narrative space.
         /// </summary>
-        public Stack<BaseViewContainer> viewContainerStack = new Stack<BaseViewContainer>();
+        private Stack<ViewContainer> viewContainerStack = new Stack<ViewContainer>();
+
+        /// <summary>
+        /// The view container stack.
+        /// </summary>
+        public Stack<ViewContainer> ViewContainerStack { get { return viewContainerStack; } }
 
         /// <summary>
         /// The collection of containers which currently exists.
         /// These may or may not currently be on the view stack.
         /// </summary>
-        public List<BaseViewContainer> viewContainers = new List<BaseViewContainer>();
+        public List<ViewContainer> viewContainers = new List<ViewContainer>();
 
         public CuttingRoomEditorGraphView(CuttingRoomEditorWindow window)
         {
@@ -92,7 +97,7 @@ namespace CuttingRoom.Editor
             gridBackground.StretchToParentSize();
 
             // Root view container always exists.
-            viewContainers.Add(new BaseViewContainer(rootViewContainerGuid));
+            viewContainers.Add(new ViewContainer(rootViewContainerGuid));
 
             // Push the "root" container of the graph view.
             // This element should never be removed and represents a container
@@ -254,7 +259,7 @@ namespace CuttingRoom.Editor
                         UnityEngine.Object.DestroyImmediate(narrativeObjectNode.NarrativeObject.gameObject);
 
                         // Remove the node object as it has been removed from the graph.
-                        NarrativeObjectNodes.Remove(narrativeObjectNode);
+                        //NarrativeObjectNodes.Remove(narrativeObjectNode);
                     }
                 }
             }
@@ -312,11 +317,11 @@ namespace CuttingRoom.Editor
         /// <param name="narrativeObjectNode"></param>
         private void PushViewContainer(NarrativeObjectNode narrativeObjectNode)
         {
-            BaseViewContainer viewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == narrativeObjectNode.NarrativeObject.guid).FirstOrDefault();
+            ViewContainer viewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == narrativeObjectNode.NarrativeObject.guid).FirstOrDefault();
 
             if (viewContainer == null)
             {
-                viewContainer = new BaseViewContainer(narrativeObjectNode.NarrativeObject.guid);
+                viewContainer = new ViewContainer(narrativeObjectNode.NarrativeObject.guid);
 
                 viewContainers.Add(viewContainer);
             }
@@ -345,6 +350,33 @@ namespace CuttingRoom.Editor
             return false;
         }
 
+        public bool PopViewContainersToViewContainer(ViewContainer viewContainer)
+        {
+            if (!viewContainerStack.Contains(viewContainer))
+            {
+                Debug.LogError($"View Container Stack does not contain a View Container with the guid: {viewContainer.narrativeObjectGuid}");
+
+                return false;
+            }
+
+            bool popOccurred = false;
+
+            while (viewContainerStack.Peek() != viewContainer && viewContainerStack.Count > 1)
+            {
+                bool pop = PopViewContainer();
+
+                if (!popOccurred)
+                {
+                    if (pop)
+                    {
+                        popOccurred = true;
+                    }
+                }
+            }
+
+            return popOccurred;
+        }
+
         /// <summary>
         /// Whether a narrative object is currently visible on the graph view.
         /// </summary>
@@ -359,7 +391,7 @@ namespace CuttingRoom.Editor
             }
 
             // Find the view containers which contain the narrative object.
-            IEnumerable<BaseViewContainer> viewContainersWithNarrativeObject = viewContainers.ToList().Where(viewContainer => viewContainer.ContainsNode(narrativeObject.guid));
+            IEnumerable<ViewContainer> viewContainersWithNarrativeObject = viewContainers.ToList().Where(viewContainer => viewContainer.ContainsNode(narrativeObject.guid));
 
             // If no view containers contain the narrative object, it has just been created and therefore should be visible.
             if (viewContainersWithNarrativeObject.Count() == 0)
@@ -368,6 +400,32 @@ namespace CuttingRoom.Editor
             }
 
             return false;
+        }
+
+        private void GetDeletedViewContainersAndNarrativeObjectGuids(ViewContainer viewContainer, ref List<ViewContainer> deletedViewContainers, ref List<string> deletedNarrativeObjectGuids)
+        {
+            deletedViewContainers.Add(viewContainer);
+
+            deletedNarrativeObjectGuids.Add(viewContainer.narrativeObjectGuid);
+
+            // Check for nested view containers for the contents of the view container passed as parameter.
+            foreach (string guid in viewContainer.narrativeObjectNodeGuids)
+            {
+                // Find the view containers of any children of this view container.
+                ViewContainer childViewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == guid).FirstOrDefault();
+
+                // If the child node has a view container, this and its contents must go too.
+                if (childViewContainer != null)
+                {
+                    // Recursively call this method to get rid of the contents.
+                    GetDeletedViewContainersAndNarrativeObjectGuids(childViewContainer, ref deletedViewContainers, ref deletedNarrativeObjectGuids);
+                }
+                else
+                {
+                    // Doesn't have a view container so just mark the object itself for deletion (no recursion required).
+                    deletedNarrativeObjectGuids.Add(guid);
+                }
+            }
         }
 
         /// <summary>
@@ -390,17 +448,98 @@ namespace CuttingRoom.Editor
                     graphViewChanged = true;
                 }
 
+                // If a narrative object has been added or removed since the last state, then save.
+                if (narrativeObjects.Length != graphViewState.narrativeObjectNodeStates.Count)
+                {
+                    graphViewChanged = true;
+                }
+
                 // Ensure all view containers exist.
                 foreach (ViewContainerState viewContainerState in graphViewState.viewContainerStates)
                 {
-                    BaseViewContainer baseViewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == viewContainerState.narrativeObjectGuid).FirstOrDefault();
+                    bool viewContainerShouldExist = viewContainerState.narrativeObjectGuid == rootViewContainerGuid || narrativeObjects.Where(narrativeObject => narrativeObject.guid == viewContainerState.narrativeObjectGuid).FirstOrDefault() != null;
 
-                    if (baseViewContainer == null)
+                    // The view container (if it exists).
+                    ViewContainer viewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == viewContainerState.narrativeObjectGuid).FirstOrDefault();
+
+                    // Ensure that the narrative object which the view container state represents still exists or check if the container is the root before restoring.
+                    if (viewContainerShouldExist)
                     {
-                        viewContainers.Add(new BaseViewContainer(viewContainerState.narrativeObjectGuid) { narrativeObjectNodeGuids = viewContainerState.narrativeObjectNodeGuids });
+                        // If the view container doesnt exist.
+                        if (viewContainer == null)
+                        {
+                            viewContainer = new ViewContainer(viewContainerState.narrativeObjectGuid);
+
+                            viewContainers.Add(viewContainer);
+                        }
+
+                        // Find which guids inside the view container still exist.
+                        List<string> narrativeObjectNodeGuids = new List<string>();
+
+                        foreach (string guid in viewContainerState.narrativeObjectNodeGuids)
+                        {
+                            // Get the narrative object which has the guid.
+                            NarrativeObject existingNarrativeObject = narrativeObjects.Where(narrativeObject => narrativeObject.guid == guid).FirstOrDefault();
+
+                            // If the narrative object exists, then it's guid is still valid, else the narrative object has been removed so don't add the guid again.
+                            if (existingNarrativeObject != null)
+                            {
+                                narrativeObjectNodeGuids.Add(existingNarrativeObject.guid);
+                            }
+                        }
+
+                        // Restore the guids of the container.
+                        viewContainer.narrativeObjectNodeGuids = narrativeObjectNodeGuids;
+                    }
+                    else
+                    {
+                        // The container should not exist. Remove it if it exists.
+                        if (viewContainers.Contains(viewContainer))
+                        {
+                            if (viewContainerStack.Contains(viewContainer))
+                            {
+                                PopViewContainersToViewContainer(viewContainer);
+                            }
+
+                            List<ViewContainer> deletedViewContainers = new List<ViewContainer>();
+
+                            List<string> deletedNarrativeObjectGuids = new List<string>();
+
+                            // Find the view containers and narrative objects which must be removed (self and children of view container which should not exist).
+                            GetDeletedViewContainersAndNarrativeObjectGuids(viewContainer, ref deletedViewContainers, ref deletedNarrativeObjectGuids);
+
+                            foreach (string guid in deletedNarrativeObjectGuids)
+                            {
+                                NarrativeObject deletedNarrativeObject = narrativeObjects.Where(narrativeObject => narrativeObject.guid == guid).FirstOrDefault();
+
+                                // Delete narrative object if it exists in the scene.
+                                if (deletedNarrativeObject != null)
+                                {
+                                    UnityEngine.Object.DestroyImmediate(deletedNarrativeObject.gameObject);
+                                }
+                            }
+
+                            foreach (ViewContainer deletedViewContainer in deletedViewContainers)
+                            {
+                                // Pop view to be deleted if its on the stack at the moment.
+                                if (viewContainerStack.Contains(deletedViewContainer))
+                                {
+                                    PopViewContainersToViewContainer(deletedViewContainer);
+                                }
+
+                                // Remove the view containers which have to be deleted.
+                                if (viewContainers.Contains(deletedViewContainer))
+                                {
+                                    viewContainers.Remove(deletedViewContainer);
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            // Remove any objects which have been deleted due to their view container being deleted or recursively as part of the parent view container being deleted.
+            narrativeObjects = narrativeObjects.Where(narrativeObject => narrativeObject != null).ToArray();
 
             foreach (NarrativeObject narrativeObject in narrativeObjects)
             {
@@ -443,6 +582,8 @@ namespace CuttingRoom.Editor
                         // Add the node to the visible container on the view stack.
                         viewContainerStack.Peek().AddNode(narrativeObjectNode.NarrativeObject.guid);
                     }
+
+                    narrativeObjectNode.OnSetAsRoot += OnNarrativeObjectNodeSetAsRoot;
 
                     AddElement(narrativeObjectNode);
                 }
@@ -497,7 +638,7 @@ namespace CuttingRoom.Editor
                         // If the input node doesn't exist, something very wrong has happened somewhere!
                         if (inputNarrativeObjectNode == null)
                         {
-                            Debug.LogError($"Narrative Object Node not found for guid: {candidateNarrativeObject.guid}");
+                            Debug.LogError($"Narrative Object Node not found for guid: {candidate}");
 
                             continue;
                         }
@@ -529,6 +670,49 @@ namespace CuttingRoom.Editor
             }
 
             return graphViewChanged;
+        }
+
+        private void OnNarrativeObjectNodeSetAsRoot(NarrativeObjectNode narrativeObjectNode)
+        {
+            // If the current view is the narrative space.
+            if (viewContainerStack.Peek().narrativeObjectGuid == rootViewContainerGuid)
+            {
+                NarrativeSpace narrativeSpace = UnityEngine.Object.FindObjectOfType<NarrativeSpace>();
+
+                if (narrativeSpace == null)
+                {
+                    Debug.LogError("Narrative Space not found. Please ensure there is an instance of NarrativeSpace attached to a game object within the scene.");
+
+                    return;
+                }
+
+                narrativeSpace.rootNarrativeObject = narrativeObjectNode.NarrativeObject;
+            }
+            else
+            {
+                NarrativeObject[] narrativeObjects = UnityEngine.Object.FindObjectsOfType<NarrativeObject>();
+
+                // Find the narrative object which has the same guid as the current view container.
+                NarrativeObject narrativeObject = narrativeObjects.Where(narrativeObject => narrativeObject.guid == viewContainerStack.Peek().narrativeObjectGuid).FirstOrDefault();
+
+                if (narrativeObject == null)
+                {
+                    Debug.LogError($"Narrative Object with guid {narrativeObjectNode.NarrativeObject.guid} does not exist.");
+
+                    return;
+                }
+
+                if (narrativeObject is GraphNarrativeObject)
+                {
+                    GraphNarrativeObject graphNarrativeObject = narrativeObject.GetComponent<GraphNarrativeObject>();
+
+                    graphNarrativeObject.rootNarrativeObject = narrativeObjectNode.NarrativeObject;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot set root node of narrative object as type is unknown.");
+                }
+            }
         }
     }
 }

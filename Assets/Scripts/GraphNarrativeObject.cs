@@ -7,8 +7,7 @@ namespace CuttingRoom
 {
     public class GraphNarrativeObject : NarrativeObject
     {
-        [SerializeField]
-        private NarrativeObject rootNarrativeObject = null;
+        public NarrativeObject rootNarrativeObject = null;
 
         public override IEnumerator Process(Sequencer sequencer, Sequencer.SequencerLayer sequencerLayer)
         {

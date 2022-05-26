@@ -17,7 +17,7 @@ namespace CuttingRoom.Editor
 
         private List<NarrativeObjectNode> NarrativeObjectNodes => CuttingRoomEditorGraphView.NarrativeObjectNodes;
 
-        private List<BaseViewContainer> ViewContainers => CuttingRoomEditorGraphView.viewContainers;
+        private List<ViewContainer> ViewContainers => CuttingRoomEditorGraphView.viewContainers;
 
         private List<string> ViewContainerStackGuids
         {
@@ -25,7 +25,7 @@ namespace CuttingRoom.Editor
             {
                 List<string> viewContainerStackGuids = new List<string>();
 
-                foreach (BaseViewContainer viewContainer in CuttingRoomEditorGraphView.viewContainerStack.ToList())
+                foreach (ViewContainer viewContainer in CuttingRoomEditorGraphView.ViewContainerStack.ToList())
                 {
                     viewContainerStackGuids.Add(viewContainer.narrativeObjectGuid);
                 }
@@ -63,7 +63,7 @@ namespace CuttingRoom.Editor
             // Load the existing save state as a reference.
             CuttingRoomEditorGraphViewState loadedGraphViewState = Load();
 
-            foreach (BaseViewContainer baseViewContainer in ViewContainers)
+            foreach (ViewContainer baseViewContainer in ViewContainers)
             {
                 ViewContainerState viewContainerState = new ViewContainerState { narrativeObjectGuid = baseViewContainer.narrativeObjectGuid, narrativeObjectNodeGuids = baseViewContainer.narrativeObjectNodeGuids };
                 graphViewState.viewContainerStates.Add(viewContainerState);

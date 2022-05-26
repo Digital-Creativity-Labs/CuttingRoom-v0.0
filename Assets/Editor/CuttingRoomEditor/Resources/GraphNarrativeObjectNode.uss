@@ -1,3 +1,10 @@
 #title {
 	background-color: #2A7221;
 }
+
+#view-contents-button {
+	margin-left: 6px;
+	margin-right: 6px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}

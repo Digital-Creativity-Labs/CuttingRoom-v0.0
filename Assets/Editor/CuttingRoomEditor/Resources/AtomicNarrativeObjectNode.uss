@@ -2,10 +2,6 @@
 	background-color: #264653;
 }
 
-#contents {
-	background-color: #3F3F3F;
-}
-
 #media-toggle { 
 	margin-left: 6px;
 	margin-right: 6px;

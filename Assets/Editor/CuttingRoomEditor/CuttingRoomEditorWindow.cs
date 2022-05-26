@@ -29,6 +29,11 @@ namespace CuttingRoom.Editor
         private CuttingRoomEditorToolbar Toolbar { get; set; } = null;
 
         /// <summary>
+        /// The navigation toolbar containing view stack breadcrumbs.
+        /// </summary>
+        private NavigationToolbar NavigationToolbar { get; set; } = null;
+
+        /// <summary>
         /// Cutting Room dev toolbar.
         /// </summary>
         private CuttingRoomEditorDevToolbar DevToolbar { get; set; } = null;
@@ -73,6 +78,11 @@ namespace CuttingRoom.Editor
                     {
                         SaveUtility.Save();
                     }
+
+                    if (graphViewChange.elementsToRemove != null && graphViewChange.elementsToRemove.Count > 0)
+                    {
+                        RegenerateContents(true);
+                    }
                 };
 
                 GraphView.OnViewContainerPushed += OnViewContainerPushed;
@@ -108,17 +118,24 @@ namespace CuttingRoom.Editor
 
                 Toolbar.OnClickAddAtomicNarrativeObjectNode += () =>
                 {
-                    CuttingRoomContextMenus.InstantiateAtomicNarrativeObject();
+                    CuttingRoomContextMenus.CreateAtomicNarrativeObject();
 
                     RegenerateContents(false);
                 };
 
                 Toolbar.OnClickAddGraphNarrativeObjectNode += () =>
                 {
-                    CuttingRoomContextMenus.InstantiateGraphNarrativeObject();
+                    CuttingRoomContextMenus.CreateGraphNarrativeObject();
 
                     RegenerateContents(false);
                 };
+            }
+
+            if (NavigationToolbar == null)
+            {
+                NavigationToolbar = new NavigationToolbar();
+
+                NavigationToolbar.OnClickNavigationButton += OnClickNavigationButton;
             }
 
             if (DevToolbar == null)
@@ -127,7 +144,19 @@ namespace CuttingRoom.Editor
             }
         }
 
-        private void OnNarrativeObjectOutputCandidatesChanged()
+        /// <summary>
+        /// Invoked whenever a navigation button is clicked on the Navigation Toolbar.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        private void OnClickNavigationButton(ViewContainer viewContainer)
+        {
+            if (GraphView.PopViewContainersToViewContainer(viewContainer))
+            {
+                RegenerateContents(true);
+            }
+        }
+
+        private void OnNarrativeObjectConnectedGuidsChanged()
         {
             RegenerateContents(true);
         }
@@ -139,8 +168,8 @@ namespace CuttingRoom.Editor
 
             foreach (NarrativeObject narrativeObject in narrativeObjects)
             {
-                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged -= OnNarrativeObjectOutputCandidatesChanged;
-                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectOutputCandidatesChanged;
+                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged -= OnNarrativeObjectConnectedGuidsChanged;
+                narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectConnectedGuidsChanged;
             }
 
             bool graphViewChanged = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
@@ -232,6 +261,9 @@ namespace CuttingRoom.Editor
 
             AddGraphView();
             AddToolbar();
+            AddNavigationToolbar();
+
+            NavigationToolbar.GenerateContents(GraphView.ViewContainerStack);
 
             if (DevToolbarEnabled)
             {
@@ -263,6 +295,14 @@ namespace CuttingRoom.Editor
         private void AddToolbar()
         {
             rootVisualElement.Add(Toolbar.Toolbar);
+        }
+
+        /// <summary>
+        /// Add the navigation toolbar to this window.
+        /// </summary>
+        private void AddNavigationToolbar()
+        {
+            rootVisualElement.Add(NavigationToolbar.Toolbar);
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -28,6 +29,11 @@ namespace CuttingRoom.Editor
         /// The style sheet for this node.
         /// </summary>
         private StyleSheet StyleSheet = null;
+
+        /// <summary>
+        /// Event invoked when set as root is clicked.
+        /// </summary>
+        public event Action<NarrativeObjectNode> OnSetAsRoot;
 
         /// <summary>
         /// Abstract method which must be implememented to update nodes when the
@@ -66,6 +72,10 @@ namespace CuttingRoom.Editor
 
             VisualElement titleElement = this.Q<VisualElement>("title");
             titleElement?.styleSheets.Add(StyleSheet);
+
+            // Get the contents container and add the stylesheet.
+            VisualElement contents = this.Q<VisualElement>("contents");
+            contents.styleSheets.Add(StyleSheet);
         }
 
         /// <summary>
@@ -84,7 +94,7 @@ namespace CuttingRoom.Editor
         /// <param name="action"></param>
         private void OnSetAsRootFromContextualMenu(DropdownMenuAction action)
         {
-            Debug.LogError("Set as root not implemented.");
+            OnSetAsRoot?.Invoke(this);
         }
     }
 }
