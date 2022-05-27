@@ -121,7 +121,7 @@ namespace CuttingRoom.Editor
                 Toolbar.OnClickAddAtomicNarrativeObjectNode += () =>
                 {
                     CuttingRoomContextMenus.CreateAtomicNarrativeObject();
-                                        
+
                     RegenerateContents(false);
                 };
 

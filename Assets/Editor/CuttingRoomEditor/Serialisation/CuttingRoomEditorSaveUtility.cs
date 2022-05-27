@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using Unity.EditorCoroutines.Editor;
 
 namespace CuttingRoom.Editor
 {
@@ -46,31 +45,19 @@ namespace CuttingRoom.Editor
 
         public void Save()
         {
-            EditorCoroutineUtility.StartCoroutine(SaveCoroutine(), this);
-        }
-
-        public IEnumerator SaveCoroutine()
-        {
-            // Wait a frame.
-            // When creating nodes on the graph, setting the position and then saving
-            // on the same frame results in the position retaining the value as before
-            // setting the position. Internally, despite set position call, the node is
-            // only being updated on the next repaint of the editor and not immediately.
-            yield return null;
-
-            CuttingRoomEditorGraphViewState graphViewState = ScriptableObject.CreateInstance<CuttingRoomEditorGraphViewState>();
+             CuttingRoomEditorGraphViewState graphViewState = ScriptableObject.CreateInstance<CuttingRoomEditorGraphViewState>();
 
             // Load the existing save state as a reference.
             CuttingRoomEditorGraphViewState loadedGraphViewState = Load();
 
-            foreach (ViewContainer baseViewContainer in ViewContainers)
+            foreach (ViewContainer viewContainer in ViewContainers)
             {
-                ViewContainerState viewContainerState = new ViewContainerState { narrativeObjectGuid = baseViewContainer.narrativeObjectGuid, narrativeObjectNodeGuids = baseViewContainer.narrativeObjectNodeGuids };
+                ViewContainerState viewContainerState = new ViewContainerState { narrativeObjectGuid = viewContainer.narrativeObjectGuid, narrativeObjectNodeGuids = viewContainer.narrativeObjectNodeGuids };
                 graphViewState.viewContainerStates.Add(viewContainerState);
 
                 NarrativeObject[] narrativeObjects = Object.FindObjectsOfType<NarrativeObject>();
 
-                foreach (string narrativeObjectGuid in baseViewContainer.narrativeObjectNodeGuids)
+                foreach (string narrativeObjectGuid in viewContainer.narrativeObjectNodeGuids)
                 {
                     // Find if the object still exists in the scene.
                     bool narrativeObjectExists = narrativeObjects.Where(narrativeObject => narrativeObject.guid == narrativeObjectGuid).FirstOrDefault() != null;
@@ -84,7 +71,39 @@ namespace CuttingRoom.Editor
                         // If there is a node currently visible, save that.
                         if (narrativeObjectNode != null)
                         {
-                            graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
+                            Rect rect = narrativeObjectNode.GetPosition();
+
+                            // This is a hack to work around the position rect not being valid on the frame it is created.
+                            // If node is created and then the rect examined on the same frame, it hasn't come into existence yet
+                            // (has position 0,0 despite node being positioned elsewhere, height and width are NaN etc.).
+                            if (rect.height.ToString() == "NaN" || rect.width.ToString() == "NaN")
+                            {
+                                if (loadedGraphViewState != null)
+                                {
+                                    // Check the loaded save file for existing saved state for the narrative object.
+                                    NarrativeObjectNodeState existingNodeState = loadedGraphViewState.narrativeObjectNodeStates.Where(narrativeObjectNodeState => narrativeObjectNodeState.narrativeObjectGuid == narrativeObjectGuid).FirstOrDefault();
+
+                                    // If there is an existing state, then it persists onto the new save rather than saving the invalid rects position.
+                                    if (existingNodeState != null)
+                                    {
+                                        graphViewState.narrativeObjectNodeStates.Add(existingNodeState);
+                                    }
+                                    // or if the node is truly new, then just record its position at 0,0 and add it to the save data.
+                                    else
+                                    {
+                                        graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
+                                    }
+                                }
+                                else
+                                {
+                                    graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
+                                }
+                            }
+                            else
+                            {
+                                // The nodes rect is valid, so save it with whatever its values are.
+                                graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
+                            }
                         }
                         else
                         {
@@ -123,8 +142,8 @@ namespace CuttingRoom.Editor
             {
                 Debug.LogWarning("Cutting Room Graph View could not be saved as scene has not been saved. Please save your scene and try again.");
 
-                // Exit coroutine here.
-                yield break;
+                // Exit here.
+                return;
             }
 
             // Try to load any existing saved asset for this scene.
