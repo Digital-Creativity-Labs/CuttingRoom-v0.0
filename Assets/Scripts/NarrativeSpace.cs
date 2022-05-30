@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace CuttingRoom
 {
+	[RequireComponent(typeof(VariableStore))]
 	/// <summary>
 	/// The container which holds all of the narrative objects which make up a production.
 	/// </summary>

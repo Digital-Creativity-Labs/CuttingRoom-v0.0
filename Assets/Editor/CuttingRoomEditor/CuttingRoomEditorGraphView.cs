@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System;
 using System.Linq;
@@ -126,6 +126,62 @@ namespace CuttingRoom.Editor
             NarrativeObjectNodes.Add(narrativeObjectNode);
 
             return narrativeObjectNode;
+        }
+
+        /// <summary>
+        /// Invoked whenever a selection is made within the graph view.
+        /// </summary>
+        /// <param name="selectable"></param>
+        public override void AddToSelection(ISelectable selectable)
+        {
+            if (selectable is NarrativeObjectNode)
+            {
+                GameObject narrativeObjectGameObject = (selectable as NarrativeObjectNode).NarrativeObject.gameObject;
+
+                if (!Selection.objects.Contains(narrativeObjectGameObject))
+                {
+                    List<UnityEngine.Object> selectedObjects = new List<UnityEngine.Object>(Selection.objects);
+
+                    selectedObjects.Add(narrativeObjectGameObject);
+
+                    Selection.objects = selectedObjects.ToArray();
+                }
+            }
+
+            base.AddToSelection(selectable);
+        }
+
+        /// <summary>
+        /// Invoked whenever a deselection is made within the graph view.
+        /// </summary>
+        /// <param name="selectable"></param>
+        public override void RemoveFromSelection(ISelectable selectable)
+        {
+            if (selectable is NarrativeObjectNode)
+            {
+                GameObject narrativeObjectGameObject = (selectable as NarrativeObjectNode).NarrativeObject.gameObject;
+
+                if (Selection.objects.Contains(narrativeObjectGameObject))
+                {
+                    List<UnityEngine.Object> selectedObjects = new List<UnityEngine.Object>(Selection.objects);
+
+                    selectedObjects.Remove(narrativeObjectGameObject);
+
+                    Selection.objects = selectedObjects.ToArray();
+                }
+            }
+
+            base.RemoveFromSelection(selectable);
+        }
+
+        /// <summary>
+        /// Invoked whenever the selection is cleared within the graph view.
+        /// </summary>
+        public override void ClearSelection()
+        {
+            Selection.objects = new UnityEngine.Object[0];
+
+            base.ClearSelection();
         }
 
         /// <summary>
@@ -325,6 +381,15 @@ namespace CuttingRoom.Editor
                 viewContainers.Add(viewContainer);
             }
 
+            PushViewContainer(viewContainer);
+        }
+
+        /// <summary>
+        /// Push view container onto the view stack and invoke callbacks.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        private void PushViewContainer(ViewContainer viewContainer)
+        {
             viewContainerStack.Push(viewContainer);
 
             OnViewContainerPushed?.Invoke();
@@ -439,6 +504,11 @@ namespace CuttingRoom.Editor
             }
         }
 
+        /// <summary>
+        /// Get the guid for the root narrative object of the specified view container.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        /// <returns></returns>
         private string GetViewContainerRootNarrativeObjectGuid(ViewContainer viewContainer)
         {
             if (viewContainer.narrativeObjectGuid == rootViewContainerGuid)
@@ -473,14 +543,27 @@ namespace CuttingRoom.Editor
             return string.Empty;
         }
 
+        public class PopulateResult
+        {
+            /// <summary>
+            /// Whether the call to Populate changed the graph view and should be saved.
+            /// </summary>
+            public bool GraphViewChanged { get; set; } = false;
+
+            /// <summary>
+            /// The guid and position of any newly created nodes.
+            /// </summary>
+            public List<Tuple<string, Vector2>> CreatedNodes { get; set; } = new List<Tuple<string, Vector2>>();
+        }
+
         /// <summary>
         /// Populate the graph view based on the contents of the scene currently open.
         /// </summary>
         /// <returns>Whether the graph view contents have been changed.</returns>
-        public bool Populate(CuttingRoomEditorGraphViewState graphViewState, NarrativeObject[] narrativeObjects)
+        public PopulateResult Populate(CuttingRoomEditorGraphViewState graphViewState, NarrativeObject[] narrativeObjects)
         {
-            // Whether this method has altered the contents of the graph view.
-            bool graphViewChanged = false;
+            // Returned populate result.
+            PopulateResult populateResult = new PopulateResult();
 
             if (graphViewState != null)
             {
@@ -490,13 +573,13 @@ namespace CuttingRoom.Editor
                 if (viewContainers.Count != graphViewState.viewContainerStates.Count ||
                     viewContainerStack.Count != graphViewState.viewContainerStackGuids.Count)
                 {
-                    graphViewChanged = true;
+                    populateResult.GraphViewChanged = true;
                 }
 
                 // If a narrative object has been added or removed since the last state, then save.
                 if (narrativeObjects.Length != graphViewState.narrativeObjectNodeStates.Count)
                 {
-                    graphViewChanged = true;
+                    populateResult.GraphViewChanged = true;
                 }
 
                 // Ensure all view containers exist.
@@ -581,6 +664,19 @@ namespace CuttingRoom.Editor
                         }
                     }
                 }
+
+                foreach (string guid in graphViewState.viewContainerStackGuids)
+                {
+                    ViewContainer viewContainer = viewContainers.Where(viewContainer => viewContainer.narrativeObjectGuid == guid).FirstOrDefault();
+
+                    if (viewContainer != null)
+                    {
+                        if (!viewContainerStack.Contains(viewContainer))
+                        {
+                            PushViewContainer(viewContainer);
+                        }
+                    }
+                }
             }
 
             // Remove any objects which have been deleted due to their view container being deleted or recursively as part of the parent view container being deleted.
@@ -635,6 +731,9 @@ namespace CuttingRoom.Editor
                 else
                 {
                     narrativeObjectNode = existingNodesForNarrativeObject.First();
+
+                    // Ensure this node is visible as it will definitely be in the correct location now.
+                    narrativeObjectNode.visible = true;
                 }
 
                 // If a save graph view exists, try to find the properties for this node.
@@ -649,14 +748,23 @@ namespace CuttingRoom.Editor
                     }
                     else
                     {
+                        // The current centre of the graph view window.
+                        Vector2 graphViewCenter = contentViewContainer.WorldToLocal(layout.center);
+
+                        // Store node as created.
+                        populateResult.CreatedNodes.Add(new Tuple<string, Vector2>(narrativeObjectNode.NarrativeObject.guid, graphViewCenter));
+
+                        // Make invisible to avoid popping onto screen at 0,0 before appearing at the centre of the graph view.
+                        narrativeObjectNode.visible = false;
+
                         // Node state for this node doesn't exist. Graph view is different from it's save state.
-                        graphViewChanged = true;
+                        populateResult.GraphViewChanged = true;
                     }
                 }
                 else
                 {
                     // At least one node has been added and there is no save state so create one.
-                    graphViewChanged = true;
+                    populateResult.GraphViewChanged = true;
                 }
             }
 
@@ -726,7 +834,7 @@ namespace CuttingRoom.Editor
                 }
             }
 
-            return graphViewChanged;
+            return populateResult;
         }
 
         /// <summary>
@@ -739,7 +847,7 @@ namespace CuttingRoom.Editor
 
             if (narrativeSpace == null)
             {
-                Debug.LogError("Narrative Space not found. Please ensure there is an instance of NarrativeSpace attached to a game object within the scene.");
+                narrativeSpace = CuttingRoomContextMenus.CreateNarrativeSpace();
             }
 
             return narrativeSpace;

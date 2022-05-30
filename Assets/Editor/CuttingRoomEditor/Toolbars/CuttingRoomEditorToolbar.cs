@@ -15,11 +15,6 @@ namespace CuttingRoom.Editor
         public event Action OnClickToggleDevToolbar;
 
         /// <summary>
-        /// Invoked when the Pop View button is clicked.
-        /// </summary>
-        public event Action OnClickPopViewContainer;
-
-        /// <summary>
         /// Invoked when the Add Atomic Narrative Object Node button is clicked.
         /// </summary>
         public event Action OnClickAddAtomicNarrativeObjectNode;
@@ -31,8 +26,7 @@ namespace CuttingRoom.Editor
 
         public CuttingRoomEditorToolbar()
         {
-            AddButton(InvokeOnClickToggleDevToolbar, "Show Dev Toolbar");
-            AddButton(InvokeOnClickPopViewContainer, "Pop View");
+            //AddButton(InvokeOnClickToggleDevToolbar, "Show Dev Toolbar");
             AddButton(InvokeOnClickAddAtomicNarrativeObjectNode, "Atomic");
             AddButton(InvokeOnClickAddGraphNarrativeObjectNode, "Graph");
         }
@@ -40,11 +34,6 @@ namespace CuttingRoom.Editor
         private void InvokeOnClickToggleDevToolbar()
         {
             OnClickToggleDevToolbar?.Invoke();
-        }
-
-        private void InvokeOnClickPopViewContainer()
-        {
-            OnClickPopViewContainer?.Invoke();
         }
 
         private void InvokeOnClickAddAtomicNarrativeObjectNode()

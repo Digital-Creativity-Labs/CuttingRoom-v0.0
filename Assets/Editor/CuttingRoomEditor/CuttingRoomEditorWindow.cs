@@ -101,23 +101,6 @@ namespace CuttingRoom.Editor
                     RegenerateContents(false);
                 };
 
-                Toolbar.OnClickPopViewContainer += () =>
-                {
-                    // Only do a regen if a view is actually popped.
-                    if (GraphView.PopViewContainer())
-                    {
-                        // Save here to ensure that the altered view stack is preserved.
-                        // When regenerating the contents of the window, the viewstack is loaded
-                        // and recreated, then saved again. If it's not saved before Regenerating then
-                        // the viewstack in the save file still has the view which has just been popped
-                        // at the top and you can never escape it!
-                        SaveUtility.Save();
-
-                        // New view container so clear the window as the old nodes are not visible anymore.
-                        RegenerateContents(true);
-                    }
-                };
-
                 Toolbar.OnClickAddAtomicNarrativeObjectNode += () =>
                 {
                     CuttingRoomContextMenus.CreateAtomicNarrativeObject();
@@ -138,6 +121,23 @@ namespace CuttingRoom.Editor
                 NavigationToolbar = new NavigationToolbar();
 
                 NavigationToolbar.OnClickNavigationButton += OnClickNavigationButton;
+
+                NavigationToolbar.OnClickViewBackButton += () =>
+                {
+                    // Only do a regen if a view is actually popped.
+                    if (GraphView.PopViewContainer())
+                    {
+                        // Save here to ensure that the altered view stack is preserved.
+                        // When regenerating the contents of the window, the viewstack is loaded
+                        // and recreated, then saved again. If it's not saved before Regenerating then
+                        // the viewstack in the save file still has the view which has just been popped
+                        // at the top and you can never escape it!
+                        SaveUtility.Save();
+
+                        // New view container so clear the window as the old nodes are not visible anymore.
+                        RegenerateContents(true);
+                    }
+                };
             }
 
             if (DevToolbar == null)
@@ -154,6 +154,10 @@ namespace CuttingRoom.Editor
         {
             if (GraphView.PopViewContainersToViewContainer(viewContainer))
             {
+                // Save the view has been popped before regenerating (which loads existing data,
+                // which without this save will still have the popped containers in it).
+                SaveUtility.Save();
+
                 RegenerateContents(true);
             }
         }
@@ -188,11 +192,11 @@ namespace CuttingRoom.Editor
                 narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectOutputCandidatesChanged;
             }
 
-            bool graphViewChanged = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
+            CuttingRoomEditorGraphView.PopulateResult populateResult = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
 
-            if (graphViewChanged)
+            if (populateResult.GraphViewChanged)
             {
-                SaveUtility.Save();
+                SaveUtility.Save(populateResult.CreatedNodes);
             }
         }
 

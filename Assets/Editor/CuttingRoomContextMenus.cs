@@ -20,27 +20,15 @@ namespace CuttingRoom.Editor
 		//	}
 		//}
 
-		[MenuItem("GameObject/Cutting Room/Create/Graph Narrative Object", false, menuItemPriority)]
-		public static void CreateGraphNarrativeObject()
+		[MenuItem("GameObject/Cutting Room/Create/Narrative Space", false, menuItemPriority)]
+		public static NarrativeSpace CreateNarrativeSpace()
 		{
-			GameObject graphNarrativeObjectGO = InstantiateGraphNarrativeObject().gameObject;
+			NarrativeSpace narrativeSpace = new GameObject("NarrativeSpace", typeof(NarrativeSpace)).GetComponent<NarrativeSpace>();
 
-			AttachToEditorSelection(graphNarrativeObjectGO);
-		}
+			// Set reference to variable store.
+			narrativeSpace.globalVariableStore = narrativeSpace.GetComponent<VariableStore>();
 
-		public static GraphNarrativeObject InstantiateGraphNarrativeObject()
-		{
-			GameObject graphNarrativeObjectGO = new GameObject("GraphNarrativeObject", typeof(GraphNarrativeObject));
-
-			Undo.RegisterCreatedObjectUndo(graphNarrativeObjectGO, "Create Graph Narrative Object");
-
-			GraphNarrativeObject graphNarrativeObject = graphNarrativeObjectGO.GetComponent<GraphNarrativeObject>();
-
-			graphNarrativeObject.outputSelectionDecisionPoint = graphNarrativeObject.GetComponent<OutputSelectionDecisionPoint>();
-			graphNarrativeObject.variableStore = graphNarrativeObject.GetComponent<VariableStore>();
-			graphNarrativeObject.gameObjectGuid = graphNarrativeObject.GetComponent<GameObjectGuid>();
-
-			return graphNarrativeObject;
+			return narrativeSpace;
 		}
 
 		public static AtomicNarrativeObject InstantiateAtomicNarrativeObject()
@@ -130,6 +118,29 @@ namespace CuttingRoom.Editor
 			GameObject layerDefinitionGO = new GameObject("LayerDefinition", typeof(LayerDefinition));
 
 			AttachToEditorSelection(layerDefinitionGO);
+		}
+
+		[MenuItem("GameObject/Cutting Room/Create/Graph Narrative Object", false, menuItemPriority)]
+		public static void CreateGraphNarrativeObject()
+		{
+			GameObject graphNarrativeObjectGO = InstantiateGraphNarrativeObject().gameObject;
+
+			AttachToEditorSelection(graphNarrativeObjectGO);
+		}
+
+		public static GraphNarrativeObject InstantiateGraphNarrativeObject()
+		{
+			GameObject graphNarrativeObjectGO = new GameObject("GraphNarrativeObject", typeof(GraphNarrativeObject));
+
+			Undo.RegisterCreatedObjectUndo(graphNarrativeObjectGO, "Create Graph Narrative Object");
+
+			GraphNarrativeObject graphNarrativeObject = graphNarrativeObjectGO.GetComponent<GraphNarrativeObject>();
+
+			graphNarrativeObject.outputSelectionDecisionPoint = graphNarrativeObject.GetComponent<OutputSelectionDecisionPoint>();
+			graphNarrativeObject.variableStore = graphNarrativeObject.GetComponent<VariableStore>();
+			graphNarrativeObject.gameObjectGuid = graphNarrativeObject.GetComponent<GameObjectGuid>();
+
+			return graphNarrativeObject;
 		}
 
 		private static void AttachToEditorSelection(GameObject gameObject)

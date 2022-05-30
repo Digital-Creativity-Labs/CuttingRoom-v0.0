@@ -62,12 +62,6 @@ namespace CuttingRoom.Editor
             inputContainer.Add(InputPort);
             outputContainer.Add(OutputPort);
 
-            // On mouse down, select the narrative object in the editor/inspector. 
-            RegisterCallback<MouseDownEvent>((mouseDownEvent) =>
-            {
-                Selection.activeGameObject = NarrativeObject.gameObject;
-            });
-
             StyleSheet = Resources.Load<StyleSheet>("NarrativeObjectNode");
 
             VisualElement titleElement = this.Q<VisualElement>("title");

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,46 @@ namespace CuttingRoom.Editor
     public class CuttingRoomEditorSaveUtility
     {
         /// <summary>
+        /// The name of the unsaved scene in the Unity Editor.
+        /// </summary>
+        private const string untitledSceneName = "Untitled";
+
+        /// <summary>
+        /// Get the name of the active scene in the editor.
+        /// </summary>
+        public string ActiveSceneName
+        {
+            get
+            {
+                string activeSceneName = EditorSceneManager.GetActiveScene().name;
+
+                if (string.IsNullOrEmpty(activeSceneName))
+                {
+                    activeSceneName = untitledSceneName;
+                }
+
+                return activeSceneName;
+            }
+        }
+
+        /// <summary>
         /// The graph view to be saved.
         /// </summary>
         private CuttingRoomEditorGraphView CuttingRoomEditorGraphView = null;
 
+        /// <summary>
+        /// The narrative object nodes which currently exist on the graph view.
+        /// </summary>
         private List<NarrativeObjectNode> NarrativeObjectNodes => CuttingRoomEditorGraphView.NarrativeObjectNodes;
 
+        /// <summary>
+        /// The view containers which currently exist within the graph view.
+        /// </summary>
         private List<ViewContainer> ViewContainers => CuttingRoomEditorGraphView.viewContainers;
 
+        /// <summary>
+        /// Get the guids of the view containers on the view stack.
+        /// </summary>
         private List<string> ViewContainerStackGuids
         {
             get
@@ -36,14 +69,21 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Returns the save path for the currently open scene.
         /// </summary>
-        private string SavePath { get { return $"Assets/Resources/CuttingRoomEditor/{EditorSceneManager.GetActiveScene().name}.asset"; } }
+        private string SavePath { get { return $"Assets/Resources/CuttingRoomEditor/{ActiveSceneName}.asset"; } }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="cuttingRoomEditorGraphView"></param>
         public CuttingRoomEditorSaveUtility(CuttingRoomEditorGraphView cuttingRoomEditorGraphView)
         {
             CuttingRoomEditorGraphView = cuttingRoomEditorGraphView;
         }
 
-        public void Save()
+        /// <summary>
+        /// Save the current graph view layout and data.
+        /// </summary>
+        public void Save(List<Tuple<string, Vector2>> createdNodes = null)
         {
              CuttingRoomEditorGraphViewState graphViewState = ScriptableObject.CreateInstance<CuttingRoomEditorGraphViewState>();
 
@@ -55,7 +95,7 @@ namespace CuttingRoom.Editor
                 ViewContainerState viewContainerState = new ViewContainerState { narrativeObjectGuid = viewContainer.narrativeObjectGuid, narrativeObjectNodeGuids = viewContainer.narrativeObjectNodeGuids };
                 graphViewState.viewContainerStates.Add(viewContainerState);
 
-                NarrativeObject[] narrativeObjects = Object.FindObjectsOfType<NarrativeObject>();
+                NarrativeObject[] narrativeObjects = UnityEngine.Object.FindObjectsOfType<NarrativeObject>();
 
                 foreach (string narrativeObjectGuid in viewContainer.narrativeObjectNodeGuids)
                 {
@@ -73,6 +113,8 @@ namespace CuttingRoom.Editor
                         {
                             Rect rect = narrativeObjectNode.GetPosition();
 
+                            bool nodeStateAdded = false;
+
                             // This is a hack to work around the position rect not being valid on the frame it is created.
                             // If node is created and then the rect examined on the same frame, it hasn't come into existence yet
                             // (has position 0,0 despite node being positioned elsewhere, height and width are NaN etc.).
@@ -86,23 +128,31 @@ namespace CuttingRoom.Editor
                                     // If there is an existing state, then it persists onto the new save rather than saving the invalid rects position.
                                     if (existingNodeState != null)
                                     {
+                                        nodeStateAdded = true;
+
                                         graphViewState.narrativeObjectNodeStates.Add(existingNodeState);
                                     }
-                                    // or if the node is truly new, then just record its position at 0,0 and add it to the save data.
-                                    else
-                                    {
-                                        graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
-                                    }
-                                }
-                                else
-                                {
-                                    graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
                                 }
                             }
-                            else
+
+                            if (!nodeStateAdded)
                             {
+                                Vector2 nodePosition = narrativeObjectNode.GetPosition().position;
+
+                                // Check newly created nodes and find what position they have been instantiated at and save that.
+                                // This is necessary as if you get position of a new node, it will be 0,0 as rect of the node is uninitialised until next window repaint.
+                                if (createdNodes != null)
+                                {
+                                    Tuple<string, Vector2> createdNodeData = createdNodes.Where(createdNode => createdNode.Item1 == narrativeObjectNode.NarrativeObject.guid).FirstOrDefault();
+
+                                    if (createdNodeData != null)
+                                    {
+                                        nodePosition = createdNodeData.Item2;
+                                    }
+                                }
+
                                 // The nodes rect is valid, so save it with whatever its values are.
-                                graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = narrativeObjectNode.GetPosition().position });
+                                graphViewState.narrativeObjectNodeStates.Add(new NarrativeObjectNodeState { narrativeObjectGuid = narrativeObjectGuid, position = nodePosition });
                             }
                         }
                         else
@@ -136,15 +186,7 @@ namespace CuttingRoom.Editor
             }
 
             // Get the name of the current scene in the editor.
-            string sceneName = EditorSceneManager.GetActiveScene().name;
-
-            if (string.IsNullOrEmpty(sceneName))
-            {
-                Debug.LogWarning("Cutting Room Graph View could not be saved as scene has not been saved. Please save your scene and try again.");
-
-                // Exit here.
-                return;
-            }
+            string sceneName = ActiveSceneName;
 
             // Try to load any existing saved asset for this scene.
             CuttingRoomEditorGraphViewState existingGraphViewState = Load();
@@ -173,20 +215,13 @@ namespace CuttingRoom.Editor
         public CuttingRoomEditorGraphViewState Load()
         {
             // Get the name of the current scene in the editor.
-            string sceneName = EditorSceneManager.GetActiveScene().name;
-
-            if (string.IsNullOrEmpty(sceneName))
-            {
-                Debug.LogWarning("Cutting Room Graph View could not be saved as scene has not been saved. Please save your scene and try again.");
-
-                return null;
-            }
+            string sceneName = ActiveSceneName;
 
             // Generate the path that this scenes graph should be saved at.
             string savePath = $"Assets/Resources/CuttingRoomEditor/{sceneName}.asset";
 
             // Try to load any existing saved asset for this scene.
-            Object existingGraphViewState = AssetDatabase.LoadAssetAtPath(savePath, typeof(CuttingRoomEditorGraphViewState));
+            UnityEngine.Object existingGraphViewState = AssetDatabase.LoadAssetAtPath(savePath, typeof(CuttingRoomEditorGraphViewState));
 
             if (existingGraphViewState == null)
             {
