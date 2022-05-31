@@ -88,6 +88,13 @@ namespace CuttingRoom
 		/// <returns></returns>
 		public IEnumerator Process(OnSelectedCallback onSelected, Sequencer sequencer, Sequencer.SequencerLayer sequencerLayer, GroupNarrativeObject groupNarrativeObject)
 		{
+#if UNITY_EDITOR
+			if (candidates.Count > 0 && !groupSelectionMethodName.Initialised)
+			{
+				Debug.LogWarning("Group Selection decision point has candidates but no assigned Group Selection Method. No selection will be made.");
+			}
+#endif
+
 			// Store selection callback;
 			this.onSelected = onSelected;
 

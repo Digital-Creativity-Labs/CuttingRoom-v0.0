@@ -42,6 +42,13 @@ namespace CuttingRoom
 		/// <returns></returns>
 		public IEnumerator Process(OnSelectedCallback onSelected, Sequencer sequencer, Sequencer.SequencerLayer sequencerLayer, LayerNarrativeObject layerNarrativeObject)
 		{
+#if UNITY_EDITOR
+			if (candidates.Count > 0 && !layerSelectionMethodNameContainer.Initialised)
+			{
+				Debug.LogWarning("Layer Selection decision point has candidates but no assigned Layer Selection Method. No selection will be made.");
+			}
+#endif
+
 			// If ready to select some layers...
 			if (layerSelectionMethodNameContainer.Initialised)
 			{
