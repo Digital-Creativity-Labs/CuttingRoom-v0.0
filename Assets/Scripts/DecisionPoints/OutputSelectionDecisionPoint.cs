@@ -54,6 +54,12 @@ namespace CuttingRoom
 		/// <returns></returns>
 		public IEnumerator Process(OnSelectedCallback onSelected, Sequencer sequencer, Sequencer.SequencerLayer sequencerLayer, NarrativeObject narrativeObject)
 		{
+#if UNITY_EDITOR
+			if (candidates.Count > 0 && !outputSelectionMethodName.Initialised)
+			{
+				Debug.LogWarning("Output Selection decision point has candidates but no assigned Output Selection Method. No selection will be made.");
+			}
+#endif
 			// Store selection callback;
 			this.onSelected = onSelected;
 
