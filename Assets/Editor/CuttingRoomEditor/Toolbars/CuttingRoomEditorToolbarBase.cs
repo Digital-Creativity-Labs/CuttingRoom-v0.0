@@ -19,12 +19,18 @@ namespace CuttingRoom.Editor
         /// </summary>
         /// <param name="onClick"></param>
         /// <param name="text"></param>
-        protected void AddButton(Action onClick, string text)
+        protected Button AddButton(Action onClick, string text)
         {
-            Button button = new Button(() => { onClick?.Invoke(); });
+            Button button = new Button(() =>
+            {
+                onClick?.Invoke();
+            });
+
             button.text = text;
 
             Toolbar.Add(button);
+
+            return button;
         }
     }
 }

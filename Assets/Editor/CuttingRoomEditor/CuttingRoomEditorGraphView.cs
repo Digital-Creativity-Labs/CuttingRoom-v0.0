@@ -36,6 +36,11 @@ namespace CuttingRoom.Editor
         public event Action OnRootNarrativeObjectChanged;
 
         /// <summary>
+        /// Invoked whenever the candidates of the visible view container change.
+        /// </summary>
+        public event Action OnNarrativeObjectCandidatesChanged;
+
+        /// <summary>
         /// The supported node types in this graph view.
         /// </summary>
         private enum NodeType
@@ -78,6 +83,8 @@ namespace CuttingRoom.Editor
         {
             window.OnWindowCleared += OnWindowCleared;
 
+            window.OnNarrativeObjectCreated += OnNarrativeObjectCreated;
+
             graphViewChanged += OnGraphViewChangedEvent;
 
             // Load the style sheet defining the style of the graph view.
@@ -117,11 +124,11 @@ namespace CuttingRoom.Editor
         /// <typeparam name="T"></typeparam>
         /// <param name="narrativeObject"></param>
         /// <returns></returns>
-        public NarrativeObjectNode AddNode<T>(NarrativeObject narrativeObject) where T : NarrativeObjectNode
+        public NarrativeObjectNode AddNode<T>(NarrativeObject narrativeObject, NarrativeObject parentNarrativeObject) where T : NarrativeObjectNode
         {
             // Careful here as the constructor is being reflected based on the parameters.
             // If parameters change, this method call will still be valid but fail to find ctor.
-            NarrativeObjectNode narrativeObjectNode = Activator.CreateInstance(typeof(T), new object[] { narrativeObject }) as NarrativeObjectNode;
+            NarrativeObjectNode narrativeObjectNode = Activator.CreateInstance(typeof(T), new object[] { narrativeObject, parentNarrativeObject }) as NarrativeObjectNode;
 
             NarrativeObjectNodes.Add(narrativeObjectNode);
 
@@ -278,6 +285,18 @@ namespace CuttingRoom.Editor
 
             // Clear out old edge states.
             EdgeStates.Clear();
+        }
+
+        /// <summary>
+        /// Invoked whenever a new narrative object is created via the toolbar.
+        /// </summary>
+        private void OnNarrativeObjectCreated(NarrativeObject narrativeObject)
+        {
+            // If the current view container has no root object, then set it.
+            if (!ViewContainerHasRootNarrativeObject(viewContainerStack.Peek()))
+            {
+                SetNarrativeObjectAsRootOfViewContainer(viewContainerStack.Peek(), narrativeObject);
+            }
         }
 
         /// <summary>
@@ -682,6 +701,12 @@ namespace CuttingRoom.Editor
             // Remove any objects which have been deleted due to their view container being deleted or recursively as part of the parent view container being deleted.
             narrativeObjects = narrativeObjects.Where(narrativeObject => narrativeObject != null).ToArray();
 
+            // The view container being rendered.
+            ViewContainer visibleViewContainer = viewContainerStack.Peek();
+
+            // Get the narrative object represented by the visible view container.
+            NarrativeObject visibleViewContainerNarrativeObject = GetNarrativeObject(visibleViewContainer.narrativeObjectGuid);
+
             foreach (NarrativeObject narrativeObject in narrativeObjects)
             {
                 // If the narrative object is not visible, then continue onto the next and create no node.
@@ -700,16 +725,25 @@ namespace CuttingRoom.Editor
                 {
                     if (narrativeObject is AtomicNarrativeObject)
                     {
-                        narrativeObjectNode = AddNode<AtomicNarrativeObjectNode>(narrativeObject);
+                        narrativeObjectNode = AddNode<AtomicNarrativeObjectNode>(narrativeObject, visibleViewContainerNarrativeObject);
                     }
                     else if (narrativeObject is GraphNarrativeObject)
                     {
-                        narrativeObjectNode = AddNode<GraphNarrativeObjectNode>(narrativeObject);
+                        narrativeObjectNode = AddNode<GraphNarrativeObjectNode>(narrativeObject, visibleViewContainerNarrativeObject);
 
                         GraphNarrativeObjectNode graphNarrativeObjectNode = narrativeObjectNode as GraphNarrativeObjectNode;
 
                         graphNarrativeObjectNode.OnClickViewContents -= PushViewContainer;
                         graphNarrativeObjectNode.OnClickViewContents += PushViewContainer;
+                    }
+                    else if (narrativeObject is GroupNarrativeObject)
+                    {
+                        narrativeObjectNode = AddNode<GroupNarrativeObjectNode>(narrativeObject, visibleViewContainerNarrativeObject);
+
+                        GroupNarrativeObjectNode groupNarrativeObjectNode = narrativeObjectNode as GroupNarrativeObjectNode;
+
+                        groupNarrativeObjectNode.OnClickViewContents -= PushViewContainer;
+                        groupNarrativeObjectNode.OnClickViewContents += PushViewContainer;
                     }
                     else
                     {
@@ -725,6 +759,9 @@ namespace CuttingRoom.Editor
                     }
 
                     narrativeObjectNode.OnSetAsRoot += OnNarrativeObjectNodeSetAsRoot;
+
+                    narrativeObjectNode.OnSetAsCandidate += OnNarrativeObjectNodeSetAsCandidate;
+                    narrativeObjectNode.OnRemoveAsCandidate += OnNarrativeObjectNodeRemoveAsCandidate;
 
                     AddElement(narrativeObjectNode);
                 }
@@ -768,9 +805,6 @@ namespace CuttingRoom.Editor
                 }
             }
 
-            // The view container being rendered.
-            ViewContainer visibleViewContainer = viewContainerStack.Peek();
-
             // Get the guid of the root narrative object of the view.
             string viewContainerRootNarrativeObjectGuid = GetViewContainerRootNarrativeObjectGuid(visibleViewContainer);
 
@@ -784,6 +818,17 @@ namespace CuttingRoom.Editor
                 if (narrativeObjectNode.NarrativeObject.guid == viewContainerRootNarrativeObjectGuid)
                 {
                     narrativeObjectNode.EnableRootVisuals();
+                }
+
+                // If the visible view is a representing a group, show candidate graphics on candidate nodes.
+                if (visibleViewContainerNarrativeObject is GroupNarrativeObject)
+                {
+                    GroupNarrativeObject groupNarrativeObject = visibleViewContainerNarrativeObject as GroupNarrativeObject;
+
+                    if (groupNarrativeObject.groupSelectionDecisionPoint.Candidates.Contains(narrativeObjectNode.NarrativeObject.gameObject))
+                    {
+                        narrativeObjectNode.EnableCandidateVisuals();
+                    }
                 }
 
                 // For each connection from the nodes outputs.
@@ -850,6 +895,17 @@ namespace CuttingRoom.Editor
                 narrativeSpace = CuttingRoomContextMenus.CreateNarrativeSpace();
             }
 
+            // Ensure sequencer exists.
+            Sequencer sequencer = UnityEngine.Object.FindObjectOfType<Sequencer>();
+
+            if (sequencer == null)
+            {
+                sequencer = CuttingRoomContextMenus.CreateSequencer();
+
+                // Set narrative space on the sequencer.
+                sequencer.narrativeSpace = narrativeSpace;
+            }
+
             return narrativeSpace;
         }
 
@@ -871,46 +927,220 @@ namespace CuttingRoom.Editor
         /// <param name="narrativeObjectNode"></param>
         private void OnNarrativeObjectNodeSetAsRoot(NarrativeObjectNode narrativeObjectNode)
         {
+            SetNarrativeObjectAsRootOfViewContainer(viewContainerStack.Peek(), narrativeObjectNode.NarrativeObject);
+
+            // Invoke the callback as a root has changed somewhere on the graph.
+            OnRootNarrativeObjectChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Invoked whenever a narrative object is Set as a candidate on the graph view.
+        /// </summary>
+        /// <param name="narrativeObjectNode"></param>
+        private void OnNarrativeObjectNodeSetAsCandidate(NarrativeObjectNode narrativeObjectNode)
+        {
+            ViewContainer visibleViewContainer = viewContainerStack.Peek();
+
+            // If the container is the root view, no candidates are allowed so ignore.
+            if (visibleViewContainer.narrativeObjectGuid != rootViewContainerGuid)
+            {
+                NarrativeObject visibleViewContainerNarrativeObject = GetNarrativeObject(visibleViewContainer.narrativeObjectGuid);
+
+                if (visibleViewContainerNarrativeObject is GroupNarrativeObject)
+                {
+                    GroupNarrativeObject groupNarrativeObject = visibleViewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
+
+                    groupNarrativeObject.groupSelectionDecisionPoint.AddCandidate(narrativeObjectNode.NarrativeObject.gameObject);
+
+                    OnNarrativeObjectCandidatesChanged?.Invoke();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invoked whenever a narrative object is removed as a candidate on the graph view.
+        /// </summary>
+        /// <param name="narrativeObjectNode"></param>
+        private void OnNarrativeObjectNodeRemoveAsCandidate(NarrativeObjectNode narrativeObjectNode)
+        {
+            ViewContainer visibleViewContainer = viewContainerStack.Peek();
+
+            // If the container is the root view, no candidates are allowed so ignore.
+            if (visibleViewContainer.narrativeObjectGuid != rootViewContainerGuid)
+            {
+                NarrativeObject visibleViewContainerNarrativeObject = GetNarrativeObject(visibleViewContainer.narrativeObjectGuid);
+
+                if (visibleViewContainerNarrativeObject is GroupNarrativeObject)
+                {
+                    GroupNarrativeObject groupNarrativeObject = visibleViewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
+
+                    groupNarrativeObject.groupSelectionDecisionPoint.RemoveCandidate(narrativeObjectNode.NarrativeObject.gameObject);
+
+                    OnNarrativeObjectCandidatesChanged?.Invoke();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the root narrative object of a view container.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        /// <param name="narrativeObject"></param>
+        /// <returns></returns>
+        private bool SetNarrativeObjectAsRootOfViewContainer(ViewContainer viewContainer, NarrativeObject narrativeObject)
+        {
             // If the current view is the narrative space.
-            if (viewContainerStack.Peek().narrativeObjectGuid == rootViewContainerGuid)
+            if (viewContainer.narrativeObjectGuid == rootViewContainerGuid)
             {
                 NarrativeSpace narrativeSpace = GetNarrativeSpace();
 
                 if (narrativeSpace == null)
                 {
-                    return;
+                    return false;
                 }
 
-                narrativeSpace.rootNarrativeObject = narrativeObjectNode.NarrativeObject;
+                narrativeSpace.rootNarrativeObject = narrativeObject;
             }
             else
             {
                 // Find the narrative object which has the same guid as the current view container.
-                NarrativeObject narrativeObject = GetNarrativeObject(viewContainerStack.Peek().narrativeObjectGuid);
+                NarrativeObject viewContainerNarrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
 
-                if (narrativeObject == null)
+                if (viewContainerNarrativeObject == null)
                 {
-                    Debug.LogError($"Narrative Object with guid {narrativeObjectNode.NarrativeObject.guid} does not exist.");
+                    Debug.LogError($"Narrative Object with guid {narrativeObject.guid} does not exist.");
 
-                    return;
+                    return false;
                 }
 
-                if (narrativeObject is GraphNarrativeObject)
+                if (viewContainerNarrativeObject is GraphNarrativeObject)
                 {
-                    GraphNarrativeObject graphNarrativeObject = narrativeObject.GetComponent<GraphNarrativeObject>();
+                    GraphNarrativeObject graphNarrativeObject = viewContainerNarrativeObject.GetComponent<GraphNarrativeObject>();
 
-                    graphNarrativeObject.rootNarrativeObject = narrativeObjectNode.NarrativeObject;
+                    graphNarrativeObject.rootNarrativeObject = narrativeObject;
+                }
+                else if (viewContainerNarrativeObject is GroupNarrativeObject)
+                {
+                    // TODO: Do nothing but perhaps add as candidate?
                 }
                 else
                 {
                     Debug.LogError("Cannot set root node of narrative object as type is unknown.");
 
-                    return;
+                    return false;
                 }
             }
 
-            // Invoke the callback as a root has changed somewhere on the graph.
-            OnRootNarrativeObjectChanged?.Invoke();
+            return true;
         }
+
+        private bool AddNarrativeObjectAsCandidateOfViewContainer(ViewContainer viewContainer, NarrativeObject narrativeObject)
+        {
+            // Find the narrative object which has the same guid as the current view container.
+            NarrativeObject viewContainerNarrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
+
+            if (viewContainerNarrativeObject == null)
+            {
+                Debug.LogError($"Narrative Object with guid {narrativeObject.guid} does not exist.");
+
+                return false;
+            }
+
+            if (viewContainerNarrativeObject is GroupNarrativeObject)
+            {
+                GroupNarrativeObject groupNarrativeObject = viewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
+
+                groupNarrativeObject.groupSelectionDecisionPoint.AddCandidate(narrativeObject.gameObject);
+            }
+            else
+            {
+                Debug.LogError("Cannot add candidate as narrative object has no candidates.");
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool RemoveNarrativeObjectAsCandidateOfViewContainer(ViewContainer viewContainer, NarrativeObject narrativeObject)
+        {
+            // Find the narrative object which has the same guid as the current view container.
+            NarrativeObject viewContainerNarrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
+
+            if (viewContainerNarrativeObject == null)
+            {
+                Debug.LogError($"Narrative Object with guid {narrativeObject.guid} does not exist.");
+
+                return false;
+            }
+
+            if (viewContainerNarrativeObject is GroupNarrativeObject)
+            {
+                GroupNarrativeObject groupNarrativeObject = viewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
+
+                groupNarrativeObject.groupSelectionDecisionPoint.RemoveCandidate(narrativeObject.gameObject);
+            }
+            else
+            {
+                Debug.LogError("Cannot add candidate as narrative object has no candidates.");
+
+                return false;
+            }
+
+            return true;
+
+        }
+
+        /// <summary>
+        /// Query whether a view container has a root narrative object set.
+        /// </summary>
+        /// <param name="viewContainer"></param>
+        /// <returns></returns>
+        private bool ViewContainerHasRootNarrativeObject(ViewContainer viewContainer)
+        {
+            if (viewContainer.narrativeObjectGuid == rootViewContainerGuid)
+            {
+                NarrativeSpace narrativeSpace = GetNarrativeSpace();
+
+                if (narrativeSpace == null)
+                {
+                    return false;
+                }
+
+                return narrativeSpace.rootNarrativeObject != null;
+            }
+            else
+            {
+                // Find the narrative object which has the same guid as the current view container.
+                NarrativeObject viewContainerNarrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
+
+                if (viewContainerNarrativeObject == null)
+                {
+                    Debug.LogError($"Narrative Object with guid {viewContainer.narrativeObjectGuid} does not exist.");
+
+                    return false;
+                }
+
+                if (viewContainerNarrativeObject is GraphNarrativeObject)
+                {
+                    GraphNarrativeObject graphNarrativeObject = viewContainerNarrativeObject.GetComponent<GraphNarrativeObject>();
+
+                    return graphNarrativeObject.rootNarrativeObject != null;
+                }
+                else if (viewContainerNarrativeObject is GroupNarrativeObject)
+                {
+                    // TODO: No roots inside a group.
+
+                    return false;
+                }
+                else
+                {
+                    Debug.LogError("Cannot determine if root exists as ");
+                }
+            }
+
+            return false;
+        }
+
     }
 }

@@ -20,15 +20,30 @@ namespace CuttingRoom.Editor
         public event Action OnClickAddAtomicNarrativeObjectNode;
 
         /// <summary>
-        /// Invoked when the Add Atomic Narrative Object Node button is clicked.
+        /// Invoked when the Add Graph Narrative Object Node button is clicked.
         /// </summary>
         public event Action OnClickAddGraphNarrativeObjectNode;
+
+		/// Invoked when the Add Group Narrative Object Node button is clicked.
+        /// </summary>
+        public event Action OnClickAddGroupNarrativeObjectNode;
+
+        /// <summary>
+        /// The button which creates atomic objects when clicked.
+        /// </summary>
+        public Button CreateAtomicNarrativeObjectButton { get; private set; } = null;
+
+        /// <summary>
+        /// The button which creates atomic objects when clicked.
+        /// </summary>
+        public Button CreateGraphNarrativeObjectButton { get; private set; } = null;
 
         public CuttingRoomEditorToolbar()
         {
             //AddButton(InvokeOnClickToggleDevToolbar, "Show Dev Toolbar");
-            AddButton(InvokeOnClickAddAtomicNarrativeObjectNode, "Atomic");
-            AddButton(InvokeOnClickAddGraphNarrativeObjectNode, "Graph");
+            CreateAtomicNarrativeObjectButton = AddButton(InvokeOnClickAddAtomicNarrativeObjectNode, "Atomic");
+            CreateGraphNarrativeObjectButton = AddButton(InvokeOnClickAddGraphNarrativeObjectNode, "Graph");
+			AddButton(InvokeOnClickAddGroupNarrativeObjectNode, "Group");
         }
 
         private void InvokeOnClickToggleDevToolbar()
@@ -44,6 +59,11 @@ namespace CuttingRoom.Editor
         private void InvokeOnClickAddGraphNarrativeObjectNode()
         {
             OnClickAddGraphNarrativeObjectNode?.Invoke();
+        }
+
+        private void InvokeOnClickAddGroupNarrativeObjectNode()
+        {
+            OnClickAddGroupNarrativeObjectNode?.Invoke();
         }
     }
 }

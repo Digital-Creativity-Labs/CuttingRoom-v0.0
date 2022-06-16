@@ -31,6 +31,21 @@ namespace CuttingRoom.Editor
 			return narrativeSpace;
 		}
 
+		public static Sequencer CreateSequencer()
+		{
+			Sequencer sequencer = new GameObject("Sequencer", typeof(Sequencer)).GetComponent<Sequencer>();
+
+			// Find narrative space and try to link it to the sequencer.
+			NarrativeSpace narrativeSpace = GameObject.FindObjectOfType<NarrativeSpace>();
+
+			if (narrativeSpace != null)
+			{
+				sequencer.narrativeSpace = narrativeSpace;
+			}
+
+			return sequencer;
+		}
+
 		public static AtomicNarrativeObject InstantiateAtomicNarrativeObject()
 		{
 			// Create the game object.
@@ -50,13 +65,15 @@ namespace CuttingRoom.Editor
 		}
 
 		[MenuItem("GameObject/Cutting Room/Create/Atomic Narrative Object", false, menuItemPriority)]
-		public static void CreateAtomicNarrativeObject()
+		public static AtomicNarrativeObject CreateAtomicNarrativeObject()
 		{
 			// Create the game object.
 			GameObject atomicNarrativeObjectGO = InstantiateAtomicNarrativeObject().gameObject;
 
 			// Parent to the correct point in the hierarchy.
 			AttachToEditorSelection(atomicNarrativeObjectGO);
+
+			return atomicNarrativeObjectGO.GetComponent<AtomicNarrativeObject>();
 		}
 
 		public static GroupNarrativeObject InstantiateGroupNarrativeObject()
@@ -79,13 +96,15 @@ namespace CuttingRoom.Editor
 		}
 
 		[MenuItem("GameObject/Cutting Room/Create/Group Narrative Object", false, menuItemPriority)]
-		public static void CreateGroupNarrativeObject()
+		public static GroupNarrativeObject CreateGroupNarrativeObject()
 		{
 			// Create the game object.
 			GameObject groupNarrativeObjectGO = InstantiateGroupNarrativeObject().gameObject;
 
 			// Parent to the correct point in the hierarchy.
 			AttachToEditorSelection(groupNarrativeObjectGO);
+
+			return groupNarrativeObjectGO.GetComponent<GroupNarrativeObject>();
 		}
 
 		public static LayerNarrativeObject InstantiateLayerNarrativeObject()
@@ -121,11 +140,13 @@ namespace CuttingRoom.Editor
 		}
 
 		[MenuItem("GameObject/Cutting Room/Create/Graph Narrative Object", false, menuItemPriority)]
-		public static void CreateGraphNarrativeObject()
+		public static GraphNarrativeObject CreateGraphNarrativeObject()
 		{
 			GameObject graphNarrativeObjectGO = InstantiateGraphNarrativeObject().gameObject;
 
 			AttachToEditorSelection(graphNarrativeObjectGO);
+
+			return graphNarrativeObjectGO.GetComponent<GraphNarrativeObject>();
 		}
 
 		public static GraphNarrativeObject InstantiateGraphNarrativeObject()

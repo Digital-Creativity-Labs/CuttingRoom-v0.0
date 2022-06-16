@@ -32,7 +32,7 @@ namespace CuttingRoom.Editor
 		/// Constructor.
 		/// </summary>
 		/// <param name="graphNarrativeObject"></param>
-		public GraphNarrativeObjectNode(GraphNarrativeObject graphNarrativeObject) : base(graphNarrativeObject)
+		public GraphNarrativeObjectNode(GraphNarrativeObject graphNarrativeObject, NarrativeObject parentNarrativeObject) : base(graphNarrativeObject, parentNarrativeObject)
 		{
 			GraphNarrativeObject = graphNarrativeObject;
 

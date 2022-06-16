@@ -26,7 +26,7 @@ namespace CuttingRoom.Editor
         /// Constructor.
         /// </summary>
         /// <param name="atomicNarrativeObject"></param>
-        public AtomicNarrativeObjectNode(AtomicNarrativeObject atomicNarrativeObject) : base(atomicNarrativeObject)
+        public AtomicNarrativeObjectNode(AtomicNarrativeObject atomicNarrativeObject, NarrativeObject parentNarrativeObject) : base(atomicNarrativeObject, parentNarrativeObject)
         {
             AtomicNarrativeObject = atomicNarrativeObject;
 

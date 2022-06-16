@@ -17,3 +17,13 @@
 	margin-top: 6px;
 	margin-bottom: 6px;
 }
+
+#candidate-icon {
+	width: 24px;
+	height: 24px;
+	align-self: center;
+	/* No need for margin right as label element to the right provides that margin.*/
+	margin-left: 6px;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}

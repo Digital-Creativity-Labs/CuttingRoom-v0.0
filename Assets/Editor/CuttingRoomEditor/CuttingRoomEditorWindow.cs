@@ -21,12 +21,12 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Cutting Room graph view which contains nodes.
         /// </summary>
-        private CuttingRoomEditorGraphView GraphView { get; set; } = null;
+        public CuttingRoomEditorGraphView GraphView { get; private set; } = null;
 
         /// <summary>
         /// Cutting Room toolbar with controls for editing narrative spaces.
         /// </summary>
-        private CuttingRoomEditorToolbar Toolbar { get; set; } = null;
+        public CuttingRoomEditorToolbar Toolbar { get; private set; } = null;
 
         /// <summary>
         /// The navigation toolbar containing view stack breadcrumbs.
@@ -49,13 +49,28 @@ namespace CuttingRoom.Editor
         public event Action OnWindowCleared;
 
         /// <summary>
+        /// Invoked whenever a new narrative object is created through the toolbar.
+        /// </summary>
+        public event Action<NarrativeObject> OnNarrativeObjectCreated;
+
+        /// <summary>
         /// Menu option to open editor window.
         /// </summary>
         [MenuItem("Cutting Room/Open Editor")]
         public static void OpenEditor()
         {
+            CreateCuttingRoomEditorWindow();
+        }
+
+        /// <summary>
+        /// Create a new instance of the editor window.
+        /// </summary>
+        /// <returns></returns>
+        public static CuttingRoomEditorWindow CreateCuttingRoomEditorWindow()
+        {
             CuttingRoomEditorWindow window = GetWindow<CuttingRoomEditorWindow>();
             window.titleContent = new GUIContent(text: "Cutting Room");
+            return window;
         }
 
         /// <summary>
@@ -88,6 +103,7 @@ namespace CuttingRoom.Editor
                 GraphView.OnViewContainerPushed += OnViewContainerPushed;
 
                 GraphView.OnRootNarrativeObjectChanged += OnRootNarrativeObjectChanged;
+                GraphView.OnNarrativeObjectCandidatesChanged += OnNarrativeObjectCandidatesChanged;
             }
 
             if (Toolbar == null)
@@ -103,16 +119,29 @@ namespace CuttingRoom.Editor
 
                 Toolbar.OnClickAddAtomicNarrativeObjectNode += () =>
                 {
-                    CuttingRoomContextMenus.CreateAtomicNarrativeObject();
+                    AtomicNarrativeObject atomicNarrativeObject = CuttingRoomContextMenus.CreateAtomicNarrativeObject();
+
+                    OnNarrativeObjectCreated?.Invoke(atomicNarrativeObject);
 
                     RegenerateContents(false);
                 };
 
                 Toolbar.OnClickAddGraphNarrativeObjectNode += () =>
                 {
-                    CuttingRoomContextMenus.CreateGraphNarrativeObject();
+                    GraphNarrativeObject graphNarrativeObject = CuttingRoomContextMenus.CreateGraphNarrativeObject();
+
+                    OnNarrativeObjectCreated?.Invoke(graphNarrativeObject);
 
                     RegenerateContents(false);
+                };
+
+                Toolbar.OnClickAddGroupNarrativeObjectNode += () =>
+                {
+                    GroupNarrativeObject groupNarrativeObject = CuttingRoomContextMenus.CreateGroupNarrativeObject();
+
+                    OnNarrativeObjectCreated?.Invoke(groupNarrativeObject);
+
+                    RegenerateContents(true);
                 };
             }
 
@@ -171,9 +200,25 @@ namespace CuttingRoom.Editor
         }
 
         /// <summary>
+        /// Invoked whenever the candidates for a group narrative objects group selection decision point change.
+        /// </summary>
+        private void OnGroupNarrativeObjectGroupSelectionCandidatesChanged()
+        {
+            RegenerateContents(true);
+        }
+
+        /// <summary>
         /// Invoked whenever the root narrative object of the narrative space or any narrative object changes.
         /// </summary>
         private void OnRootNarrativeObjectChanged()
+        {
+            RegenerateContents(true);
+        }
+
+        /// <summary>
+        /// Invoked whenever the candidates of the current view container change.
+        /// </summary>
+        private void OnNarrativeObjectCandidatesChanged()
         {
             RegenerateContents(true);
         }
@@ -190,6 +235,14 @@ namespace CuttingRoom.Editor
             {
                 narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged -= OnNarrativeObjectOutputCandidatesChanged;
                 narrativeObject.outputSelectionDecisionPoint.OnCandidatesChanged += OnNarrativeObjectOutputCandidatesChanged;
+
+                if (narrativeObject is GroupNarrativeObject)
+                {
+                    GroupNarrativeObject groupNarrativeObject = narrativeObject.GetComponent<GroupNarrativeObject>();
+
+                    groupNarrativeObject.groupSelectionDecisionPoint.OnCandidatesChanged -= OnGroupNarrativeObjectGroupSelectionCandidatesChanged;
+                    groupNarrativeObject.groupSelectionDecisionPoint.OnCandidatesChanged += OnGroupNarrativeObjectGroupSelectionCandidatesChanged;
+                }
             }
 
             CuttingRoomEditorGraphView.PopulateResult populateResult = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
