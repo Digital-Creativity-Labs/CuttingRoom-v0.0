@@ -50,7 +50,7 @@ namespace CuttingRoom
 		/// </summary>
 		[Header("Termination")]
 		[HelpBox("Built in Group Selection Methods:\n\n• HasPlayedAll - Group selection terminates once all candidates have been selected at least once.\n• PlayCount - Group selection terminates once the number of selections made equals the value specified in the Play Count field.", HelpBoxMessageType.Info)]
-		public GroupSelectionTerminationMethodNameContainer groupSelectionTerminationMethodName = null;
+		public GroupSelectionTerminationMethodNameContainer groupSelectionTerminationMethodName = new GroupSelectionTerminationMethodNameContainer();
 
 		/// <summary>
 		/// Number of selections made when the group termination method being used is the built in "PlayCount" method.

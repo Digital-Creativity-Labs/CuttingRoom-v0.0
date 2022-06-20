@@ -90,7 +90,15 @@ namespace CuttingRoom.Editor
 
             groupSelectionMethodNameRow.expanded = true;
 
+            BlackboardRow groupTerminationMethodNameRow = CreateBlackboardRowTextField("Group Termination Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionTerminationMethodName.methodName, (string newValue) =>
+            {
+                GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionTerminationMethodName.methodName = newValue;
+            });
+
+            groupTerminationMethodNameRow.expanded = true;
+
             blackboardRows.Add(groupSelectionMethodNameRow);
+            blackboardRows.Add(groupTerminationMethodNameRow);
 
             return blackboardRows;
         }
