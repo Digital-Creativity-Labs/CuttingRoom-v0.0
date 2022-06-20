@@ -37,7 +37,7 @@ namespace CuttingRoom
 		/// </summary>
 		[Header("Selection")]
 		[HelpBox("Built in Group Selection Methods:\n\n• Random - Select randomly from the specified candidates.\n• Count - Select candidates up to the number specified in the Selection Count field.\n• Select - Select based on constraints applied to the group.\n• SelectUnique - Select unique narrative objects based on constraints applied to the group.", HelpBoxMessageType.Info)]
-		public GroupSelectionMethodNameContainer groupSelectionMethodName = null;
+		public GroupSelectionMethodNameContainer groupSelectionMethodName = new GroupSelectionMethodNameContainer();
 
 		/// <summary>
 		/// Number of selections made when the group selection method being used is the built in "Count" method.

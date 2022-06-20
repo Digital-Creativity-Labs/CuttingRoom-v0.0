@@ -26,7 +26,7 @@ namespace CuttingRoom
 		/// The output selection method definition for this instance of the decision point.
 		/// </summary>
 		[HelpBox("Built in Output Selection Methods:\n\n• First - Select the first output.\n• Random - Select a random output.\n• Select - Select based on constraints applied to this object.\n• WaitThenSelect - Select based on constraints applied to this object once the object has nearly finished playback.", HelpBoxMessageType.Info)]
-		public OutputSelectionMethodNameContainer outputSelectionMethodName = null;
+		public OutputSelectionMethodNameContainer outputSelectionMethodName = new OutputSelectionMethodNameContainer();
 
 		/// <summary>
 		/// The objects which have been selected by this decision point.

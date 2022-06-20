@@ -21,12 +21,17 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Cutting Room graph view which contains nodes.
         /// </summary>
-        public CuttingRoomEditorGraphView GraphView { get; private set; } = null;
+        public EditorGraphView GraphView { get; private set; } = null;
+
+        /// <summary>
+        /// Blackboard for properties.
+        /// </summary>
+        public EditorBlackboard Blackboard { get; private set; } = null;
 
         /// <summary>
         /// Cutting Room toolbar with controls for editing narrative spaces.
         /// </summary>
-        public CuttingRoomEditorToolbar Toolbar { get; private set; } = null;
+        public EditorToolbar Toolbar { get; private set; } = null;
 
         /// <summary>
         /// The navigation toolbar containing view stack breadcrumbs.
@@ -36,12 +41,12 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Cutting Room dev toolbar.
         /// </summary>
-        private CuttingRoomEditorDevToolbar DevToolbar { get; set; } = null;
+        private EditorDevToolbar DevToolbar { get; set; } = null;
 
         /// <summary>
         /// Save utility instance.
         /// </summary>
-        private CuttingRoomEditorSaveUtility SaveUtility { get; set; } = null;
+        private EditorSaveUtility SaveUtility { get; set; } = null;
 
         /// <summary>
         /// Invoked when the editor window is cleared.
@@ -80,7 +85,7 @@ namespace CuttingRoom.Editor
         {
             if (GraphView == null)
             {
-                GraphView = new CuttingRoomEditorGraphView(this);
+                GraphView = new EditorGraphView(this);
 
                 // Stretch graph view to size of window.
                 GraphView.StretchToParentSize();
@@ -104,11 +109,19 @@ namespace CuttingRoom.Editor
 
                 GraphView.OnRootNarrativeObjectChanged += OnRootNarrativeObjectChanged;
                 GraphView.OnNarrativeObjectCandidatesChanged += OnNarrativeObjectCandidatesChanged;
+
+                GraphView.OnNarrativeObjectNodeSelected += OnGraphViewNarrativeObjectNodeSelected;
+                GraphView.OnNarrativeObjectNodeDeselected += OnGraphViewNarrativeObjectNodeDeselected;
+            }
+
+            if (Blackboard == null)
+            {
+                Blackboard = new EditorBlackboard();
             }
 
             if (Toolbar == null)
             {
-                Toolbar = new CuttingRoomEditorToolbar();
+                Toolbar = new EditorToolbar();
 
                 Toolbar.OnClickToggleDevToolbar += () =>
                 {
@@ -171,7 +184,42 @@ namespace CuttingRoom.Editor
 
             if (DevToolbar == null)
             {
-                DevToolbar = new CuttingRoomEditorDevToolbar();
+                DevToolbar = new EditorDevToolbar();
+            }
+        }
+
+        private void OnGraphViewNarrativeObjectNodeDeselected()
+        {
+            Blackboard.Clear();
+        }
+
+        private void OnGraphViewNarrativeObjectNodeSelected(NarrativeObjectNode narrativeObjectNode)
+        {
+            // No multi editing as the blackboard doesn't fit the ui in without crushing.
+            if (Selection.objects.Length == 1)
+            {
+                Blackboard.Clear();
+
+                List<BlackboardRow> blackboardRows = narrativeObjectNode.GetBlackboardRows();
+
+                VisualElement container = new VisualElement();
+
+                BlackboardSection blackboardSection = new BlackboardSection { title = narrativeObjectNode.NarrativeObject.gameObject.name };
+
+                container.Add(blackboardSection);
+
+                foreach (BlackboardRow blackboardRow in blackboardRows)
+                {
+                    blackboardSection.Add(blackboardRow);
+                }
+
+                Blackboard.Add(container);
+            }
+            else
+            {
+                Blackboard.Clear();
+
+                Blackboard.Add(new Label("Multi Edit not supported."));
             }
         }
 
@@ -245,7 +293,7 @@ namespace CuttingRoom.Editor
                 }
             }
 
-            CuttingRoomEditorGraphView.PopulateResult populateResult = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
+            EditorGraphView.PopulateResult populateResult = GraphView.Populate(SaveUtility.Load(), narrativeObjects);
 
             if (populateResult.GraphViewChanged)
             {
@@ -333,6 +381,7 @@ namespace CuttingRoom.Editor
             }
 
             AddGraphView();
+            AddBlackboard();
             AddToolbar();
             AddNavigationToolbar();
 
@@ -348,7 +397,7 @@ namespace CuttingRoom.Editor
             }
 
             // Create a save utility instance with the current graph as it's target.
-            SaveUtility = new CuttingRoomEditorSaveUtility(GraphView);
+            SaveUtility = new EditorSaveUtility(GraphView);
 
             PopulateGraphView();
         }
@@ -363,11 +412,19 @@ namespace CuttingRoom.Editor
         }
 
         /// <summary>
+        /// Add the blackboard to the window.
+        /// </summary>
+        private void AddBlackboard()
+        {
+            rootVisualElement.Add(Blackboard);
+        }
+
+        /// <summary>
         /// Add the toolbar to this window.
         /// </summary>
         private void AddToolbar()
         {
-            rootVisualElement.Add(Toolbar.Toolbar);
+            rootVisualElement.Add(Toolbar);
         }
 
         /// <summary>
@@ -375,7 +432,7 @@ namespace CuttingRoom.Editor
         /// </summary>
         private void AddNavigationToolbar()
         {
-            rootVisualElement.Add(NavigationToolbar.Toolbar);
+            rootVisualElement.Add(NavigationToolbar);
         }
 
         /// <summary>
@@ -383,7 +440,7 @@ namespace CuttingRoom.Editor
         /// </summary>
         private void AddDevToolbar()
         {
-            rootVisualElement.Add(DevToolbar.Toolbar);
+            rootVisualElement.Add(DevToolbar);
         }
 
         /// <summary>
@@ -391,9 +448,9 @@ namespace CuttingRoom.Editor
         /// </summary>
         private void RemoveDevToolbar()
         {
-            if (rootVisualElement.Contains(DevToolbar.Toolbar))
+            if (rootVisualElement.Contains(DevToolbar))
             {
-                rootVisualElement.Remove(DevToolbar.Toolbar);
+                rootVisualElement.Remove(DevToolbar);
             }
         }
     }

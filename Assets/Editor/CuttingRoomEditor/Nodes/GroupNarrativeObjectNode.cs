@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -76,6 +77,22 @@ namespace CuttingRoom.Editor
         /// </summary>
         protected override void OnNarrativeObjectChanged()
         {
+        }
+
+        public override List<BlackboardRow> GetBlackboardRows()
+        {
+            List<BlackboardRow> blackboardRows = new List<BlackboardRow>(base.GetBlackboardRows());
+
+            BlackboardRow groupSelectionMethodNameRow = CreateBlackboardRowTextField("Group Selection Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionMethodName.methodName, (string newValue) =>
+            {
+                GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionMethodName.methodName = newValue;
+            });
+
+            groupSelectionMethodNameRow.expanded = true;
+
+            blackboardRows.Add(groupSelectionMethodNameRow);
+
+            return blackboardRows;
         }
     }
 }

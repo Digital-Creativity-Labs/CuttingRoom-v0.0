@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -202,6 +203,84 @@ namespace CuttingRoom.Editor
         private void OnRemoveAsCandidateFromContextualMenu(DropdownMenuAction action)
         {
             OnRemoveAsCandidate?.Invoke(this);
+        }
+
+        /// <summary>
+        /// Get the fields to be displayed on the blackboard for this narrative object node.
+        /// </summary>
+        public virtual List<BlackboardRow> GetBlackboardRows()
+        {
+            List<BlackboardRow> editorBlackboardRows = new List<BlackboardRow>();
+
+            BlackboardRow outputSelectionMethodNameRow = CreateBlackboardRowTextField("Output Selection Method", NarrativeObject.outputSelectionDecisionPoint.outputSelectionMethodName.methodName, (string newValue) =>
+            {
+                NarrativeObject.outputSelectionDecisionPoint.outputSelectionMethodName.methodName = newValue;
+            });
+
+            // Start expanded.
+            outputSelectionMethodNameRow.expanded = true;
+
+            editorBlackboardRows.Add(outputSelectionMethodNameRow);
+
+            return editorBlackboardRows;
+        }
+
+        /// <summary>
+        /// Create a blackboard row with a text field.
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <param name="value"></param>
+        /// <param name="OnValueChanged"></param>
+        /// <returns></returns>
+        protected BlackboardRow CreateBlackboardRowTextField(string labelText, string value, Action<string> OnValueChanged)
+        {
+            TextField textField = new TextField();
+            textField.value = value;
+            textField.RegisterValueChangedCallback(evt =>
+            {
+                OnValueChanged?.Invoke(evt.newValue);
+            });
+
+            BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), textField);
+
+            return blackboardRow;
+        }
+
+        /// <summary>
+        /// Create a blackboard row with an object field.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="labelText"></param>
+        /// <param name="value"></param>
+        /// <param name="OnValueChanged"></param>
+        /// <returns></returns>
+        protected BlackboardRow CreateBlackboardRowObjectField<T>(string labelText, UnityEngine.Object value, Action<UnityEngine.Object> OnValueChanged)
+        {
+            ObjectField objectField = new ObjectField();
+            objectField.objectType = typeof(T);
+            objectField.value = value;
+            objectField.RegisterValueChangedCallback(evt =>
+            {
+                OnValueChanged?.Invoke(evt.newValue);
+            });
+
+            BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), objectField);
+
+            return blackboardRow;
+        }
+
+        protected BlackboardRow CreateBlackboardRowFloatField(string labelText, float value, Action<float> OnValueChanged)
+        {
+            FloatField floatField = new FloatField();
+            floatField.value = value;
+            floatField.RegisterValueChangedCallback(evt =>
+            {
+                OnValueChanged?.Invoke(evt.newValue);
+            });
+
+            BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), floatField);
+
+            return blackboardRow;
         }
     }
 }

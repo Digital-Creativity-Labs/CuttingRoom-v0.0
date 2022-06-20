@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace CuttingRoom.Editor
 {
-    public class NavigationToolbar : CuttingRoomEditorToolbarBase
+    public class NavigationToolbar : EditorToobarBase
     {
         /// <summary>
         /// The back button which pops a view off the stack.
@@ -60,7 +60,7 @@ namespace CuttingRoom.Editor
 
             viewBackButton.Insert(0, viewBackImage);
 
-            Toolbar.Add(viewBackButton);
+            Add(viewBackButton);
         }
 
         public void GenerateContents(Stack<ViewContainer> viewContainerStack)
@@ -68,7 +68,7 @@ namespace CuttingRoom.Editor
             // Remove existing breadcrumbs as these will be regenerated.
             foreach (Button button in viewContainerButtons)
             {
-                Toolbar.Remove(button);
+                Remove(button);
             }
 
             // Remove references to removed buttons.
@@ -90,7 +90,7 @@ namespace CuttingRoom.Editor
                     OnClickNavigationButton?.Invoke(viewContainer);
                 });
 
-                if (viewContainer.narrativeObjectGuid == CuttingRoomEditorGraphView.rootViewContainerGuid)
+                if (viewContainer.narrativeObjectGuid == EditorGraphView.rootViewContainerGuid)
                 {
                     button.text = "Root";
                 }
@@ -101,7 +101,7 @@ namespace CuttingRoom.Editor
                     button.text = narrativeObject.gameObject.name;
                 }
 
-                Toolbar.Add(button);
+                Add(button);
 
                 viewContainerButtons.Add(button);
             }

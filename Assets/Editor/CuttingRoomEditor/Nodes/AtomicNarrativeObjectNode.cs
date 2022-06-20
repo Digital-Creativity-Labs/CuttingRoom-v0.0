@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -71,7 +72,7 @@ namespace CuttingRoom.Editor
         /// </summary>
         private void SetContentsFields()
         {
-            hasMediaSourceToggle.SetValueWithoutNotify(AtomicNarrativeObject.HasMediaSource);
+            hasMediaSourceToggle.SetValueWithoutNotify(AtomicNarrativeObject.mediaSource != null);
         }
 
         /// <summary>
@@ -80,6 +81,53 @@ namespace CuttingRoom.Editor
         protected override void OnNarrativeObjectChanged()
         {
             SetContentsFields();
+        }
+
+        public override List<BlackboardRow> GetBlackboardRows()
+        {
+            List<BlackboardRow> blackboardRows = new List<BlackboardRow>(base.GetBlackboardRows());
+
+            // Media source.
+            BlackboardRow mediaSourceRow = CreateBlackboardRowObjectField<MediaSource>("Media Source", AtomicNarrativeObject.mediaSource, (newValue) =>
+            {
+                MediaSource mediaSource = newValue as MediaSource;
+
+                AtomicNarrativeObject.mediaSource = mediaSource;
+
+                // Flag that the object has changed.
+                OnNarrativeObjectChanged();
+            });
+
+            // Start expanded.
+            mediaSourceRow.expanded = true;
+
+            // Duration.
+            BlackboardRow durationRow = CreateBlackboardRowFloatField("Duration", AtomicNarrativeObject.duration, (newValue) =>
+            {
+                AtomicNarrativeObject.duration = newValue;
+
+                // Flag that the object has changed.
+                OnNarrativeObjectChanged();
+            });
+
+            durationRow.expanded = true;
+
+            // In time.
+            BlackboardRow inTimeRow = CreateBlackboardRowFloatField("In Time", AtomicNarrativeObject.inTime, (newValue) =>
+            {
+                AtomicNarrativeObject.inTime = newValue;
+
+                // Flag that the object has changed.
+                OnNarrativeObjectChanged();
+            });
+
+            inTimeRow.expanded = true;
+
+            blackboardRows.Add(mediaSourceRow);
+            blackboardRows.Add(durationRow);
+            blackboardRows.Add(inTimeRow);
+
+            return blackboardRows;
         }
     }
 }
