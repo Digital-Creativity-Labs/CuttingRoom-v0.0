@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CuttingRoom
 {
@@ -25,7 +26,8 @@ namespace CuttingRoom
 		/// <summary>
 		/// Global variable store for the narrative space.
 		/// </summary>
-		public VariableStore globalVariableStore = null;
+		[FormerlySerializedAs("globalVariableStore")]
+		public VariableStore variableStore = null;
 
 		/// <summary>
 		/// Checks whether the narrative space is valid and can be processed.
@@ -55,7 +57,7 @@ namespace CuttingRoom
 		{
 			StateSkeleton stateSkeleton = new StateSkeleton();
 
-			stateSkeleton.globalVariableStoreState = globalVariableStore.Save();
+			stateSkeleton.globalVariableStoreState = variableStore.Save();
 
 			return XmlSerialization.SerializeToXmlString(stateSkeleton);
 		}
@@ -64,7 +66,7 @@ namespace CuttingRoom
 		{
 			StateSkeleton stateSkeleton = XmlSerialization.DeserializeFromXmlString<StateSkeleton>(state);
 
-			globalVariableStore.Load(stateSkeleton.globalVariableStoreState);
+			variableStore.Load(stateSkeleton.globalVariableStoreState);
 		}
 	}
 }

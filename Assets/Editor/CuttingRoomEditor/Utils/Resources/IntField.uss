@@ -1,0 +1,3 @@
+.int-field {
+	flex-grow: 1;
+}

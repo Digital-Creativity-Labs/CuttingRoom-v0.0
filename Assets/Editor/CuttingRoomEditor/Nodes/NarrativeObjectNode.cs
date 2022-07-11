@@ -1,6 +1,10 @@
+using CuttingRoom.VariableSystem;
+using CuttingRoom.VariableSystem.Constraints;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
@@ -39,7 +43,12 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Event invoked when set as root is clicked.
         /// </summary>
-        public event Action<NarrativeObjectNode> OnSetAsRoot;
+        public event Action<NarrativeObjectNode> OnSetAsNarrativeSpaceRoot;
+
+        /// <summary>
+        /// Event invoked when set as root is clicked.
+        /// </summary>
+        public event Action<NarrativeObjectNode> OnSetAsParentNarrativeObjectRoot;
 
         /// <summary>
         /// Event invoked when set as candidate is clicked in context menu.
@@ -153,7 +162,15 @@ namespace CuttingRoom.Editor
         /// <param name="evt"></param>
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Set as Root", OnSetAsRootFromContextualMenu, DropdownMenuAction.Status.Normal);
+            evt.menu.AppendAction("Set as Narrative Space Root", OnSetAsNarrativeSpaceRootFromContextualMenu, DropdownMenuAction.Status.Normal);
+
+            if (ParentNarrativeObject != null)
+            {
+                if (ParentNarrativeObject is GraphNarrativeObject)
+                {
+                    evt.menu.AppendAction("Set as Parent Narrative Object Root", OnSetAsParentNarrativeObjectRootFromContextualMenu, DropdownMenuAction.Status.Normal);
+                }
+            }
 
             // If null, then the object is on the root view level so can't be a candidate.
             if (ParentNarrativeObject != null)
@@ -182,9 +199,18 @@ namespace CuttingRoom.Editor
         /// Callback for Set as Root option in contextual menu.
         /// </summary>
         /// <param name="action"></param>
-        private void OnSetAsRootFromContextualMenu(DropdownMenuAction action)
+        private void OnSetAsNarrativeSpaceRootFromContextualMenu(DropdownMenuAction action)
         {
-            OnSetAsRoot?.Invoke(this);
+            OnSetAsNarrativeSpaceRoot?.Invoke(this);
+        }
+
+        /// <summary>
+        /// Callback for Set as Root option in contextual menu.
+        /// </summary>
+        /// <param name="action"></param>
+        private void OnSetAsParentNarrativeObjectRootFromContextualMenu(DropdownMenuAction action)
+        {
+            OnSetAsParentNarrativeObjectRoot?.Invoke(this);
         }
 
         /// <summary>
@@ -208,21 +234,257 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Get the fields to be displayed on the blackboard for this narrative object node.
         /// </summary>
-        public virtual List<BlackboardRow> GetBlackboardRows()
+        public virtual List<VisualElement> GetEditableFieldRows()
         {
-            List<BlackboardRow> editorBlackboardRows = new List<BlackboardRow>();
+            List<VisualElement> editorRows = new List<VisualElement>();
 
-            BlackboardRow outputSelectionMethodNameRow = CreateBlackboardRowTextField("Output Selection Method", NarrativeObject.outputSelectionDecisionPoint.outputSelectionMethodName.methodName, (string newValue) =>
+            VisualElement nameTextFieldRow = CreateTextFieldRow("Name", NarrativeObject.gameObject.name, (newValue) =>
+            {
+                NarrativeObject.gameObject.name = newValue;
+            });
+
+            VisualElement outputSelectionMethodNameRow = CreateTextFieldRow("Output Selection Method", NarrativeObject.outputSelectionDecisionPoint.outputSelectionMethodName.methodName, (string newValue) =>
             {
                 NarrativeObject.outputSelectionDecisionPoint.outputSelectionMethodName.methodName = newValue;
             });
 
-            // Start expanded.
-            outputSelectionMethodNameRow.expanded = true;
+            editorRows.Add(nameTextFieldRow);
+            editorRows.Add(outputSelectionMethodNameRow);
 
-            editorBlackboardRows.Add(outputSelectionMethodNameRow);
+            return editorRows;
+        }
 
-            return editorBlackboardRows;
+        public Dictionary<Constraint, VisualElement> GetOutputDecisionPointConstraintRows()
+        {
+            return GetConstraintRows(NarrativeObject.outputSelectionDecisionPoint.constraints);
+        }
+
+        public Dictionary<Constraint, VisualElement> GetCandidateConstraintRows()
+        {
+            return GetConstraintRows(NarrativeObject.constraints);
+        }
+
+        /// <summary>
+        /// Get the constraints to be displayed on the blackboard.
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<Constraint, VisualElement> GetConstraintRows(List<Constraint> constraints)
+        {
+            Dictionary<Constraint, VisualElement> constraintRows = new Dictionary<Constraint, VisualElement>();
+
+            foreach (Constraint constraint in constraints)
+            {
+                Label constraintRowLabel = new Label();
+                EnumField comparisonTypeEnumField = null;
+
+                void SetConstraintRowLabelText()
+                {
+#if UNITY_2021_1_OR_NEWER
+                    string constraintName = $"{constraint.variableStoreLocation} {(constraint.variableName != null ? constraint.variableName.name : "<color=red>Undefined</color>")} {comparisonTypeEnumField.value} {constraint.Value}";
+#else
+                    // No rich text before 2021.1
+                    string constraintName = $"{constraint.variableStoreLocation} {(constraint.variableName != null ? constraint.variableName.name : "Undefined")} {comparisonTypeEnumField.value} {constraint.Value}";
+#endif
+                    constraintRowLabel.text = constraintName;
+                }
+
+                VisualElement constraintContainer = new VisualElement();
+
+                constraintContainer.styleSheets.Add(StyleSheet);
+
+                constraintContainer.AddToClassList("constraint-container");
+
+                EnumField variableStoreLocationEnumField = new EnumField(constraint.variableStoreLocation);
+                variableStoreLocationEnumField.RegisterValueChangedCallback(evt =>
+                {
+                    constraint.variableStoreLocation = (VariableStoreLocation)evt.newValue;
+
+                    SetConstraintRowLabelText();
+                });
+
+                constraintContainer.Add(variableStoreLocationEnumField);
+
+                ObjectField variableNameField = new ObjectField();
+                variableNameField.objectType = typeof(VariableName);
+                variableNameField.value = constraint.variableName;
+                variableNameField.RegisterValueChangedCallback(evt =>
+                {
+                    constraint.variableName = evt.newValue as VariableName;
+
+                    SetConstraintRowLabelText();
+                });
+
+                constraintContainer.Add(variableNameField);
+
+                comparisonTypeEnumField = GetConstraintComparisonTypeEnumField(constraint, () =>
+                {
+                    SetConstraintRowLabelText();
+                });
+
+                // Add the comparison type enum field based on the type of constraint being visualised.
+                constraintContainer.Add(comparisonTypeEnumField);
+
+                // Add a field for the value of the constraint specified.
+                AddConstraintValueField(constraintContainer, constraint, () =>
+                {
+                    SetConstraintRowLabelText();
+                });
+
+                SetConstraintRowLabelText();
+
+                VisualElement constraintRow = new VisualElement();
+                constraintRow.Add(constraintRowLabel);
+                constraintRow.Add(constraintContainer);
+
+                constraintRows.Add(constraint, constraintRow);
+            }
+
+            return constraintRows;
+        }
+
+        /// <summary>
+        /// Find the correct constraint object on a game object with a reference to the base instance of constraint.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="constraint"></param>
+        /// <returns></returns>
+        private T GetConstraint<T>(Constraint constraint) where T : Constraint
+        {
+            T[] typedVariableConstraints = constraint.GetComponents<T>();
+
+            T typedVariableConstraint = typedVariableConstraints.Where(typedVariableConstraint => typedVariableConstraint == constraint).FirstOrDefault();
+
+            return typedVariableConstraint;
+        }
+
+        /// <summary>
+        /// Gets the enum field which represents the comparison type of the specified constraint.
+        /// </summary>
+        /// <param name="constraint"></param>
+        /// <returns></returns>
+        private EnumField GetConstraintComparisonTypeEnumField(Constraint constraint, Action onValueChanged)
+        {
+            EnumField enumField = null;
+
+            if (constraint is StringVariableConstraint)
+            {
+                StringVariableConstraint stringVariableConstraint = GetConstraint<StringVariableConstraint>(constraint);
+
+                enumField = new EnumField(stringVariableConstraint.comparisonType);
+                enumField.RegisterValueChangedCallback(evt =>
+                {
+                    stringVariableConstraint.comparisonType = (StringVariableConstraint.ComparisonType)evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+            }
+            else if (constraint is BoolVariableConstraint)
+            {
+                BoolVariableConstraint boolVariableConstraint = GetConstraint<BoolVariableConstraint>(constraint);
+
+                enumField = new EnumField(boolVariableConstraint.comparisonType);
+                enumField.RegisterValueChangedCallback(evt =>
+                {
+                    boolVariableConstraint.comparisonType = (BoolVariableConstraint.ComparisonType)evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+            }
+            else if (constraint is FloatVariableConstraint)
+            {
+                FloatVariableConstraint floatVariableConstraint = GetConstraint<FloatVariableConstraint>(constraint);
+
+                enumField = new EnumField(floatVariableConstraint.comparisonType);
+                enumField.RegisterValueChangedCallback(evt =>
+                {
+                    floatVariableConstraint.comparisonType = (FloatVariableConstraint.ComparisonType)evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+            }
+            else if (constraint is IntVariableConstraint)
+            {
+                IntVariableConstraint intVariableConstraint = GetConstraint<IntVariableConstraint>(constraint);
+
+                enumField = new EnumField(intVariableConstraint.comparisonType);
+                enumField.RegisterValueChangedCallback(evt =>
+                {
+                    intVariableConstraint.comparisonType = (IntVariableConstraint.ComparisonType)evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+            }
+
+            return enumField;
+        }
+
+        /// <summary>
+        /// Adds the correct type of value field for the specified constraint.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="constraint"></param>
+        private void AddConstraintValueField(VisualElement container, Constraint constraint, Action onValueChanged)
+        {
+            if (constraint is StringVariableConstraint)
+            {
+                StringVariableConstraint stringVariableConstraint = GetConstraint<StringVariableConstraint>(constraint);
+
+                TextField textField = new TextField();
+                textField.value = stringVariableConstraint.value;
+                textField.RegisterValueChangedCallback(evt =>
+                {
+                    stringVariableConstraint.value = evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+
+                container.Add(textField);
+            }
+            else if (constraint is BoolVariableConstraint)
+            {
+                BoolVariableConstraint boolVariableConstraint = GetConstraint<BoolVariableConstraint>(constraint);
+
+                Toggle toggle = new Toggle();
+                toggle.value = boolVariableConstraint.value;
+                toggle.RegisterValueChangedCallback(evt =>
+                {
+                    boolVariableConstraint.value = evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+
+                container.Add(toggle);
+            }
+            else if (constraint is FloatVariableConstraint)
+            {
+                FloatVariableConstraint floatVariableConstraint = GetConstraint<FloatVariableConstraint>(constraint);
+
+                FloatField floatField = new FloatField();
+                floatField.value = floatVariableConstraint.value;
+                floatField.RegisterValueChangedCallback(evt =>
+                {
+                    floatVariableConstraint.value = evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+
+                container.Add(floatField);
+            }
+            else if (constraint is IntVariableConstraint)
+            {
+                IntVariableConstraint intVariableConstraint = GetConstraint<IntVariableConstraint>(constraint);
+
+                IntegerField intField = new IntegerField();
+                intField.value = intVariableConstraint.value;
+                intField.RegisterValueChangedCallback(evt =>
+                {
+                    intVariableConstraint.value = evt.newValue;
+
+                    onValueChanged?.Invoke();
+                });
+
+                container.Add(intField);
+            }
         }
 
         /// <summary>
@@ -232,7 +494,7 @@ namespace CuttingRoom.Editor
         /// <param name="value"></param>
         /// <param name="OnValueChanged"></param>
         /// <returns></returns>
-        protected BlackboardRow CreateBlackboardRowTextField(string labelText, string value, Action<string> OnValueChanged)
+        protected VisualElement CreateTextFieldRow(string labelText, string value, Action<string> OnValueChanged)
         {
             TextField textField = new TextField();
             textField.value = value;
@@ -242,6 +504,8 @@ namespace CuttingRoom.Editor
             });
 
             BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), textField);
+
+            blackboardRow.expanded = true;
 
             return blackboardRow;
         }
@@ -254,22 +518,25 @@ namespace CuttingRoom.Editor
         /// <param name="value"></param>
         /// <param name="OnValueChanged"></param>
         /// <returns></returns>
-        protected BlackboardRow CreateBlackboardRowObjectField<T>(string labelText, UnityEngine.Object value, Action<UnityEngine.Object> OnValueChanged)
+        protected VisualElement CreateObjectFieldRow<T>(string labelText, T value, Action<UnityEngine.Object> OnValueChanged) where T : UnityEngine.Object
         {
-            ObjectField objectField = new ObjectField();
-            objectField.objectType = typeof(T);
-            objectField.value = value;
-            objectField.RegisterValueChangedCallback(evt =>
-            {
-                OnValueChanged?.Invoke(evt.newValue);
-            });
+            VisualElement objectField = UIElementsUtils.GetObjectField<T>(value, OnValueChanged);
 
             BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), objectField);
+
+            blackboardRow.expanded = true;
 
             return blackboardRow;
         }
 
-        protected BlackboardRow CreateBlackboardRowFloatField(string labelText, float value, Action<float> OnValueChanged)
+        /// <summary>
+        /// Create a blackboard row with a float field.
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <param name="value"></param>
+        /// <param name="OnValueChanged"></param>
+        /// <returns></returns>
+        protected VisualElement CreateFloatFieldRow(string labelText, float value, Action<float> OnValueChanged)
         {
             FloatField floatField = new FloatField();
             floatField.value = value;
@@ -279,6 +546,8 @@ namespace CuttingRoom.Editor
             });
 
             BlackboardRow blackboardRow = new BlackboardRow(new Label(labelText), floatField);
+
+            blackboardRow.expanded = true;
 
             return blackboardRow;
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.Timeline;
 using CuttingRoom.VariableSystem.Variables;
 
 namespace CuttingRoom.VariableSystem

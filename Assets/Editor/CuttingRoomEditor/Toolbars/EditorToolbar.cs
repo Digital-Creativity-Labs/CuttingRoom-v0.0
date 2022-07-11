@@ -46,6 +46,7 @@ namespace CuttingRoom.Editor
         public EditorToolbar()
         {
             //AddButton(InvokeOnClickToggleDevToolbar, "Show Dev Toolbar");
+            Add(UIElementsUtils.GetVerticalDivider());
             CreateAtomicNarrativeObjectButton = AddButton(InvokeOnClickAddAtomicNarrativeObjectNode, "Atomic");
             CreateGraphNarrativeObjectButton = AddButton(InvokeOnClickAddGraphNarrativeObjectNode, "Graph");
 			CreateGroupNarrativeObjectButton = AddButton(InvokeOnClickAddGroupNarrativeObjectNode, "Group");

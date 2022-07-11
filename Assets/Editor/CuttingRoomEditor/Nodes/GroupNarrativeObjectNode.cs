@@ -56,10 +56,7 @@ namespace CuttingRoom.Editor
             VisualElement contents = this.Q<VisualElement>("contents");
 
             // Add a divider below the ports.
-            VisualElement divider = new VisualElement();
-            divider.name = "divider";
-            divider.AddToClassList("horizontal");
-            contents.Add(divider);
+            contents.Add(UIElementsUtils.GetHorizontalDivider());
 
             // Add button to push view for this graph node onto the stack.
             viewContentsButton = new Button(() =>
@@ -79,28 +76,24 @@ namespace CuttingRoom.Editor
         {
         }
 
-        public override List<BlackboardRow> GetBlackboardRows()
+        public override List<VisualElement> GetEditableFieldRows()
         {
-            List<BlackboardRow> blackboardRows = new List<BlackboardRow>(base.GetBlackboardRows());
+            List<VisualElement> rows = new List<VisualElement>(base.GetEditableFieldRows());
 
-            BlackboardRow groupSelectionMethodNameRow = CreateBlackboardRowTextField("Group Selection Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionMethodName.methodName, (string newValue) =>
+            VisualElement groupSelectionMethodNameRow = CreateTextFieldRow("Group Selection Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionMethodName.methodName, (string newValue) =>
             {
                 GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionMethodName.methodName = newValue;
             });
 
-            groupSelectionMethodNameRow.expanded = true;
-
-            BlackboardRow groupTerminationMethodNameRow = CreateBlackboardRowTextField("Group Termination Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionTerminationMethodName.methodName, (string newValue) =>
+            VisualElement groupTerminationMethodNameRow = CreateTextFieldRow("Group Termination Method", GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionTerminationMethodName.methodName, (string newValue) =>
             {
                 GroupNarrativeObject.groupSelectionDecisionPoint.groupSelectionTerminationMethodName.methodName = newValue;
             });
 
-            groupTerminationMethodNameRow.expanded = true;
+            rows.Add(groupSelectionMethodNameRow);
+            rows.Add(groupTerminationMethodNameRow);
 
-            blackboardRows.Add(groupSelectionMethodNameRow);
-            blackboardRows.Add(groupTerminationMethodNameRow);
-
-            return blackboardRows;
+            return rows;
         }
     }
 }

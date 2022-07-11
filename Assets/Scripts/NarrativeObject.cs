@@ -167,6 +167,22 @@ namespace CuttingRoom
         {
 			OnNarrativeObjectChanged?.Invoke();
 		}
+
+		public void AddConstraint(Constraint constraint)
+		{
+			if (!constraints.Contains(constraint))
+			{
+				constraints.Add(constraint);
+			}
+		}
+
+		public void RemoveConstraint(Constraint constraint)
+		{
+			if (constraints.Contains(constraint))
+			{
+				constraints.Remove(constraint);
+			}
+		}
 #endif
 	}
 }

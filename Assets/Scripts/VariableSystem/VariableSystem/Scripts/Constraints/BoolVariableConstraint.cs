@@ -13,10 +13,11 @@ namespace CuttingRoom.VariableSystem.Constraints
             NotEqualTo,
         }
 
-        [SerializeField]
-        private ComparisonType comparisonType = ComparisonType.Undefined;
+        public ComparisonType comparisonType = ComparisonType.Undefined;
 
         public bool value = false;
+
+        public override string Value => value.ToString();
 
         public override bool Evaluate(Sequencer sequencer, NarrativeSpace narrativeSpace, NarrativeObject narrativeObject)
         {

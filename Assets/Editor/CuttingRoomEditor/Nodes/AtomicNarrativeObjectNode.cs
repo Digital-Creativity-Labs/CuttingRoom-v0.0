@@ -54,10 +54,7 @@ namespace CuttingRoom.Editor
             VisualElement contents = this.Q<VisualElement>("contents");
 
             // Add a divider below the ports.
-            VisualElement divider = new VisualElement();
-            divider.name = "divider";
-            divider.AddToClassList("horizontal");
-            contents.Add(divider);
+            contents.Add(UIElementsUtils.GetHorizontalDivider());
 
             // Add toggle to show whether this atomic has a media source.
             hasMediaSourceToggle = new Toggle("Has Media Source");
@@ -83,12 +80,12 @@ namespace CuttingRoom.Editor
             SetContentsFields();
         }
 
-        public override List<BlackboardRow> GetBlackboardRows()
+        public override List<VisualElement> GetEditableFieldRows()
         {
-            List<BlackboardRow> blackboardRows = new List<BlackboardRow>(base.GetBlackboardRows());
+            List<VisualElement> rows = new List<VisualElement>(base.GetEditableFieldRows());
 
             // Media source.
-            BlackboardRow mediaSourceRow = CreateBlackboardRowObjectField<MediaSource>("Media Source", AtomicNarrativeObject.mediaSource, (newValue) =>
+            VisualElement mediaSourceRow = CreateObjectFieldRow("Media Source", AtomicNarrativeObject.mediaSource, (newValue) =>
             {
                 MediaSource mediaSource = newValue as MediaSource;
 
@@ -98,11 +95,8 @@ namespace CuttingRoom.Editor
                 OnNarrativeObjectChanged();
             });
 
-            // Start expanded.
-            mediaSourceRow.expanded = true;
-
             // Duration.
-            BlackboardRow durationRow = CreateBlackboardRowFloatField("Duration", AtomicNarrativeObject.duration, (newValue) =>
+            VisualElement durationRow = CreateFloatFieldRow("Duration", AtomicNarrativeObject.duration, (newValue) =>
             {
                 AtomicNarrativeObject.duration = newValue;
 
@@ -110,10 +104,8 @@ namespace CuttingRoom.Editor
                 OnNarrativeObjectChanged();
             });
 
-            durationRow.expanded = true;
-
             // In time.
-            BlackboardRow inTimeRow = CreateBlackboardRowFloatField("In Time", AtomicNarrativeObject.inTime, (newValue) =>
+            VisualElement inTimeRow = CreateFloatFieldRow("In Time", AtomicNarrativeObject.inTime, (newValue) =>
             {
                 AtomicNarrativeObject.inTime = newValue;
 
@@ -121,13 +113,11 @@ namespace CuttingRoom.Editor
                 OnNarrativeObjectChanged();
             });
 
-            inTimeRow.expanded = true;
+            rows.Add(mediaSourceRow);
+            rows.Add(durationRow);
+            rows.Add(inTimeRow);
 
-            blackboardRows.Add(mediaSourceRow);
-            blackboardRows.Add(durationRow);
-            blackboardRows.Add(inTimeRow);
-
-            return blackboardRows;
+            return rows;
         }
     }
 }

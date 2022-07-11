@@ -19,6 +19,8 @@ namespace CuttingRoom.VariableSystem.Constraints
 
 		public string value = string.Empty;
 
+		public override string Value => value;
+
 		public override bool Evaluate(Sequencer sequencer, NarrativeSpace narrativeSpace, NarrativeObject narrativeObject)
 		{
 			return Evaluate<StringVariableConstraint, StringVariable>(sequencer, narrativeSpace, narrativeObject, comparisonType.ToString());

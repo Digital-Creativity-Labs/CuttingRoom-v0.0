@@ -27,8 +27,7 @@ namespace CuttingRoom
 		/// <summary>
 		/// The constraints which have been applied to this decision point.
 		/// </summary>
-		[SerializeField]
-		internal List<Constraint> constraints = new List<Constraint>();
+		public List<Constraint> constraints = new List<Constraint>();
 
 		/// <summary>
 		/// Selection callback.
@@ -112,6 +111,22 @@ namespace CuttingRoom
 			// Cache the new connected guids list.
 			cachedCandidates.Clear();
 			cachedCandidates.AddRange(candidates);
+		}
+
+		public void AddConstraint(Constraint constraint)
+		{
+			if (!constraints.Contains(constraint))
+			{
+				constraints.Add(constraint);
+			}
+		}
+
+		public void RemoveConstraint(Constraint constraint)
+		{
+			if (constraints.Contains(constraint))
+			{
+				constraints.Remove(constraint);
+			}
 		}
 
 #endif

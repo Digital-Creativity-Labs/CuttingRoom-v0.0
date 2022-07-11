@@ -1,0 +1,29 @@
+#inspector {
+	padding: 4px;
+}
+
+.inspector-section-container {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.constraint-row {
+	flex-direction: row;
+}
+
+.constraint-button {
+	height: 20px;
+	width: 20px;
+	max-height: 20px;
+	max-width: 20px;
+}
+
+.add-constraint-controls-container {
+	flex-direction: row;
+	padding-bottom: 6px;
+}
+
+.constraint-fields-container {
+	width: 100%;
+	padding-bottom: 6px;
+}

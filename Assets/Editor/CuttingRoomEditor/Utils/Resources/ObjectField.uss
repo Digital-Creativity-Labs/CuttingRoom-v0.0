@@ -1,0 +1,3 @@
+.object-field {
+	flex-grow: 1;
+}

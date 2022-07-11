@@ -22,6 +22,8 @@ namespace CuttingRoom.VariableSystem.Constraints
 		/// </summary>
 		public VariableName variableName = null;
 
+		public virtual string Value { get; } = string.Empty;
+
 		public virtual bool Evaluate(Sequencer sequencer, NarrativeSpace narrativeSpace, NarrativeObject narrativeObject) { throw new NotImplementedException("Constraint must implement Evaluate() method."); }
 
 		protected bool Evaluate<T1, T2>(Sequencer sequencer, NarrativeSpace narrativeSpace, NarrativeObject narrativeObject, string methodName) where T1 : Constraint where T2 : Variable
@@ -40,7 +42,7 @@ namespace CuttingRoom.VariableSystem.Constraints
 				{
 					case VariableStoreLocation.Global:
 
-						variables = narrativeSpace.globalVariableStore.GetVariables<T2>(variableName);
+						variables = narrativeSpace.variableStore.GetVariables<T2>(variableName);
 
 						break;
 

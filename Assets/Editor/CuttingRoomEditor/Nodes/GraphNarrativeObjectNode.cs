@@ -53,10 +53,7 @@ namespace CuttingRoom.Editor
 			VisualElement contents = this.Q<VisualElement>("contents");
 
 			// Add a divider below the ports.
-			VisualElement divider = new VisualElement();
-			divider.name = "divider";
-			divider.AddToClassList("horizontal");
-			contents.Add(divider);
+			contents.Add(UIElementsUtils.GetHorizontalDivider());
 
 			// Add button to push view for this graph node onto the stack.
 			viewContentsButton = new Button(() => 

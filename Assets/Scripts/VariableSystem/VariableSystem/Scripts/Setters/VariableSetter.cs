@@ -27,7 +27,7 @@ public class VariableSetter : MonoBehaviour
         {
             case VariableStoreLocation.Global:
 
-                variables = narrativeSpace.globalVariableStore.GetVariables<T>(variableName);
+                variables = narrativeSpace.variableStore.GetVariables<T>(variableName);
 
                 break;
 

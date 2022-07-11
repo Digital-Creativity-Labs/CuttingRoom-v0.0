@@ -1,0 +1,3 @@
+.float-field {
+	flex-grow: 1;
+}

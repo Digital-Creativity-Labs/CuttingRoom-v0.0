@@ -19,14 +19,14 @@ namespace CuttingRoom.VariableSystem.Constraints
 			GreaterThanOrEqualTo,
 		}
 
-		[SerializeField]
-		private ComparisonType comparisonType = ComparisonType.Undefined;
+		public ComparisonType comparisonType = ComparisonType.Undefined;
 
 		/// <summary>
 		/// Value of this constraint.
 		/// </summary>
-		[SerializeField]
-		private float value = 0;
+		public float value = 0;
+
+		public override string Value => value.ToString();
 
 		public override bool Evaluate(Sequencer sequencer, NarrativeSpace narrativeSpace, NarrativeObject narrativeObject)
 		{

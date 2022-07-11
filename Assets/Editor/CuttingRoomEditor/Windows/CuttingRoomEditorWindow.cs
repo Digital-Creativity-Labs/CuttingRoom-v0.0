@@ -6,6 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System;
 using UnityEditor.Experimental.GraphView;
+using System.Linq;
 
 namespace CuttingRoom.Editor
 {
@@ -22,11 +23,6 @@ namespace CuttingRoom.Editor
         /// Cutting Room graph view which contains nodes.
         /// </summary>
         public EditorGraphView GraphView { get; private set; } = null;
-
-        /// <summary>
-        /// Blackboard for properties.
-        /// </summary>
-        public EditorBlackboard Blackboard { get; private set; } = null;
 
         /// <summary>
         /// Cutting Room toolbar with controls for editing narrative spaces.
@@ -59,9 +55,34 @@ namespace CuttingRoom.Editor
         public event Action<NarrativeObject> OnNarrativeObjectCreated;
 
         /// <summary>
+        /// Invoked whenever a narrative object node is selected.
+        /// </summary>
+        public event Action OnSelect;
+
+        /// <summary>
+        /// Invoked whenever a narrative object node is deselected.
+        /// </summary>
+        public event Action OnDeselect;
+
+        /// <summary>
+        /// Invoked whenever the graph view selection is cleared.
+        /// </summary>
+        public event Action OnSelectionCleared;
+
+        /// <summary>
+        /// Reference to the open cutting room inspector window if it exists.
+        /// </summary>
+        public CuttingRoomInspectorWindow InspectorWindow { get; set; } = null;
+
+        /// <summary>
+        /// If constraints have been modified.
+        /// </summary>
+        public bool NarrativeObjectConstraintsModified { get; set; } = false;
+
+        /// <summary>
         /// Menu option to open editor window.
         /// </summary>
-        [MenuItem("Cutting Room/Open Editor")]
+        [MenuItem("Cutting Room/Editor")]
         public static void OpenEditor()
         {
             CreateCuttingRoomEditorWindow();
@@ -83,6 +104,19 @@ namespace CuttingRoom.Editor
         /// </summary>
         private void Initialise()
         {
+            if (InspectorWindow == null)
+            {
+                InspectorWindow = EditorWindowUtils.GetWindowIfOpen<CuttingRoomInspectorWindow>();
+
+                if (InspectorWindow != null)
+                {
+                    if (InspectorWindow.EditorWindow == null)
+                    {
+                        InspectorWindow.EditorWindow = this;
+                    }
+                }
+            }
+
             if (GraphView == null)
             {
                 GraphView = new EditorGraphView(this);
@@ -112,11 +146,9 @@ namespace CuttingRoom.Editor
 
                 GraphView.OnNarrativeObjectNodeSelected += OnGraphViewNarrativeObjectNodeSelected;
                 GraphView.OnNarrativeObjectNodeDeselected += OnGraphViewNarrativeObjectNodeDeselected;
-            }
-
-            if (Blackboard == null)
-            {
-                Blackboard = new EditorBlackboard();
+                GraphView.OnEdgeSelected += OnGraphViewEdgeSelected;
+                GraphView.OnEdgeDeselected += OnGraphViewEdgeDeselected;
+                GraphView.OnClearSelection += OnGraphViewClearSelection;
             }
 
             if (Toolbar == null)
@@ -188,39 +220,49 @@ namespace CuttingRoom.Editor
             }
         }
 
-        private void OnGraphViewNarrativeObjectNodeDeselected()
+        /// <summary>
+        /// Invoked whenever an edge is deselected on the graph view.
+        /// </summary>
+        /// <param name="selected"></param>
+        private void OnGraphViewEdgeDeselected()
         {
-            Blackboard.Clear();
+            OnDeselect?.Invoke();
         }
 
-        private void OnGraphViewNarrativeObjectNodeSelected(NarrativeObjectNode narrativeObjectNode)
+        /// <summary>
+        /// Invoked whenever an edge is selected on the graph view.
+        /// </summary>
+        /// <param name="outputNarrativeObjectNode"></param>
+        /// <param name="inputNarrativeObjectNode"></param>
+        private void OnGraphViewEdgeSelected()
         {
-            // No multi editing as the blackboard doesn't fit the ui in without crushing.
-            if (Selection.objects.Length == 1)
-            {
-                Blackboard.Clear();
+            OnSelect?.Invoke();
+        }
 
-                List<BlackboardRow> blackboardRows = narrativeObjectNode.GetBlackboardRows();
+        /// <summary>
+        /// Invoked whenever a narrative object node is deselected on the graph view.
+        /// </summary>
+        private void OnGraphViewNarrativeObjectNodeDeselected()
+        {
+            OnDeselect?.Invoke();
+        }
 
-                VisualElement container = new VisualElement();
+        /// <summary>
+        /// Invoked whenever a narrative object node is selected on the graph view.
+        /// </summary>
+        /// <param name="narrativeObjectNode"></param>
+        private void OnGraphViewNarrativeObjectNodeSelected()
+        {
+            OnSelect?.Invoke();
+        }
 
-                BlackboardSection blackboardSection = new BlackboardSection { title = narrativeObjectNode.NarrativeObject.gameObject.name };
-
-                container.Add(blackboardSection);
-
-                foreach (BlackboardRow blackboardRow in blackboardRows)
-                {
-                    blackboardSection.Add(blackboardRow);
-                }
-
-                Blackboard.Add(container);
-            }
-            else
-            {
-                Blackboard.Clear();
-
-                Blackboard.Add(new Label("Multi Edit not supported."));
-            }
+        /// <summary>
+        /// Invoked whenever the selection is cleared on the graph view.
+        /// </summary>
+        /// <param name="selected"></param>
+        private void OnGraphViewClearSelection()
+        {
+            OnSelectionCleared?.Invoke();
         }
 
         /// <summary>
@@ -315,6 +357,9 @@ namespace CuttingRoom.Editor
             RegenerateContents(false);
         }
 
+        /// <summary>
+        /// Unity event invoked whenever this window is closed.
+        /// </summary>
         private void OnDisable()
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
@@ -381,7 +426,6 @@ namespace CuttingRoom.Editor
             }
 
             AddGraphView();
-            AddBlackboard();
             AddToolbar();
             AddNavigationToolbar();
 
@@ -409,14 +453,6 @@ namespace CuttingRoom.Editor
         {
             // Add the graph view to the root element of this window.
             rootVisualElement.Add(GraphView);
-        }
-
-        /// <summary>
-        /// Add the blackboard to the window.
-        /// </summary>
-        private void AddBlackboard()
-        {
-            rootVisualElement.Add(Blackboard);
         }
 
         /// <summary>

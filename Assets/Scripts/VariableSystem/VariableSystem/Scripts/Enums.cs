@@ -1,9 +1,6 @@
-﻿namespace CuttingRoom.VariableSystem
+﻿public enum VariableStoreLocation
 {
-	public enum VariableStoreLocation
-	{
-		Undefined,
-		Global,
-		NarrativeObject,
-	}
+    Undefined,
+    Global,
+    NarrativeObject,
 }

@@ -26,7 +26,7 @@ namespace CuttingRoom.Editor
 			NarrativeSpace narrativeSpace = new GameObject("NarrativeSpace", typeof(NarrativeSpace)).GetComponent<NarrativeSpace>();
 
 			// Set reference to variable store.
-			narrativeSpace.globalVariableStore = narrativeSpace.GetComponent<VariableStore>();
+			narrativeSpace.variableStore = narrativeSpace.GetComponent<VariableStore>();
 
 			return narrativeSpace;
 		}

@@ -64,7 +64,7 @@ namespace CuttingRoom.VariableSystem.Events
 			{
 				case VariableStoreLocation.Global:
 
-					return narrativeSpace.globalVariableStore.GetVariables<T>(variableName);
+					return narrativeSpace.variableStore.GetVariables<T>(variableName);
 
 				case VariableStoreLocation.NarrativeObject:
 

@@ -1,0 +1,13 @@
+﻿.vertical {
+	border-left-color: #242424;
+	border-left-width: 1px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.horizontal {
+	border-bottom-color: #242424;
+	border-bottom-width: 1px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
