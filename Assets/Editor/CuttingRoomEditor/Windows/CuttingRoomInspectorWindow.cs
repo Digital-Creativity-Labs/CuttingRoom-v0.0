@@ -51,34 +51,38 @@ namespace CuttingRoom.Editor
             return window;
         }
 
+        /// <summary>
+        /// Ensure this window is connected to necessary windows in Cutting Room ecosystem.
+        /// </summary>
+        public void ConnectEditorWindow(CuttingRoomEditorWindow editorWindow)
+        {
+            EditorWindow = editorWindow;
+
+            if (EditorWindow.InspectorWindow == null)
+            {
+                EditorWindow.InspectorWindow = this;
+            }
+
+            EditorWindow.OnDelete -= RegenerateContents;
+            EditorWindow.OnDelete += RegenerateContents;
+
+            EditorWindow.OnSelect -= RegenerateContents;
+            EditorWindow.OnSelect += RegenerateContents;
+
+            EditorWindow.OnDeselect -= RegenerateContents;
+            EditorWindow.OnDeselect += RegenerateContents;
+
+            EditorWindow.OnSelectionCleared -= RegenerateContents;
+            EditorWindow.OnSelectionCleared += RegenerateContents;
+        }
+
         public void Initialise()
         {
-            if (EditorWindow == null)
+            CuttingRoomEditorWindow cuttingRoomEditorWindow = EditorWindowUtils.GetWindowIfOpen<CuttingRoomEditorWindow>();
+
+            if (cuttingRoomEditorWindow != null && cuttingRoomEditorWindow.InspectorWindow != this)
             {
-                EditorWindow = EditorWindowUtils.GetWindowIfOpen<CuttingRoomEditorWindow>();
-
-                if (EditorWindow != null)
-                {
-                    if (EditorWindow.InspectorWindow == null)
-                    {
-                        EditorWindow.InspectorWindow = this;
-                    }
-
-                    EditorWindow.OnSelect += () =>
-                    {
-                        RegenerateContents();
-                    };
-
-                    EditorWindow.OnDeselect += () =>
-                    {
-                        RegenerateContents();
-                    };
-
-                    EditorWindow.OnSelectionCleared += () =>
-                    {
-                        RegenerateContents();
-                    };
-                }
+                cuttingRoomEditorWindow.ConnectToOtherWindows(true);
             }
 
             if (Inspector == null)
@@ -131,7 +135,17 @@ namespace CuttingRoom.Editor
 
         private void AddObjectControls()
         {
-            List<ISelectable> selected = EditorWindow.GraphView.selected;
+            List<ISelectable> selected = new List<ISelectable>();
+
+            // When opening Unity, the window comes into existence without the editor window having initialised.
+            // In this case, the "selected" list is going to be empty, rendering global settings (no editor selection).
+            if (EditorWindow != null && EditorWindow.GraphView != null)
+            {
+                selected = EditorWindow.GraphView.selected;
+            }
+
+            // Gets or creates narrative space.
+            NarrativeSpace narrativeSpace = CuttingRoomEditorUtils.GetOrCreateNarrativeSpace();
 
             if (selected.Count == 1)
             {
@@ -139,7 +153,16 @@ namespace CuttingRoom.Editor
                 {
                     NarrativeObjectNode narrativeObjectNode = selected[0] as NarrativeObjectNode;
 
-                    Inspector.UpdateContentForNarrativeObjectNode(narrativeObjectNode);
+                    // When deleting a node, the narrative object will be null but the selection persists, so check this.
+                    if (narrativeObjectNode.NarrativeObject == null)
+                    {
+                        // If the gameobject doesnt exist, then show global settings.
+                        Inspector.UpdateContentForGlobal(narrativeSpace);
+                    }
+                    else
+                    {
+                        Inspector.UpdateContentForNarrativeObjectNode(narrativeObjectNode);
+                    }
                 }
                 else if (selected[0] is Edge)
                 {
@@ -154,10 +177,6 @@ namespace CuttingRoom.Editor
             else
             {
                 // No selection so show variables for global things.
-
-                // Gets or creates narrative space.
-                NarrativeSpace narrativeSpace = CuttingRoomEditorUtils.GetOrCreateNarrativeSpace();
-
                 Inspector.UpdateContentForGlobal(narrativeSpace);
             }
         }

@@ -104,6 +104,27 @@ namespace CuttingRoom.Editor
         public Stack<ViewContainer> ViewContainerStack { get { return viewContainerStack; } }
 
         /// <summary>
+        /// Get the narrative object which is the currently visible view container.
+        /// </summary>
+        public NarrativeObject VisibleViewContainerNarrativeObject 
+        { 
+            get 
+            { 
+                ViewContainer viewContainer = viewContainerStack.Peek();
+
+                // If the root view container, return null.
+                if (viewContainer.narrativeObjectGuid == rootViewContainerGuid)
+                {
+                    return null;
+                }
+
+                NarrativeObject narrativeObject = GetNarrativeObject(viewContainer.narrativeObjectGuid);
+
+                return narrativeObject;
+            } 
+        }
+
+        /// <summary>
         /// The root view container of the graph view.
         /// </summary>
         private ViewContainer RootViewContainer { get; set; } = null;
@@ -1012,7 +1033,7 @@ namespace CuttingRoom.Editor
         /// Invoked whenever a narrative object is Set as a candidate on the graph view.
         /// </summary>
         /// <param name="narrativeObjectNode"></param>
-        private void OnNarrativeObjectNodeSetAsCandidate(NarrativeObjectNode narrativeObjectNode)
+        private void OnNarrativeObjectNodeSetAsCandidate()
         {
             ViewContainer visibleViewContainer = viewContainerStack.Peek();
 
@@ -1025,7 +1046,19 @@ namespace CuttingRoom.Editor
                 {
                     GroupNarrativeObject groupNarrativeObject = visibleViewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
 
-                    groupNarrativeObject.groupSelectionDecisionPoint.AddCandidate(narrativeObjectNode.NarrativeObject.gameObject);
+                    foreach (ISelectable selectable in selection)
+                    {
+                        if (selectable is NarrativeObjectNode)
+                        {
+                            NarrativeObjectNode candidate = selectable as NarrativeObjectNode;
+
+                            // Ensure selection is inside the current view (group graph).
+                            if (visibleViewContainer.ContainsNode(candidate.NarrativeObject.guid))
+                            {
+                                groupNarrativeObject.groupSelectionDecisionPoint.AddCandidate(candidate.NarrativeObject.gameObject);
+                            }
+                        }
+                    }
 
                     OnNarrativeObjectCandidatesChanged?.Invoke();
                 }
@@ -1036,7 +1069,7 @@ namespace CuttingRoom.Editor
         /// Invoked whenever a narrative object is removed as a candidate on the graph view.
         /// </summary>
         /// <param name="narrativeObjectNode"></param>
-        private void OnNarrativeObjectNodeRemoveAsCandidate(NarrativeObjectNode narrativeObjectNode)
+        private void OnNarrativeObjectNodeRemoveAsCandidate()
         {
             ViewContainer visibleViewContainer = viewContainerStack.Peek();
 
@@ -1048,8 +1081,20 @@ namespace CuttingRoom.Editor
                 if (visibleViewContainerNarrativeObject is GroupNarrativeObject)
                 {
                     GroupNarrativeObject groupNarrativeObject = visibleViewContainerNarrativeObject.GetComponent<GroupNarrativeObject>();
+                   
+                    foreach (ISelectable selectable in selection)
+                    {
+                        if (selectable is NarrativeObjectNode)
+                        {
+                            NarrativeObjectNode candidate = selectable as NarrativeObjectNode;
 
-                    groupNarrativeObject.groupSelectionDecisionPoint.RemoveCandidate(narrativeObjectNode.NarrativeObject.gameObject);
+                            // Ensure selection is inside the current view (group graph).
+                            if (visibleViewContainer.ContainsNode(candidate.NarrativeObject.guid))
+                            {
+                                groupNarrativeObject.groupSelectionDecisionPoint.RemoveCandidate(candidate.NarrativeObject.gameObject);
+                            }
+                        }
+                    }
 
                     OnNarrativeObjectCandidatesChanged?.Invoke();
                 }

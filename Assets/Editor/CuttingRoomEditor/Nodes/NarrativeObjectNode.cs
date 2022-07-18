@@ -53,12 +53,12 @@ namespace CuttingRoom.Editor
         /// <summary>
         /// Event invoked when set as candidate is clicked in context menu.
         /// </summary>
-        public event Action<NarrativeObjectNode> OnSetAsCandidate;
+        public event Action OnSetAsCandidate;
 
         /// <summary>
         /// Event invoked when remove as candidate is clicked in context menu.
         /// </summary>
-        public event Action<NarrativeObjectNode> OnRemoveAsCandidate;
+        public event Action OnRemoveAsCandidate;
 
         /// <summary>
         /// Abstract method which must be implememented to update nodes when the
@@ -219,7 +219,7 @@ namespace CuttingRoom.Editor
         /// <param name="action"></param>
         private void OnSetAsCandidateFromContextualMenu(DropdownMenuAction action)
         {
-            OnSetAsCandidate?.Invoke(this);
+            OnSetAsCandidate?.Invoke();
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace CuttingRoom.Editor
         /// <param name="action"></param>
         private void OnRemoveAsCandidateFromContextualMenu(DropdownMenuAction action)
         {
-            OnRemoveAsCandidate?.Invoke(this);
+            OnRemoveAsCandidate?.Invoke();
         }
 
         /// <summary>

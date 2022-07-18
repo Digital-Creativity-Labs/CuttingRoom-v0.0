@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 using System;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace CuttingRoom.Editor
 {
@@ -70,6 +72,11 @@ namespace CuttingRoom.Editor
         public event Action OnSelectionCleared;
 
         /// <summary>
+        /// Invoked whenever an object is deleted via the graph view.
+        /// </summary>
+        public event Action OnDelete;
+
+        /// <summary>
         /// Reference to the open cutting room inspector window if it exists.
         /// </summary>
         public CuttingRoomInspectorWindow InspectorWindow { get; set; } = null;
@@ -100,22 +107,40 @@ namespace CuttingRoom.Editor
         }
 
         /// <summary>
-        /// Initialise the required components for this window.
+        /// Ensure this window is connected to necessary windows in Cutting Room ecosystem.
         /// </summary>
-        private void Initialise()
+        public void ConnectToOtherWindows(bool reconnect)
         {
-            if (InspectorWindow == null)
+            if (InspectorWindow == null || reconnect)
             {
                 InspectorWindow = EditorWindowUtils.GetWindowIfOpen<CuttingRoomInspectorWindow>();
 
                 if (InspectorWindow != null)
                 {
-                    if (InspectorWindow.EditorWindow == null)
-                    {
-                        InspectorWindow.EditorWindow = this;
-                    }
+                    InspectorWindow.ConnectEditorWindow(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// Whenever the scene is saved, make sure that a corresponding save resource exists which matches the scene name.
+        /// </summary>
+        /// <param name="scene"></param>
+        private void OnSceneSaved(Scene scene)
+        {
+            SaveUtility.Save();
+        }
+
+        /// <summary>
+        /// Initialise the required components for this window.
+        /// </summary>
+        private void Initialise()
+        {
+            ConnectToOtherWindows(false);
+
+            // Make sure that when the scene is saved, the contents are serialised once.
+            EditorSceneManager.sceneSaved -= OnSceneSaved;
+            EditorSceneManager.sceneSaved += OnSceneSaved;
 
             if (GraphView == null)
             {
@@ -135,6 +160,8 @@ namespace CuttingRoom.Editor
 
                     if (graphViewChange.elementsToRemove != null && graphViewChange.elementsToRemove.Count > 0)
                     {
+                        OnDelete?.Invoke();
+
                         RegenerateContents(true);
                     }
                 };
@@ -166,6 +193,8 @@ namespace CuttingRoom.Editor
                 {
                     AtomicNarrativeObject atomicNarrativeObject = CuttingRoomContextMenus.CreateAtomicNarrativeObject();
 
+                    atomicNarrativeObject.transform.parent = GraphView.VisibleViewContainerNarrativeObject?.transform;
+
                     OnNarrativeObjectCreated?.Invoke(atomicNarrativeObject);
 
                     RegenerateContents(false);
@@ -175,6 +204,8 @@ namespace CuttingRoom.Editor
                 {
                     GraphNarrativeObject graphNarrativeObject = CuttingRoomContextMenus.CreateGraphNarrativeObject();
 
+                    graphNarrativeObject.transform.parent = GraphView.VisibleViewContainerNarrativeObject?.transform;
+
                     OnNarrativeObjectCreated?.Invoke(graphNarrativeObject);
 
                     RegenerateContents(false);
@@ -183,6 +214,8 @@ namespace CuttingRoom.Editor
                 Toolbar.OnClickAddGroupNarrativeObjectNode += () =>
                 {
                     GroupNarrativeObject groupNarrativeObject = CuttingRoomContextMenus.CreateGroupNarrativeObject();
+
+                    groupNarrativeObject.transform.parent = GraphView.VisibleViewContainerNarrativeObject?.transform;
 
                     OnNarrativeObjectCreated?.Invoke(groupNarrativeObject);
 
@@ -372,9 +405,14 @@ namespace CuttingRoom.Editor
         /// <param name="playModeStateChange"></param>
         private void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
         {
-            // Whenever the play mode state changes, the editor ui is
-            // invalidated so it must be regenerated.
-            RegenerateContents(true);
+            if (playModeStateChange == PlayModeStateChange.EnteredEditMode || playModeStateChange == PlayModeStateChange.EnteredPlayMode)
+            {
+                ConnectToOtherWindows(true);
+
+                // Whenever the play mode state changes, the editor ui is
+                // invalidated so it must be regenerated.
+                RegenerateContents(true);
+            }
         }
 
         /// <summary>
