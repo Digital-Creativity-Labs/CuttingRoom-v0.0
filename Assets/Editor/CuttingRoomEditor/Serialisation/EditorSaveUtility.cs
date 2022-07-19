@@ -90,6 +90,13 @@ namespace CuttingRoom.Editor
             // Load the existing save state as a reference.
             CuttingRoomEditorGraphViewState loadedGraphViewState = Load();
 
+            // If there was no existing state for the scene being saved, then perhaps this is it's first save,
+            // so load the untitled scenes data (which will contain the current layout of the graph).
+            if (loadedGraphViewState == null)
+            {
+                loadedGraphViewState = Load(untitledSceneName);
+            }
+
             foreach (ViewContainer viewContainer in ViewContainers)
             {
                 ViewContainerState viewContainerState = new ViewContainerState { narrativeObjectGuid = viewContainer.narrativeObjectGuid, narrativeObjectNodeGuids = viewContainer.narrativeObjectNodeGuids };
@@ -157,13 +164,16 @@ namespace CuttingRoom.Editor
                         }
                         else
                         {
-                            // Check the loaded save file for existing saved state for the narrative object.
-                            NarrativeObjectNodeState existingNodeState = loadedGraphViewState.narrativeObjectNodeStates.Where(narrativeObjectNodeState => narrativeObjectNodeState.narrativeObjectGuid == narrativeObjectGuid).FirstOrDefault();
-
-                            // If there is an existing state, then it persists onto the new save.
-                            if (existingNodeState != null)
+                            if (loadedGraphViewState != null)
                             {
-                                graphViewState.narrativeObjectNodeStates.Add(existingNodeState);
+                                // Check the loaded save file for existing saved state for the narrative object.
+                                NarrativeObjectNodeState existingNodeState = loadedGraphViewState.narrativeObjectNodeStates.Where(narrativeObjectNodeState => narrativeObjectNodeState.narrativeObjectGuid == narrativeObjectGuid).FirstOrDefault();
+
+                                // If there is an existing state, then it persists onto the new save.
+                                if (existingNodeState != null)
+                                {
+                                    graphViewState.narrativeObjectNodeStates.Add(existingNodeState);
+                                }
                             }
                         }
                     }
@@ -217,6 +227,16 @@ namespace CuttingRoom.Editor
             // Get the name of the current scene in the editor.
             string sceneName = ActiveSceneName;
 
+            return Load(sceneName);
+        }
+
+        /// <summary>
+        /// Attempt to load the graph view state for the specified scene name.
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
+        private CuttingRoomEditorGraphViewState Load(string sceneName)
+        {
             // Generate the path that this scenes graph should be saved at.
             string savePath = $"Assets/Resources/CuttingRoomEditor/{sceneName}.asset";
 
