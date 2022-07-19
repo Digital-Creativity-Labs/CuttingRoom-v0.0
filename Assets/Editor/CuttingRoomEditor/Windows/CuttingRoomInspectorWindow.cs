@@ -52,6 +52,20 @@ namespace CuttingRoom.Editor
         }
 
         /// <summary>
+        /// Invoked whenever the editor play mode state changes (e.g. entering or exiting play mode).
+        /// </summary>
+        /// <param name="playModeStateChange"></param>
+        private void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
+        {
+            if (playModeStateChange == PlayModeStateChange.EnteredEditMode || playModeStateChange == PlayModeStateChange.EnteredPlayMode)
+            {
+                // Whenever the play mode state changes, the editor ui is
+                // invalidated so it must be regenerated.
+                RegenerateContents();
+            }
+        }
+
+        /// <summary>
         /// Ensure this window is connected to necessary windows in Cutting Room ecosystem.
         /// </summary>
         public void ConnectEditorWindow(CuttingRoomEditorWindow editorWindow)
@@ -84,6 +98,9 @@ namespace CuttingRoom.Editor
             {
                 cuttingRoomEditorWindow.ConnectToOtherWindows(true);
             }
+
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
 
             if (Inspector == null)
             {
